@@ -10,3 +10,12 @@ insert_final_newline = true
 
 [*.md]
 trim_trailing_whitespace = false
+
+# crazy spacing for our test!
+[*.js]
+indent_style = space
+indent_size = 12
+
+[*.{css,sass,scss,html}]
+indent_stype = space
+indent_size = 1
