@@ -6,38 +6,11 @@ app.config(function ($stateProvider) {
     });
 });
 
-app.controller('HomeCtrl', function($scope){
-    // var context;
-    // window.addEventListener('load', init, false);
-    // function init() {
-    //      try {
-    //         // Fix up for prefixing
-    //         window.AudioContext = window.AudioContext||window.webkitAudioContext;
-    //         context = new AudioContext();
-    //         console.log("created", context)
-    //       }
-    //       catch(e) {
-    //         alert('Web Audio API is not supported in this browser');
-    //       }
-    // }
-
-    //     init()
-
-    // var file = URL.createObjectURL(file);
-    // audio_player.src = 'server/audio/WerkinGirls.wav';
-    // audio_player.play();
+app.controller('HomeCtrl', function($scope, HomeFactory){
+// this is a test to see that we can get all tracks
  HomeFactory.getTracks()
+    .then(function(tracks){
+        console.log("tracks", tracks)
+    })
 
-})
-
-
-app.factory('HomeFactory', function($http){
-    var HomeFactory = {}
-    HomeFactory.getTracks = function(){
-            return $http.get('/api/tracks')
-                .then(track => {
-                    console.log("track", track);
-                   return track.data;
-                });
-        },
 })

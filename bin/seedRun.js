@@ -35,10 +35,11 @@ const clearDb = function() {
 
 connectToDb.bind({ docsToSave: {} })
   .then(function(){
+    //clear database
     return clearDb()
   })
   .then(function() {
-    // get song metadata and clear db at same time
+    // get song metadata
     return extractMetaData(dir)
   })
 
