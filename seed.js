@@ -22,37 +22,42 @@ var Promise = require('bluebird');
 var chalk = require('chalk');
 var connectToDb = require('./server/db');
 var User = Promise.promisifyAll(mongoose.model('User'));
+var Track = Promise.promisifyAll(mongoose.model('Track'));
+var userData = require('./server/seeds/users.js')
+var trackData = require('./server/seeds/tracks.js')
 
-var seedUsers = function () {
+function seedUser(userData) {
+    console.log("seeding users")
+    var promises = []
+    userData.forEach(function (user) {
+        promises.push(User.create(user))
+    })
+    return Promise.all(promises)
+}
 
-    var users = [
-        {
-            email: 'testing@fsa.com',
-            password: 'password'
-        },
-        {
-            email: 'obama@gmail.com',
-            password: 'potus'
-        }
-    ];
+function seedTracks(trackData) {
+    console.log("seeding tracks")
+    var promises = []
+    trackData.forEach(function (track) {
+        promises.push(Track.create(track))
+    })
+    return Promise.all(promises)
+}
 
-    return User.createAsync(users);
-
-};
 
 connectToDb.then(function () {
-    User.findAsync({}).then(function (users) {
-        if (users.length === 0) {
-            return seedUsers();
-        } else {
-            console.log(chalk.magenta('Seems to already be user data, exiting!'));
-            process.kill(0);
-        }
-    }).then(function () {
+        return Promise.all([Track.remove({}), User.remove({})])
+    })
+    .then(function () {
+        return seedUser(userData);
+    })
+    .then(function () {
+        return seedTracks(trackData);
+    })
+    .then(function () {
         console.log(chalk.green('Seed successful!'));
         process.kill(0);
     }).catch(function (err) {
-        console.error(err);
-        process.kill(1);
-    });
+    console.error(err);
+    process.kill(1);
 });
