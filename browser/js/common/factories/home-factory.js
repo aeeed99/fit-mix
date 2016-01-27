@@ -1,14 +1,8 @@
 app.factory('HomeFactory', function($http){
     var HomeFactory = {};
     var audio = document.createElement('audio');
+    var isPlaying = false;
 
-    //     function load (song, songList) {
-    //     audio.src = song.audioUrl;
-    //     audio.load();
-    //     currentSong = song;
-    //     currentSongList = songList;
-    //     progress = 0;
-    // }
     HomeFactory.getTracks = function(){
             return $http.get('/api/tracks')
                 .then(tracks => {
@@ -16,12 +10,21 @@ app.factory('HomeFactory', function($http){
                    return tracks.data;
                 });
         }
-    HomeFactory.getAudio = function(song){
-            audio.src  = '/api/tracks/' + song._id.toString() + '.audio';
-            console.log("full audio", audio)
-            console.log("src", audio.src)
-            audio.load();
-            audio.play()
-        }
+
+    HomeFactory.play =function(track){
+        if (isPlaying){ HomeFactory.pause()}
+         else{ audio.src  = '/api/tracks/' + track._id.toString() + '.audio';
+        console.log("full audio", audio)
+        console.log("src", audio.src)
+        audio.load();
+        audio.play()
+        isPlaying = true;
+    }
+    }
+
+    HomeFactory.pause =function(){
+        audio.pause();
+        isPlaying = false;
+    }
     return HomeFactory
 });

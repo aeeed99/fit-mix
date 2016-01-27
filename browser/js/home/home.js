@@ -30,8 +30,9 @@ console.log("tracks", $scope.tracks)
        track.src  = '/api/tracks/' + track._id.toString() + '.audio';
 })
 
+
 $scope.playTrack = function(track){
-    HomeFactory.getAudio(track)
+    HomeFactory.play(track)
 }
 
 });
