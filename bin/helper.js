@@ -10,6 +10,7 @@ module.exports = {
     return shasum.digest('hex')
   },
   isMp3: (path) => ['.mp3','.m4a','.mp4','.wav'].includes(pathLib.extname(path)),
+  //should this method be named `isValid`? Looks like that is more its intention.
 
 
   dirWalk: function dirWalk(all, root) {
