@@ -42,13 +42,11 @@ panel {
 > or more complex scripting if needed. In a CSS/SCSS, complexity would be limited if you or another teammember needed it in the future.
 
 ### Angular
-+ **Files intended as Factories or Controllers** should be **UpperCamelCased** and **camelCased** respectively
++ **Files intended as Factories or Controllers** should be **UpperCamelCased**.
++ **Resolves used as injectables** should be **lowerCamelCased**.
 + **Factory and Controller names** should be the same name as its filename.
 + **Factory** names should end with " **Factory** ".
 + **Controller** names should end with **Controller**.
-
-> Why the different camel casing? Factories are more similar to js classes and follow UpperCamelCased to resemble as such,
-> controllers do not follow this class-like functionality.
 
 ```
 /common/factories/SongGeneratorFactory.js
