@@ -1,10 +1,10 @@
 <section id="home">
-    <fullstack-logo></fullstack-logo>
-    <rando-greeting></rando-greeting>
-
-<div id="{{track.waveID}}" ng-click="playTrack(track)" ng-repeat="track in tracks">
-    <track the-track="track" ><track/>
-</div>
-
-
+    <div id="{{track.waveID}}" ng-click="playTrack(track)" ng-repeat="track in tracks">
+        <track the-track="track">
+            <track/>
+    </div>
+    <!-- play/pause button -->
+    <div class="control play">
+        <span class="left"></span><span class="right"></span>
+    </div>
 </section>
