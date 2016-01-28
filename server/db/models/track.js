@@ -13,8 +13,6 @@ var schema = new mongoose.Schema({
   comment: {type: String},
   cover: {type: Buffer, select: false },
   duration: {type: Number}
-
-
 });
 
 

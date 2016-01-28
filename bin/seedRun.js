@@ -15,11 +15,10 @@ const filesDir = pathLib.join(process.cwd(), 'server/audio')
 const extractMetaData = function(path) {
   return helper.dirWalk(path)
     .then(function(filesNames) {
-        console.log("filesNames",  filesNames)
+      console.log("filesNames",  filesNames)
       return filesNames.filter(helper.isMp3)
     })
     .map(function(name) {
-        console.log("I AM LOOPING", name)
       return metadata(name)
     })
 
@@ -28,7 +27,6 @@ const extractMetaData = function(path) {
 
 const clearDb = function() {
   return Promise.map(['Track', 'User'], function(modelName) {
-    console.log("HERE")
     console.log("model", modelName)
     return mongoose.model(modelName).remove()
   })
@@ -46,7 +44,7 @@ connectToDb.bind({ docsToSave: {} })
 
   // empty the audio folder (or create it if it does not yet exists)
   .then(function(songs) {
-    console.log("SONGS?", songs)
+    console.log("returned songs", songs)
     this.files = songs
     return fs.emptyDirAsync(filesDir).then(function(){
         return songs
@@ -67,9 +65,7 @@ connectToDb.bind({ docsToSave: {} })
         comment: song.comment ? song.comment : null,
         cover: song.picture ? song.picture.data : null,
         duration: song.duration ? song.duration : null,
-
       })
-      console.log("newSong", newSong)
         promises.push(Track.create(newSong))
     })
     return Promise.all(promises)
@@ -77,17 +73,13 @@ connectToDb.bind({ docsToSave: {} })
 
   // move the files to a directory on the server
   .then(function(songs) {
-    console.log("after db", songs)
     console.log("move files")
     this.songs = songs
-    console.log("songs", this.songs)
     //console.log("files", this.files)
     return Promise.map(this.songs, function(file) {
       return new Promise(function(resolve, reject) {
         console.log("path", file.path)
-        console.log("the file", file)
         let readStream = fs.createReadStream(file.path)
-        console.log("path2", file.path)
         let writeStream = fs.createWriteStream(pathLib.join(filesDir, file._id.toString()))
         readStream.on('error', reject)
         writeStream.on('error', reject)

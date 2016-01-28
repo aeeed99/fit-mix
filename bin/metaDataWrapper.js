@@ -2,7 +2,6 @@ const Promise = require('bluebird')
 const fs = require('fs')
 const path = require('path')
 const mm = require('musicmetadata')
-const audioMetaData = require('audio-metadata');
 
 /*
 Omri & Zeke:
@@ -25,13 +24,13 @@ module.exports = function(name) {
         passedData.genre = metadata.genre ? metadata.genre : 'undefined';
         passedData.path = name;
         passedData.duration = metadata.duration;
-        console.log("final", passedData);
 
         passedData.picture = metadata.picture[0]  ? metadata.picture[0] : { data: new Buffer(0), format: 'jpg' };
         var x = new Buffer(passedData.picture.data.length);
         passedData.picture.data = passedData.picture.data.copy(x);
         passedData.picture.data = x;
-        console.log("pic", passedData.picture);
+
+        console.log("final data", passedData);
 
         resolve(passedData);
 
