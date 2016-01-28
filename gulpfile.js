@@ -87,7 +87,7 @@ gulp.task('buildCSS', function () {
     var sassCompilation = sass();
     sassCompilation.on('error', console.error.bind(console));
 
-    return gulp.src('./browser/scss/main.scss')
+    return gulp.src('./browser/scss/main.sass')
         .pipe(plumber({
             errorHandler: notify.onError('SASS processing failed! Check your gulp process.')
         }))
@@ -100,7 +100,7 @@ gulp.task('buildCSS', function () {
 // --------------------------------------------------------------
 
 gulp.task('buildCSSProduction', function () {
-    return gulp.src('./browser/scss/main.scss')
+    return gulp.src('./browser/scss/main.sass')
         .pipe(sass())
         .pipe(rename('style.css'))
         .pipe(minifyCSS())

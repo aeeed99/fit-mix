@@ -1,8 +1,8 @@
 'use strict';
-var router = require('express').Router();
-var _ = require('lodash');
-var request = require('request');
-var Track = require('mongoose').model('Track');
+const router = require('express').Router();
+const _ = require('lodash');
+const request = require('request');
+const Track = require('mongoose').model('Track');
 
 module.exports = router;
 

@@ -1,3 +1,7 @@
+# Overview
+
+>An application that allows for users to create fitness workout tracks based on their personal music collection and exercise routines. These tracks include text-to-speech for exercise cues and allow for users to set which music should be set for specific intervals or based on the intensity of the interval. Includes a social aspect where users can share, download and rate routines from other users.
+ 
 # The All-Mighty Styling Guide
 
 ## Names
