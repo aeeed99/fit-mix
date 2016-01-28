@@ -19,9 +19,10 @@ const extractMetaData = function(path) {
       return filesNames.filter(helper.isMp3)
     })
     .map(function(name) {
-        console.log("name", name)
+        console.log("I AM LOOPING", name)
       return metadata(name)
     })
+
 
 }
 
@@ -56,11 +57,17 @@ connectToDb.bind({ docsToSave: {} })
     var promises = []
     songs.forEach(function (song) {
       var newSong = new Track({
-        name: song.title,
+        name: song.name,
         artist: song.artist,
         genre: song.genre,
         extension: song.path.split('.').pop(),
-        path: song.path
+        path: song.path,
+        bpm: song.bpm ? song.bpm : null,
+        key: song.key ? song.key : null,
+        comment: song.comment ? song.comment : null,
+        cover: song.picture ? song.picture.data : null,
+        duration: song.duration ? song.duration : null,
+
       })
       console.log("newSong", newSong)
         promises.push(Track.create(newSong))

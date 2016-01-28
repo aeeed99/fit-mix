@@ -2,6 +2,7 @@ const Promise = require('bluebird')
 const fs = require('fs')
 const path = require('path')
 const mm = require('musicmetadata')
+const audioMetaData = require('audio-metadata');
 
 /*
 Omri & Zeke:
@@ -14,19 +15,47 @@ Omri & Zeke:
 
 module.exports = function(name) {
   return new Promise(function(resolve, reject) {
-    mm(fs.createReadStream(name), function(err, metadata) {
-      console.log("meta", name, metadata)
-   if (err) console.warn('An error occured while reading ' + name + ' id3 tags.'); // warn instead of throw err;
-      metadata.path = name
+    var passedData={};
 
-    if(metadata.artist.length === 0) metadata.artist = ['Unknown artist'];
-    if(metadata.album === null || metadata.album === '') metadata.album = 'Unknown';
-    if(metadata.title === null || metadata.title === '') metadata.title = path.parse(name).base;
-        console.log("new data", metadata)
-      resolve(metadata)
+    var parser = mm(fs.createReadStream(name), { duration: true }, function (err, metadata) {
+        if(err) return reject(err);
+        console.log("metadata", metadata);
+        passedData.artist = metadata.artist ? metadata.artist[0] : 'Unknown Artist';
+        passedData.name = metadata.title ? metadata.title : 'undefined';
+        passedData.genre = metadata.genre ? metadata.genre : 'undefined';
+        passedData.path = name;
+        passedData.duration = metadata.duration;
+        console.log("final", passedData);
+
+        passedData.picture = metadata.picture[0]  ? metadata.picture[0] : { data: new Buffer(0), format: 'jpg' };
+        var x = new Buffer(passedData.picture.data.length);
+        passedData.picture.data = passedData.picture.data.copy(x);
+        passedData.picture.data = x;
+        console.log("pic", passedData.picture);
+
+        resolve(passedData);
+
+    });
+
+    parser.on('TBPM', function (result) {
+      console.log("I FOUND A TBPM", result );
+      passedData.bpm = result;
+    })
+
+    parser.on('TKEY', function (result) {
+      console.log("I FOUND A TKEY", result );
+      passedData.key = result;
+    })
+
+    parser.on('COMM', function (result) {
+      console.log("I FOUND A Comment", result );
+      passedData.comment = result.text
     })
   })
 }
+
+
+
 
 
 
