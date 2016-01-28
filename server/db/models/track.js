@@ -15,7 +15,4 @@ var schema = new mongoose.Schema({
   duration: {type: Number}
 });
 
-
-
-
 mongoose.model('Track', schema);
