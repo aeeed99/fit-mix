@@ -7,13 +7,26 @@ app.config(function($stateProvider){
     })
 });
 
-app.controller('MixBoardController', function($scope, myThing){
+app.controller('MixBoardController', function($scope){
     $scope.hello = "Hello from the soon to be mix controller!";
-    $scope.foo = myThing;
+    $scope.library = [
+        {
+            name: "Call me Maybe",
+            artist: 'Carly Rae Jepsen',
+            time: {
+                m: 3,
+                s: 24
+            },
+            bpm: 138
+        },
+        {
+            name: "Shake it Off",
+            artist: 'T Swift',
+            time: {
+                m: 3,
+                s: 59
+            },
+            bpm: 145
+        }
+    ];
 });
-
-app.value('testLibrary', [
-    {
-
-    }
-]);

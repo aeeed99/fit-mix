@@ -58,14 +58,18 @@ app.factory('SongGeneratorFactory')
 app.controller('stateController')
 ```
 
-
-## File Structure
-
 ## Javascript
 
 + always use semicolons when ending a statement.
 + try to avoid `switch` statements
 > `switch` statements increses the chances of a buggy program, especially if a statement falls through.
+
+#### Variables
++ variables intended for testing/temporary use should be prepended with an underscore. This way others won't mess with them!
+```
+$scope._test = "this is a test and I'll remove it later"
+const _CONSTANT_VAR = "this has no bearing on the actual program"
+```
 
 ### References
 + use `const` for all references (eg. packages).

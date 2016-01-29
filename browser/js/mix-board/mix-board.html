@@ -5,18 +5,22 @@
   <div class="" id="mix-header">
     <h3><span class="dev-placeholder">My awesome Playlist</span></h3>
   </div>
-  <div id="mix-board">
-    <div id="mix-upper">
-      <!--NP for stuff such as labes of phases-->
+  <div id="upper-panel">
+    <div id="mix-board">
+      <div id="mix-view">
+        <div class="phase" style="width: 35%;">
+          12:15
+        </div>
+      </div>
     </div>
-    <div id="mix-view">
-    </div>
-    <div id="mix-lower">
-      <!--NP might be empty depending on amount of features. If so it is essentially spacing control.-->
-    </div>
+    <!--NP: This is not working :( issue #19
+    <div id="add-phase"><button class="btn">+</button></div>-->
   </div>
 
   <div id="library">
-
+    <!--{{ library }}-->
+    <div ng-repeat="track in library">
+      <track-panel track-info="track"></track-panel>
+    </div>
   </div>
 </div>
