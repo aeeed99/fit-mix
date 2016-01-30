@@ -7,6 +7,12 @@ app.factory('HomeFactory', function ($http) {
         return $http.get('/api/tracks')
             .then(tracks => {
                 console.log('HomeFactory.getTracks input tracks: ', tracks);
+                tracks.data.forEach(function(track){
+                    track.time = { m: Math.floor(track.duration/60),
+                                   s: Math.ceil(track.duration%60)};
+                    track.src = '/api/tracks/' + track._id.toString() + '.audio';
+                })
+                console.log("test tracks log", tracks.data)
                 return tracks.data;
             });
     };
