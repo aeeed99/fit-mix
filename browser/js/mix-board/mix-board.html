@@ -8,21 +8,23 @@
   <div id="upper-panel">
     <div id="mix-board">
       <div id="mix-view">
-        <div class="phase" style="width: 35%;">
-          12:15
-        </div>
+        <mix-clip ng-repeat="track in mix | limitTo: 3" track-info="track"></mix-clip>
       </div>
     </div>
-    <!--NP: This is not working :( issue #19
-    <div id="add-phase"><button class="btn">+</button></div>-->
+    <!--NP this doesn't work. see issue 9-->
+    <!--<div id="add-phase"><button class="btn">+</button></div>&ndash;&gt;-->
   </div>
 
   <div id="library">
     <!--{{ library }}-->
-    <div ng-click="prevWave(track)" ng-repeat="track in library">
-      <track-panel track-info="track"></track-panel>
+    <div ng-repeat="track in library">
+      <track-panel track-info="track" ng-click="prevWave(track)"></track-panel>
     </div>
   </div>
+  <div id="action-buttons">
+    <button class="btn" type="button" ng-click="addSelectedTrackToMix()">Add to Mix</button>
+  </div>
+
   <div class="progress progress-striped active" id="progress-bar">
     <div class="progress-bar progress-bar-info">
     </div>
@@ -34,6 +36,5 @@
   <div id="track-preview">
 
   </div>
-
 
 </div>

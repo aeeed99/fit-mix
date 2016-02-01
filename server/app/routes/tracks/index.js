@@ -13,7 +13,7 @@ module.exports = router;
 router.route('/')
     .get(function (req, res, next) {
         Track.find({}).exec()
-            .then(tracks => send(tracks)) //don't need res.status(200)
+            .then(tracks => res.send(tracks)) //??: don't need res.status(200); NP: but still need `res.send(tracks)`
             .then(null, next);
     });
 

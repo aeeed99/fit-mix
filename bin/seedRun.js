@@ -4,7 +4,7 @@ const Promise = require('bluebird')
 const pathLib = require('path')
 const helper = require('./helper')
 const _ = require('lodash')
-const metadata = require('./metadataWrapper')
+const metadata = require('./metaDataWrapper')
 Promise.promisifyAll(fs);
 const mongoose = require('mongoose')
 const connectToDb = require('../server/db')

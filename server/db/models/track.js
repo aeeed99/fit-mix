@@ -12,7 +12,7 @@ var schema = new mongoose.Schema({
   key: {type: String},
   comment: {type: String},
   cover: {type: Buffer, select: false },
-  duration: {type: Number}
+  duration: {type: Number} //NP: In seconds.
 });
 
 mongoose.model('Track', schema);
