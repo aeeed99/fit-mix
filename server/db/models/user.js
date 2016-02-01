@@ -4,7 +4,8 @@ var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
     email: {
-        type: String
+        type: String,
+        unique: true
     },
     password: {
         type: String
@@ -22,7 +23,14 @@ var schema = new mongoose.Schema({
         id: String
     },
     google: {
-        id: String
+        id: String,
+        token: String,
+        email: String,
+        name: String
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
 });
 
