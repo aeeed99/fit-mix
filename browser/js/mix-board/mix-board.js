@@ -57,6 +57,11 @@ app.controller('MixBoardController', function($scope, tracks){
             $scope.isPlaying = true;
         });
 
+        wavesurfer.on('region-updated', function(){
+            console.log("data", wavesurfer)
+        });
+
+
     /* Progress bar */
         var progressDiv = document.querySelector('#progress-bar');
         var progressBar = progressDiv.querySelector('.progress-bar');
@@ -74,17 +79,10 @@ app.controller('MixBoardController', function($scope, tracks){
       //  wavesurfer.on('ready', hideProgress);
         wavesurfer.on('destroy', hideProgress);
         wavesurfer.on('error', hideProgress);
-
-         wavesurfer.load(track.src);
-
-        //scope.$digest()
-        console.log("new scope", $scope);
+        wavesurfer.load(track.src);
 
     };
-
-
-
-
+      // PLAY / PAUSE FUNCTIONALITY
         $(document).on('keyup', function(e) {
             console.log("SPACE")
              if (e.which == 32 && $scope.isLoaded) {
