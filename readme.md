@@ -1,3 +1,7 @@
+# Overview
+
+>An application that allows for users to create fitness workout tracks based on their personal music collection and exercise routines. These tracks include text-to-speech for exercise cues and allow for users to set which music should be set for specific intervals or based on the intensity of the interval. Includes a social aspect where users can share, download and rate routines from other users.
+ 
 # The All-Mighty Styling Guide
 
 ## Names
@@ -57,14 +61,18 @@ app.factory('SongGeneratorFactory')
 app.controller('stateController')
 ```
 
-
-## File Structure
-
 ## Javascript
 
 + always use semicolons when ending a statement.
 + try to avoid `switch` statements
 > `switch` statements increses the chances of a buggy program, especially if a statement falls through.
+
+#### Variables
++ variables intended for testing/temporary use should be prepended with an underscore. This way others won't mess with them!
+```
+$scope._test = "this is a test and I'll remove it later"
+const _CONSTANT_VAR = "this has no bearing on the actual program"
+```
 
 ### References
 + use `const` for all references (eg. packages).

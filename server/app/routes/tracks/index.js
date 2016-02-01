@@ -1,11 +1,13 @@
 'use strict';
-var mongoose = require('mongoose');
-var mime = require('mime');
-var path = require('path');
-var router = require('express').Router();
-var _ = require('lodash');
-var request = require('request');
-var Track = require('mongoose').model('Track');
+
+const router = require('express').Router();
+const _ = require('lodash');
+const request = require('request');
+const Track = require('mongoose').model('Track');
+const mongoose = require('mongoose');
+const mime = require('mime');
+const path = require('path');
+
 module.exports = router;
 
 router.route('/')
