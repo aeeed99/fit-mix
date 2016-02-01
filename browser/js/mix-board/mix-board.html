@@ -8,8 +8,14 @@
   <div id="upper-panel">
     <div id="mix-board">
       <div id="mix-view">
-        <mix-clip track-info="library[0]"></mix-clip>
-      </div>
+        <!--<div id="track-info-wrapper" ng-repeat="track in library | limitTo: 3 ">-->
+          <!--<mix-clip track-info="track"></mix-clip>-->
+        <!--</div>-->
+        <mix-clip ng-repeat="track in library | limitTo: 3" track-info="track"></mix-clip>
+        <!--<mix-clip track-info="library[0]"></mix-clip>-->
+        <!--<mix-clip track-info="library[1]"></mix-clip>-->
+        <!--<mix-clip track-info="library[2]"></mix-clip>-->
+      <!--</div>-->
     </div>
     <!--NP: This is not working :( issue #19
     <div id="add-phase"><button class="btn">+</button></div>-->
