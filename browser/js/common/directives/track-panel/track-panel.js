@@ -4,6 +4,10 @@ app.directive('trackPanel',function(){
         templateUrl: 'js/common/directives/track-panel/track-panel.html',
         scope: {
             trackInfo: '='
+        },
+        link: function(scope) {
+            console.log("scope: ", scope.trackInfo);
+
         }
     };
 });

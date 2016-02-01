@@ -19,8 +19,21 @@
 
   <div id="library">
     <!--{{ library }}-->
-    <div ng-repeat="track in library">
+    <div ng-click="prevWave(track)" ng-repeat="track in library">
       <track-panel track-info="track"></track-panel>
     </div>
   </div>
+  <div class="progress progress-striped active" id="progress-bar">
+    <div class="progress-bar progress-bar-info">
+    </div>
+  </div>
+  <div id="track-timeline">
+
+  </div>
+
+  <div id="track-preview">
+
+  </div>
+
+
 </div>
