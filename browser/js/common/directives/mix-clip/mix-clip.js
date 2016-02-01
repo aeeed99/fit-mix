@@ -7,7 +7,6 @@ app.directive('mixClip',function(){
         },
         link: function(scope) {
             console.log("scope: ", scope.trackInfo);
-
         }
     };
 });
