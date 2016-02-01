@@ -89,6 +89,7 @@ app.controller('MixBoardController', function($scope, tracks){
                 if ($scope.isPlaying){
                     wavesurfer.pause();
                 } else{
+                    console.log("wavesurfer should play now")
                      wavesurfer.play();
                 }
                 $scope.isPlaying = !$scope.isPlaying
@@ -99,6 +100,7 @@ app.controller('MixBoardController', function($scope, tracks){
         //$scope.mix is what we ng-repeat over for the playlist
         $scope.mix = [];
         $scope.addToMix = function (index, song, evt) {
+            console.log("shit's being added to the mix, yo!");
             var copyOfSong;
             //MB:This is NOT to check for multiple of the same song on mix; it is to check if the song is coming from mix or library
             if(song.onMix === false){

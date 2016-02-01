@@ -11,7 +11,10 @@
         <!--<div id="track-info-wrapper" ng-repeat="track in library | limitTo: 3 ">-->
           <!--<mix-clip track-info="track"></mix-clip>-->
         <!--</div>-->
-        <mix-clip ng-repeat="track in library | limitTo: 3" track-info="track"></mix-clip>
+        <!-- MB: I don't know that much about element directives, but it's possible probably to make a directive that contains both the draggable mix-clip and the droppable containing div -->
+        <div ng-repeat="track in library | limitTo: 3" ng-style=" {width: '{{ track.duration / 3600 * 100}}' + '%', float: 'left', height: '100%'} " ng-drop="true" ng-drop-success="addToMix($index, $data, $event">
+          <mix-clip track-info="track"></mix-clip>
+        </div>
         <!--<mix-clip track-info="library[0]"></mix-clip>-->
         <!--<mix-clip track-info="library[1]"></mix-clip>-->
         <!--<mix-clip track-info="library[2]"></mix-clip>-->
