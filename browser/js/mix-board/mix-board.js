@@ -6,94 +6,117 @@ app.config(function($stateProvider){
         controller: 'MixBoardController',
         resolve: {
             tracks: function(HomeFactory) {
-                //console.log("[resolve] starting..", $stateParams);
                 return HomeFactory.getTracks();
             }
         }
     })
 });
 
-app.controller('MixBoardController', function($scope, tracks){
-    $scope.hello = "Hello from the soon to be mix controller!";
+app.controller('MixBoardController', function($scope, tracks, MixBoardFactory){
     $scope.library = tracks
-    console.log("LIB", $scope.library)
     $scope.isLoaded = false;
     $scope.isPlaying = false;
-    var wavesurfer
-    $scope.prevWave = function(track){
+    $scope.region;
+    $scope.currentTrack;
+    // CHES - have not had to use index variable yet but may come in handy..
+    $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack)
+    var wavesurfer;
+    var loadingPrev = false
 
+    $scope.prevWave = function(track){
+        // CHES - "isLoaded" is for loading pre-saved data
         $scope.isLoaded=false;
+        // CHES - remove previous wavesurfer if exists
          if (wavesurfer){
             wavesurfer.destroy();
             $("#track-preview").empty();
          }
-         wavesurfer = WaveSurfer.create({
-            container: '#track-preview',
-            waveColor: 'violet',
-            progressColor: 'purple',
-            loaderColor   : 'navy',
-            cursorColor   : 'navy',
 
+        $scope.currentTrack = MixBoardFactory.getCurrentSong($scope.library, track)
+        $scope.currentTrack.hasRegion = $scope.currentTrack.hasRegion ? $scope.currentTrack.hasRegion : false;
 
-        });
-
-        console.log('wavesurfer: ', wavesurfer);
+         // CHES - create waveform
+        wavesurfer = MixBoardFactory.createWaveForm();
 
         wavesurfer.on('ready', function () {
             $scope.isLoaded=true;
-            hideProgress()
-            $scope.$digest()
-            var timeline = Object.create(WaveSurfer.Timeline);
+            // CHES - removes loading bar
+            hideProgress();
+            $scope.$digest();
+            // CHES - creates track timeline
+            var timeline = MixBoardFactory.createTimeline(wavesurfer)
+            MixBoardFactory.enableDragSelection(wavesurfer)
 
-            timeline.init({
-                wavesurfer: wavesurfer,
-                container: "#track-timeline"
-            });
-           wavesurfer.enableDragSelection({
-                color: 'rgba(0, 255, 0, 0.1)'
-            });
+            // CHES - if it finds a pre-existing region, it will preload it
+            if ($scope.currentTrack.region){
+                loadingPrev = true;
+                wavesurfer.regions.list[$scope.currentTrack.region.id] = $scope.currentTrack.region;
+                MixBoardFactory.addRegion(wavesurfer, $scope.currentTrack.region);
+            }
 
+            // CHES - play track once ready
             wavesurfer.play();
             $scope.isPlaying = true;
         });
 
         wavesurfer.on('region-updated', function(){
-            console.log("data", wavesurfer)
+             $scope.currentTrack.region.startTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.start);
+             $scope.currentTrack.region.endTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.end);
+             $scope.$digest()
         });
 
+       wavesurfer.on('region-created', function(region){
+        if ($scope.currentTrack.hasRegion && !loadingPrev){
+            // CHES - the second loadingPrev checks for whether we are reloading saved data
+            region.remove()
+        } else {
+            $scope.currentTrack.region = region;
+            $scope.currentTrack.region.startTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.start);
+            $scope.currentTrack.region.endTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.end);
+            $scope.currentTrack.hasRegion = true;
+            loadingPrev = false;
+            $scope.$digest();
 
-    /* Progress bar */
-        var progressDiv = document.querySelector('#progress-bar');
-        var progressBar = progressDiv.querySelector('.progress-bar');
-
-        var showProgress = function (percent) {
-            progressDiv.style.display = 'block';
-            progressBar.style.width = percent + '%';
-        };
-
-        var hideProgress = function () {
-            progressDiv.style.display = 'none';
-        };
+            // CHES remove region on dbclick - from waveform AND curent track
+           region.on('dblclick', function(){
+             $scope.currentTrack.hasRegion=false;
+             region.remove()
+             $scope.currentTrack.region=undefined;
+             $scope.$digest();
+           })
+          }
+        });
 
         wavesurfer.on('loading', showProgress);
-      //  wavesurfer.on('ready', hideProgress);
         wavesurfer.on('destroy', hideProgress);
         wavesurfer.on('error', hideProgress);
         wavesurfer.load(track.src);
+        $scope.currentTrack.wavesurfer=wavesurfer
 
     };
+
       // PLAY / PAUSE FUNCTIONALITY
-        $(document).on('keyup', function(e) {
-            console.log("SPACE")
-             if (e.which == 32 && $scope.isLoaded) {
-                if ($scope.isPlaying){
-                    wavesurfer.pause();
-                } else{
-                     wavesurfer.play();
-                }
-                $scope.isPlaying = !$scope.isPlaying
-             }
-        });
-})
+    $(document).on('keyup', function(e) {
+         if (e.which == 32 && $scope.isLoaded) {
+            if ($scope.isPlaying){
+                wavesurfer.pause();
+            } else{
+                 wavesurfer.play();
+            }
+            $scope.isPlaying = !$scope.isPlaying
+         }
+    });
 
+    /* Progress bar */
+    var progressDiv = document.querySelector('#progress-bar');
+    var progressBar = progressDiv.querySelector('.progress-bar');
 
+    var showProgress = function (percent) {
+        progressDiv.style.display = 'block';
+        progressBar.style.width = percent + '%';
+    };
+
+    var hideProgress = function () {
+        progressDiv.style.display = 'none';
+    };
+});
