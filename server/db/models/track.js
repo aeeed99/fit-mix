@@ -3,8 +3,8 @@ var crypto = require('crypto');
 var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  artist: { type: String, required: true, trim: true },
+  name: { type: String, required: true, trim: true, default: "No Track Name" },
+  artist: { type: String, required: true, trim: true, default: "No Artist Name" },
   genre: [String],
   extension: { type: String },
   path: {type: String},
