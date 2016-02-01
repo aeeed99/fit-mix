@@ -15,8 +15,7 @@ app.config(function($stateProvider){
 
 app.controller('MixBoardController', function($scope, tracks){
     $scope.hello = "Hello from the soon to be mix controller!";
-    $scope.library = tracks
-    console.log("LIB", $scope.library)
+    $scope.library = tracks;
     $scope.isLoaded = false;
     $scope.isPlaying = false;
     var wavesurfer
@@ -98,9 +97,10 @@ app.controller('MixBoardController', function($scope, tracks){
 
         //MB:draggable things below here VVVVVVVVVVVVVVVVVVVV
         //$scope.mix is what we ng-repeat over for the playlist
-        $scope.mix = [];
-        $scope.addToMix = function (index, song, evt) {
-            console.log("shit's being added to the mix, yo!");
+        //for test purposes setting it to first four of library
+        $scope.mix = [$scope.library[0],$scope.library[1],$scope.library[2],$scope.library[3]];
+        $scope.magicMagicName = function (index, song, evt) {
+            console.log("shit's being added to the mix, yo!")
             var copyOfSong;
             //MB:This is NOT to check for multiple of the same song on mix; it is to check if the song is coming from mix or library
             if(song.onMix === false){
@@ -134,21 +134,25 @@ app.controller('MixBoardController', function($scope, tracks){
                 }
             }
         };
-        $scope.addToLibrary = function (index, song, evt) {
+        $scope.moveWithinMix = function (index, track, evt) {
             //MB: index is the index of the position where the draggable was dropped
-            var originalArray = $scope.library.slice(0);
-            var originIndex = $scope.library.indexOf(song);
+            console.log(track);
+            console.log(index);
+            var originalArray = $scope.mix.slice(0);
+            var originIndex = $scope.mix.indexOf(track);
             //MB:the draggable is put at the index position it was dropped onto
-            $scope.library[index] = song;
+            $scope.mix[index] = track;
+            console.log(track);
+            console.log($scope.mix[index]);
             //MB:start at the position the draggable came from and shift everything forward/backward
             if(index < originIndex){
                 for (var idx = originIndex; idx > index; idx--){
-                    $scope.library[idx] = originalArray[idx - 1];
+                    $scope.mix[idx] = originalArray[idx - 1];
                 }
             }
             else{
                 for (var idx = originIndex; idx < index; idx++){
-                    $scope.library[idx] = originalArray[idx + 1];
+                    $scope.mix[idx] = originalArray[idx + 1];
                 }
             }
         }
