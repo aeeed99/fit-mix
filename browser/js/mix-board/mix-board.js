@@ -111,33 +111,13 @@ app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) 
                 $scope.isPlaying = !$scope.isPlaying
              }
         });
-    $scope.moveWithinMix = function (index, track, evt) {
-        //MB: index is the index of the position where the draggable was dropped
-        console.log(track);
-        console.log(index);
-        var originalArray = $scope.mix.slice(0);
-        var originIndex = $scope.mix.indexOf(track);
-        //MB:the draggable is put at the index position it was dropped onto
-        $scope.mix[index] = track;
-        console.log(track);
-        console.log($scope.mix[index]);
-        //MB:start at the position the draggable came from and shift everything forward/backward
-        if(index < originIndex){
-            for (var idx = originIndex; idx > index; idx--){
-                $scope.mix[idx] = originalArray[idx - 1];
-            }
-        }
-        else{
-            for (var idx = originIndex; idx < index; idx++){
-                $scope.mix[idx] = originalArray[idx + 1];
-            }
-        }
-    }
+    $scope.reorderMix = function (index, track, event, mix) {
+        MixBoardFactory.reorderInPlace(index, track, event, mix)
+    };
 
     // NP: Add-to-mix functionality (non-DnD version)
-    $scope.addSelectedTrackToMix = function () {
-        if ($scope.selectedTrack) $scope.mix.push($scope.selectedTrack);
-        $('track-panel').removeClass('track-selected');
+    $scope.addSelectedTrackToMix = function (track, mix) {
+        MixBoardFactory.addTrackToMix(track, mix);
         $scope.selectedTrack = null;
     };
     // PLAY / PAUSE FUNCTIONALITY
