@@ -1,22 +1,4 @@
-$font-title: 'Cabin', Arial, sans-serif
-$font-standard: Arial, sans-serif
-$font-digital: 'Share Tech Mono', monospace
-$font-digital-small: 'Nova Mono', monospace
-
-$color-body: #434343
-$color-inner: #222222
-$color-inner-line: #c1c1c1
-$font-color: #eaeaea
-
-$phase-color: #161616
-$phase-color-hover: rgba(18, 39, 21, 0.73)
-$phase-text: rgba(161, 162, 163, 0.56)
-$phase-text-hover: rgba(92, 184, 92, 0.56)
-
-$track-panel-color-1: #ffab40
-$track-panel-color-2: #84d94a
-$track-panel-color-3: #f3a9ff
-$track-panel-color-4: #6fa8dc
+@import '_variables'
 
 =inner-frame()
   background-color: $color-inner
@@ -59,7 +41,6 @@ $track-panel-color-4: #6fa8dc
     height: 100%
     overflow: hidden
 
-#mix-upper
   //margin: 8vh 0
 
 #mix-header
@@ -82,9 +63,26 @@ $track-panel-color-4: #6fa8dc
     display: inline-table
   #track-info-wrapper
     height: 100%
+  border-bottom: 1px solid #646967
   //.phase:hover
   //  background-color: $phase-color-hover
   //  color: $phase-text-hover
+
+#phase-view
+  +inner-frame()
+  height: 1.3em
+  background-color: rgb(54, 50, 58)
+  border-top: none
+
+phase
+  height: 100%
+#phase
+  background-color: #a2b488
+  float: none
+  height: 100%
+  font-size: 10px
+  font-weight: bold
+  font-family: $font-digital
 
 #action-buttons
   button
@@ -93,11 +91,11 @@ $track-panel-color-4: #6fa8dc
     font-family: $font-standard
     border-radius: 0
     border: 1px solid #a4a4a4
-    background-color: #4500a7
+    background-color: $color-blue-steel
     padding: 0
     color: #a4a4a4
   button:hover
-    background-color: #9f00e8
+    background-color: $color-steel-highlight
     color: #222
 
 #add-phase

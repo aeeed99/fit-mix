@@ -14,16 +14,21 @@ app.config(function ($stateProvider) {
 
 app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) {
     $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
-    $scope.mix = [] //NP List of songs on the mix bar.
-    $scope.library = tracks
+    $scope.mix = []; //NP List of songs on the mix bar.
+    $scope.phases = [{
+        name: "Not a phase, mom",
+        duration: 1000
+    }]; //NP: Keep track of phases below mix bar.
+    $scope.library = tracks;
     $scope.isLoaded = false;
     $scope.isPlaying = false;
     $scope.region;
     $scope.currentTrack;
+
     // CHES - have not had to use index variable yet but may come in handy..
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack)
     var wavesurfer;
-    var loadingPrev = false
+    var loadingPrev = false;
 
     $scope.prevWave = function (track) {
         // CHES - "isLoaded" is for loading pre-saved data
@@ -155,10 +160,15 @@ app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) 
     };
 
     // NP: Add-to-mix functionality (non-DnD version)
+    // NP: These will be refactored into an ActionButtonsFactory.
     $scope.addSelectedTrackToMix = function () {
         if ($scope.selectedTrack) $scope.mix.push($scope.selectedTrack);
         $('track-panel').removeClass('track-selected');
         $scope.selectedTrack = null;
+    };
+    $scope.addPhaseDialogue = function(){
+        $('body').add('track-panel');
+        $scope.$digest();
     };
     // PLAY / PAUSE FUNCTIONALITY
     $(document).on('keyup', function (e) {
