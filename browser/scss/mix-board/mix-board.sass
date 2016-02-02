@@ -54,9 +54,10 @@ $track-panel-color-4: #6fa8dc
   background-color: transparent
   border: none
   #mix-board
-    width: 92%
+    width: 100%
     //margin: 0 2% 0 0
     height: 100%
+    overflow: hidden
 
 #mix-upper
   //margin: 8vh 0
@@ -74,14 +75,30 @@ $track-panel-color-4: #6fa8dc
     font-size: 2em
     text-align: center
     height: 100%
-    padding: 0.5em 0 0 0
+    padding: 0
     color: $phase-text
     background-color: $phase-color
     border-right: 1px solid #444
     display: inline-table
+  #track-info-wrapper
+    height: 100%
   //.phase:hover
   //  background-color: $phase-color-hover
   //  color: $phase-text-hover
+
+#action-buttons
+  button
+    width: 120px
+    height: 20px
+    font-family: $font-standard
+    border-radius: 0
+    border: 1px solid #a4a4a4
+    background-color: #4500a7
+    padding: 0
+    color: #a4a4a4
+  button:hover
+    background-color: #9f00e8
+    color: #222
 
 #add-phase
   display: inline
@@ -97,3 +114,4 @@ $track-panel-color-4: #6fa8dc
   display: none
 
 @import '_library'
+@import '_mix-clip'

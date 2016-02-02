@@ -5,9 +5,12 @@ app.directive('trackPanel',function(){
         scope: {
             trackInfo: '='
         },
-        link: function(scope) {
+        link: function(scope, element) {
             console.log("scope: ", scope.trackInfo);
-
+            element.on('click', function(){
+                $('track-panel').removeClass('track-selected');
+                $(this).addClass('track-selected');
+            });
         }
     };
 });

@@ -1,15 +1,7 @@
 angular.module('ExampleApp', ['ngDraggable']).
     controller('DragCtrl', function ($scope, MixFactory) {
-        $scope.mix = [];
-        $scope.targetLength = 100;
-        $scope.library = [
-            {name: 'call me maybe', intensity: 'severe', onMix: false, length: 5},
-            {name: 'freebird', intensity: 'moderate', onMix: false, length: 7},
-            {name: 'gagnam style', intensity: 'moderate', onMix: false, length: 10},
-            {name: 'moonlight sonata', intensity: 'mild', onMix: false, length: 3},
-            {name: 'you\'re so vain', intensity: 'mild', onMix: false, length: 5},
-            {name: 'the real slim shady', intensity: 'severe', onMix: false, length: 4}
-        ];
+
+        // $scope.targetLength = 100;
         $scope.mixLength = function(){ return $scope.mix.reduce(function(totalLength, song){
             return totalLength + song.length;
         }, 0) };
@@ -18,10 +10,7 @@ angular.module('ExampleApp', ['ngDraggable']).
             for(var property in original)
                 this[property] = (typeof(original[property]) == 'object')? new Clone(original[property]) : original[property];
         };
-        //MB:Need for the ng-repeat to track by. Once we have a real DB with real songs, we can just track by _id.
-        $scope.randomNumber = function(){
-            return Math.random() * 100000000000000000;
-        };
+        $scope.mix = [];
         $scope.addToMix = function (index, song, evt) {
             var copyOfSong;
             //MB:This is NOT to check for multiple of the same song on mix; it is to check if the song is coming from mix or library
