@@ -15,7 +15,8 @@ app.config(function ($stateProvider) {
 app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) {
     $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = [] //NP List of songs on the mix bar.
-    $scope.library = tracks
+    $scope.library = tracks;
+
     $scope.isLoaded = false;
     $scope.isPlaying = false;
     $scope.region;
@@ -97,62 +98,41 @@ app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) 
 
         $scope.currentTrack.wavesurfer = wavesurfer
     };
-
-    //MB:draggable things below here VVVVVVVVVVVVVVVVVVVV
-    //$scope.mix is what we ng-repeat over for the playlist
-    $scope.mix = [];
-    $scope.addToMix = function (index, song, evt) {
-        var copyOfSong;
-        //MB:This is NOT to check for multiple of the same song on mix; it is to check if the song is coming from mix or library
-        if (song.onMix === false) {
-            copyOfSong = new $scope.Clone(song);
-            copyOfSong.pseudoId = $scope.randomNumber();
-            $scope.mix.push(copyOfSong);
-            copyOfSong.onMix = true;
-        }
-        //MB:index is the index of the position where the draggable was dropped
+      // PLAY / PAUSE FUNCTIONALITY
+        $(document).on('keyup', function(e) {
+            console.log("SPACE")
+             if (e.which == 32 && $scope.isLoaded) {
+                if ($scope.isPlaying){
+                    wavesurfer.pause();
+                } else{
+                    console.log("wavesurfer should play now")
+                     wavesurfer.play();
+                }
+                $scope.isPlaying = !$scope.isPlaying
+             }
+        });
+    $scope.moveWithinMix = function (index, track, evt) {
+        //MB: index is the index of the position where the draggable was dropped
+        console.log(track);
+        console.log(index);
         var originalArray = $scope.mix.slice(0);
-        var originIndex;
-
-        //MB:whether it came from the playlist or the library, the draggable is put at the index position it was dropped onto
-        if (copyOfSong) {
-            originIndex = $scope.mix.indexOf(copyOfSong);
-            $scope.mix[index] = copyOfSong;
-        }
-        else {
-            originIndex = $scope.mix.indexOf(song);
-            $scope.mix[index] = song;
-        }
-        //MB:shift everything based on the new position of song
-        if (index < originIndex) {
-            for (var idx = originIndex; idx > index; idx--) {
+        var originIndex = $scope.mix.indexOf(track);
+        //MB:the draggable is put at the index position it was dropped onto
+        $scope.mix[index] = track;
+        console.log(track);
+        console.log($scope.mix[index]);
+        //MB:start at the position the draggable came from and shift everything forward/backward
+        if(index < originIndex){
+            for (var idx = originIndex; idx > index; idx--){
                 $scope.mix[idx] = originalArray[idx - 1];
             }
         }
-        else {
-            for (var idx = originIndex; idx < index; idx++) {
+        else{
+            for (var idx = originIndex; idx < index; idx++){
                 $scope.mix[idx] = originalArray[idx + 1];
             }
         }
-    };
-    $scope.addToLibrary = function (index, song, evt) {
-        //MB: index is the index of the position where the draggable was dropped
-        var originalArray = $scope.library.slice(0);
-        var originIndex = $scope.library.indexOf(song);
-        //MB:the draggable is put at the index position it was dropped onto
-        $scope.library[index] = song;
-        //MB:start at the position the draggable came from and shift everything forward/backward
-        if (index < originIndex) {
-            for (var idx = originIndex; idx > index; idx--) {
-                $scope.library[idx] = originalArray[idx - 1];
-            }
-        }
-        else {
-            for (var idx = originIndex; idx < index; idx++) {
-                $scope.library[idx] = originalArray[idx + 1];
-            }
-        }
-    };
+    }
 
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function () {
