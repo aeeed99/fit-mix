@@ -48,5 +48,28 @@ app.factory('MixBoardFactory', function(){
 
     };
 
+    MixBoardFactory.addTrackToMix = function (track, mix) {
+        if (track) mix.push(track);
+        $('track-panel').removeClass('track-selected');
+    };
+
+    MixBoardFactory.reorderInPlace = function (index, item, event, dropArray){
+        //MB: index is the index of the position where the draggable was dropped
+        var originalArray = dropArray.slice(0);
+        var originIndex = dropArray.indexOf(item);
+        //MB:the draggable is put at the index position it was dropped onto
+        dropArray[index] = item;
+        //MB:start at the position the draggable came from and shift everything forward/backward
+        if(index < originIndex){
+            for (var idx = originIndex; idx > index; idx--){
+                dropArray[idx] = originalArray[idx - 1];
+            }
+        }
+        else{
+            for (var idx = originIndex; idx < index; idx++){
+                dropArray[idx] = originalArray[idx + 1];
+            }
+        }
+    };
     return MixBoardFactory;
 })

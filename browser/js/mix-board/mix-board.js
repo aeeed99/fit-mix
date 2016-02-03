@@ -20,11 +20,13 @@ app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) 
     $scope.toggleAddPhase = function(){ $scope.showAddPhase = !$scope.showAddPhase };
     $scope.phases = []; //NP: Keep track of phases below mix bar.
     $scope.addPhase = function(input){
+        console.log(input);
         let totalRemaining = _.sum($scope.phases.map(i => i.duration));
         //TODO NP: create an alert if there is no room for another phase.
         if(input.lengthSeconds > totalRemaining) input.lengthSeconds = totalRemaining;
         $scope.phases.push({ name: input.phaseName, duration: input.lengthSeconds });
         $scope.showAddPhase = false;
+        console.log($scope.phases);
     };
     $scope.library = tracks;
     $scope.isLoaded = false;
@@ -109,61 +111,21 @@ app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) 
 
         $scope.currentTrack.wavesurfer = wavesurfer
     };
-
-    //MB:draggable things below here VVVVVVVVVVVVVVVVVVVV
-    //$scope.mix is what we ng-repeat over for the playlist
-    $scope.mix = [];
-    $scope.addToMix = function (index, song, evt) {
-        var copyOfSong;
-        //MB:This is NOT to check for multiple of the same song on mix; it is to check if the song is coming from mix or library
-        if (song.onMix === false) {
-            copyOfSong = new $scope.Clone(song);
-            copyOfSong.pseudoId = $scope.randomNumber();
-            $scope.mix.push(copyOfSong);
-            copyOfSong.onMix = true;
-        }
-        //MB:index is the index of the position where the draggable was dropped
-        var originalArray = $scope.mix.slice(0);
-        var originIndex;
-
-        //MB:whether it came from the playlist or the library, the draggable is put at the index position it was dropped onto
-        if (copyOfSong) {
-            originIndex = $scope.mix.indexOf(copyOfSong);
-            $scope.mix[index] = copyOfSong;
-        }
-        else {
-            originIndex = $scope.mix.indexOf(song);
-            $scope.mix[index] = song;
-        }
-        //MB:shift everything based on the new position of song
-        if (index < originIndex) {
-            for (var idx = originIndex; idx > index; idx--) {
-                $scope.mix[idx] = originalArray[idx - 1];
-            }
-        }
-        else {
-            for (var idx = originIndex; idx < index; idx++) {
-                $scope.mix[idx] = originalArray[idx + 1];
-            }
-        }
-    };
-    $scope.addToLibrary = function (index, song, evt) {
-        //MB: index is the index of the position where the draggable was dropped
-        var originalArray = $scope.library.slice(0);
-        var originIndex = $scope.library.indexOf(song);
-        //MB:the draggable is put at the index position it was dropped onto
-        $scope.library[index] = song;
-        //MB:start at the position the draggable came from and shift everything forward/backward
-        if (index < originIndex) {
-            for (var idx = originIndex; idx > index; idx--) {
-                $scope.library[idx] = originalArray[idx - 1];
-            }
-        }
-        else {
-            for (var idx = originIndex; idx < index; idx++) {
-                $scope.library[idx] = originalArray[idx + 1];
-            }
-        }
+      // PLAY / PAUSE FUNCTIONALITY
+        $(document).on('keyup', function(e) {
+            console.log("SPACE")
+             if (e.which == 32 && $scope.isLoaded) {
+                if ($scope.isPlaying){
+                    wavesurfer.pause();
+                } else{
+                    console.log("wavesurfer should play now")
+                     wavesurfer.play();
+                }
+                $scope.isPlaying = !$scope.isPlaying
+             }
+        });
+    $scope.reorderMix = function (index, track, event, mix) {
+        MixBoardFactory.reorderInPlace(index, track, event, mix)
     };
 
     // NP: Add-to-mix functionality (non-DnD version)
@@ -171,6 +133,10 @@ app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) 
     $scope.addSelectedTrackToMix = function () {
         if ($scope.selectedTrack) $scope.mix.push($scope.selectedTrack);
         $('track-panel').removeClass('track-selected');
+//=======
+//    $scope.addSelectedTrackToMix = function (track, mix) {
+//        MixBoardFactory.addTrackToMix(track, mix);
+//>>>>>>> master
         $scope.selectedTrack = null;
     };
     // PLAY / PAUSE FUNCTIONALITY
