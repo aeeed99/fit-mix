@@ -136,6 +136,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     $scope.addToMix = function (index, song, evt) {
         var copyOfSong;
         //MB:This is NOT to check for multiple of the same song on mix; it is to check if the song is coming from mix or library
+        console.log("song", song)
         if (song.onMix === false) {
             copyOfSong = new $scope.Clone(song);
             copyOfSong.pseudoId = $scope.randomNumber();
@@ -168,6 +169,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
         }
     };
     $scope.addToLibrary = function (index, song, evt) {
+        console.log("add to library", song)
         //MB: index is the index of the position where the draggable was dropped
         var originalArray = $scope.library.slice(0);
         var originIndex = $scope.library.indexOf(song);
@@ -188,9 +190,10 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
 
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function () {
+        console.log("selectedTrack", $scope.selectedTrack)
         if ($scope.selectedTrack) $scope.mix.push($scope.selectedTrack);
-        $('track-panel').removeClass('track-selected');
-        $scope.selectedTrack = null;
+        //$('track-panel').removeClass('track-selected');
+        //$scope.selectedTrack = null;
     };
     // PLAY / PAUSE FUNCTIONALITY
     $(document).on('keyup', function (e) {
