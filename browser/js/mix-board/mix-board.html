@@ -15,8 +15,7 @@
           <div id="mix-clip" ng-drag="true" ng-drag-data="track">
           <!--NP: TODO: replace hardcode 1200 with dynamic custom length -->
           <span class="">{{ track.name }}</span>
-          <p ng-model="lengthModels[track.length]">{{track.duration / 3600 * 100}}</p>
-          <p>{{lengthModels}}</p>
+          <p ng-model="lengthModels[track.length]">{{track.duration}}</p>
           </div>
         </div>
         <!--<mix-clip track-info="library[0]"></mix-clip>-->
