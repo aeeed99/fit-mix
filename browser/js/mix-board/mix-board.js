@@ -157,7 +157,6 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
             height: '100%'
         };
         style.width = (track.duration / 3600 * 100) + '%';
-        console.log(style);
         return style;
     }
 
