@@ -1,7 +1,0 @@
-<div ng-style=" {width: '{{ trackInfo.duration / 3600 * 100}}' + '%', float: 'left', height: '100%'} " ng-drop="true" ng-drop-success="moveWithinMix($index, $data, $event)">
-  <div id="mix-clip" ng-drag="true" ng-drag-data="trackInfo">
-  <!--NP: TODO: replace hardcode 1200 with dynamic custom length -->
-  <span class="">{{ trackInfo.name }}</span>
-  {{trackInfo.duration / 3600 * 100}}
-  </div>
-</div>
