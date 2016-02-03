@@ -143,8 +143,9 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
                 $scope.isPlaying = !$scope.isPlaying
              }
         });
-    $scope.reorderMix = function (index, track, event, mix) {
-        MixBoardFactory.reorderInPlace(index, track, event, mix)
+
+    $scope.reorder = function (index, track, event, array) {
+        MixBoardFactory.reorderInPlace(index, track, event, array)
     };
 
     // NP: Add-to-mix functionality (non-DnD version)

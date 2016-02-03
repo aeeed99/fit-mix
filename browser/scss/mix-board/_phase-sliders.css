@@ -112,7 +112,6 @@
   -webkit-align-content: space-around;
       -ms-flex-line-pack: distribute;
           align-content: space-around;
-  padding: 7px;
 }
 
 .row {
@@ -145,16 +144,25 @@
 
 section {
   box-sizing: border-box;
-  border-radius: 10px;
-  padding: 1.25em;
   background: #ddd;
-  border: 7px solid #fff;
+  border: 2px solid #fff;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
       -ms-flex: 1;
           flex: 1;
   min-width: 30px;
 }
+
+section p{
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+section div{
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
 section.resizable {
   -webkit-box-flex: 0;
   -webkit-flex: 0 0 300px;
