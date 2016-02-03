@@ -48,5 +48,38 @@ app.factory('MixBoardFactory', function(){
 
     };
 
+    MixBoardFactory.addTrackToMix = function (track, mix) {
+        if (track) {
+            // EC - adds start and end times based on region/no region
+            if (track.hasRegion){
+            track.start = track.region.start;
+            track.end = track.region.end;
+            track.duration = track.end - track.start;
+            } else {
+            track.start =0;
+            track.end = track.duration;
+            }
+             mix.push(track);
+        }
+    };
+
+    MixBoardFactory.reorderInPlace = function (index, item, event, dropArray){
+        //MB: index is the index of the position where the draggable was dropped
+        var originalArray = dropArray.slice(0);
+        var originIndex = dropArray.indexOf(item);
+        //MB:the draggable is put at the index position it was dropped onto
+        dropArray[index] = item;
+        //MB:start at the position the draggable came from and shift everything forward/backward
+        if(index < originIndex){
+            for (var idx = originIndex; idx > index; idx--){
+                dropArray[idx] = originalArray[idx - 1];
+            }
+        }
+        else{
+            for (var idx = originIndex; idx < index; idx++){
+                dropArray[idx] = originalArray[idx + 1];
+            }
+        }
+    };
     return MixBoardFactory;
 })
