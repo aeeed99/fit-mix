@@ -12,7 +12,39 @@ app.config(function ($stateProvider) {
     })
 });
 
-app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) {
+app.controller('MixBoardController', function ($scope, $document, tracks, MixBoardFactory) {
+        // HARD CODED RIGHT NOW
+        $scope.mixLength = 60;
+        $scope.workouts = [
+            {name: "STRETCH",
+             duration: 10,
+             color: "one"
+             },
+            {name: "WARM UP",
+             duration: 10,
+             color: "two"
+             },
+            {name: "SPRINT",
+             duration: 20,
+             color: "three"
+
+             },
+            {name: "COOL DOWN",
+             duration: 20,
+             color: "one"
+             }
+        ]
+
+
+    $scope.durSum = function(){
+        var sum = 0;
+        $scope.workouts.forEach(function(workout){
+            sum+=workout.duration;
+        })
+        return sum
+    };
+
+
     $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = []; //NP List of songs on the mix bar.
     $scope.mixDuration = 3600; //TODO NP: have this adjustable
@@ -111,24 +143,27 @@ app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) 
 
         $scope.currentTrack.wavesurfer = wavesurfer
     };
-      // PLAY / PAUSE FUNCTIONALITY
+
+
+     //PLAY / PAUSE FUNCTIONALITY
         $(document).on('keyup', function(e) {
-            console.log("SPACE")
-             if (e.which == 32 && $scope.isLoaded) {
+              if (e.which == 32 && $scope.isLoaded) {
                 if ($scope.isPlaying){
                     wavesurfer.pause();
                 } else{
-                    console.log("wavesurfer should play now")
                      wavesurfer.play();
                 }
                 $scope.isPlaying = !$scope.isPlaying
              }
         });
+
     $scope.reorderMix = function (index, track, event, mix) {
         MixBoardFactory.reorderInPlace(index, track, event, mix)
     };
 
+
     // NP: Add-to-mix functionality (non-DnD version)
+<<<<<<< HEAD
     // NP: These will be refactored into an ActionButtonsFactory.
     $scope.addSelectedTrackToMix = function () {
         if ($scope.selectedTrack) $scope.mix.push($scope.selectedTrack);
@@ -138,18 +173,12 @@ app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) 
 //        MixBoardFactory.addTrackToMix(track, mix);
 //>>>>>>> master
         $scope.selectedTrack = null;
+=======
+    $scope.addSelectedTrackToMix = function (track, mix) {
+        MixBoardFactory.addTrackToMix(track, mix);
+>>>>>>> master
     };
-    // PLAY / PAUSE FUNCTIONALITY
-    $(document).on('keyup', function (e) {
-        if (e.which == 32 && $scope.isLoaded) {
-            if ($scope.isPlaying) {
-                wavesurfer.pause();
-            } else {
-                wavesurfer.play();
-            }
-            $scope.isPlaying = !$scope.isPlaying
-        }
-    });
+
     /* Progress bar */
     var progressDiv = document.querySelector('#progress-bar');
     var progressBar = progressDiv.querySelector('.progress-bar');
