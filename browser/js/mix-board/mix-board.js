@@ -130,14 +130,14 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
 
         $scope.currentTrack.wavesurfer = wavesurfer
     };
-      // PLAY / PAUSE FUNCTIONALITY
+
+
+     //PLAY / PAUSE FUNCTIONALITY
         $(document).on('keyup', function(e) {
-            console.log("SPACE")
-             if (e.which == 32 && $scope.isLoaded) {
+              if (e.which == 32 && $scope.isLoaded) {
                 if ($scope.isPlaying){
                     wavesurfer.pause();
                 } else{
-                    console.log("wavesurfer should play now")
                      wavesurfer.play();
                 }
                 $scope.isPlaying = !$scope.isPlaying
@@ -148,22 +148,12 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
         MixBoardFactory.reorderInPlace(index, track, event, array)
     };
 
+
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function (track, mix) {
         MixBoardFactory.addTrackToMix(track, mix);
-        $scope.selectedTrack = null;
     };
-    // PLAY / PAUSE FUNCTIONALITY
-    $(document).on('keyup', function (e) {
-        if (e.which == 32 && $scope.isLoaded) {
-            if ($scope.isPlaying) {
-                wavesurfer.pause();
-            } else {
-                wavesurfer.play();
-            }
-            $scope.isPlaying = !$scope.isPlaying
-        }
-    });
+
     /* Progress bar */
     var progressDiv = document.querySelector('#progress-bar');
     var progressBar = progressDiv.querySelector('.progress-bar');
