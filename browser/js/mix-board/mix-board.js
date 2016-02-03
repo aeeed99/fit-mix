@@ -144,8 +144,8 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
              }
         });
 
-    $scope.reorderMix = function (index, track, event, mix) {
-        MixBoardFactory.reorderInPlace(index, track, event, mix)
+    $scope.reorder = function (index, item, event, array) {
+        MixBoardFactory.reorderInPlace(index, item, event, array)
     };
 
 
