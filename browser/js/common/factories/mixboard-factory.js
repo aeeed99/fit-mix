@@ -49,8 +49,18 @@ app.factory('MixBoardFactory', function(){
     };
 
     MixBoardFactory.addTrackToMix = function (track, mix) {
-        if (track) mix.push(track);
-        $('track-panel').removeClass('track-selected');
+        if (track) {
+            // EC - adds start and end times based on region/no region
+            if (track.hasRegion){
+            track.start = track.region.start;
+            track.end = track.region.end;
+            track.duration = track.end - track.start;
+            } else {
+            track.start =0;
+            track.end = track.duration;
+            }
+             mix.push(track);
+        }
     };
 
     MixBoardFactory.reorderInPlace = function (index, item, event, dropArray){
