@@ -15,10 +15,17 @@ app.config(function ($stateProvider) {
 app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) {
     $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = []; //NP List of songs on the mix bar.
-    $scope.phases = [{
-        name: "Not a phase, mom",
-        duration: 1000
-    }]; //NP: Keep track of phases below mix bar.
+    $scope.mixDuration = 3600; //TODO NP: have this adjustable
+    $scope.showAddPhase = false; // NP: Toggle add-phase dialogue (a simple, pseduo-modal)
+    $scope.toggleAddPhase = function(){ $scope.showAddPhase = !$scope.showAddPhase };
+    $scope.phases = []; //NP: Keep track of phases below mix bar.
+    $scope.addPhase = function(input){
+        let totalRemaining = _.sum($scope.phases.map(i => i.duration));
+        //TODO NP: create an alert if there is no room for another phase.
+        if(input.lengthSeconds > totalRemaining) input.lengthSeconds = totalRemaining;
+        $scope.phases.push({ name: input.phaseName, duration: input.lengthSeconds });
+        $scope.showAddPhase = false;
+    };
     $scope.library = tracks;
     $scope.isLoaded = false;
     $scope.isPlaying = false;
@@ -165,10 +172,6 @@ app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) 
         if ($scope.selectedTrack) $scope.mix.push($scope.selectedTrack);
         $('track-panel').removeClass('track-selected');
         $scope.selectedTrack = null;
-    };
-    $scope.addPhaseDialogue = function(){
-        $('body').add('track-panel');
-        $scope.$digest();
     };
     // PLAY / PAUSE FUNCTIONALITY
     $(document).on('keyup', function (e) {

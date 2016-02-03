@@ -1,0 +1,41 @@
+=dialogue-box()
+  width: 36vw
+  height: 32vh
+  position: fixed
+  overflow: hidden
+  top: 50vh - (32vh / 2)
+  left: 50vh + (36vh / 2)
+  align-content: center
+  background-color: rgba(118, 203, 238, 0.5)
+
+add-phase
+  border: 2px solid #888
+  +dialogue-box()
+  #dialogue-header
+    height: 1.8em
+    color: #ddd
+    text-align: center
+    font-size: 16px
+    font-weight: bold
+    .btn-x
+      float: right
+      background: #761c19
+      color: #ddc88c
+
+    background-color: rgba(51, 61, 95, 0.86)
+  #dialogue-body
+    align-content: center
+    padding: 5px 20px
+    input
+      display: block
+      float: none
+      position: relative
+      margin: 0 auto
+  h2
+    text-align: center
+    font-size: 18px
+    font-family: $font-standard
+    margin: 8px 0 5px 0
+  .buttons
+    @mixin action-buttons
+

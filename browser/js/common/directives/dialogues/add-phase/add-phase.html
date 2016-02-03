@@ -1,9 +1,13 @@
-<div id="dialogue-header">Add a Phase</div>
-<div id="dialogue-body">
-  <form ng-model="phaseInput" ng-submit="addPhase()">
+<div id="dialogue-header">Add a Phase <button class="btn-x" ng-click="toggleAddPhase()">x</button></div>
+<form novalidate>
+  <div id="dialogue-body">
+    <h2>Name:</h2>
+    <input type="text" ng-model="input.phaseName" default="Awesome Workout Phase">
     <h2>Length:</h2>
-    <input type="number" ng-model="lengthSeconds">s.
+    <input type="number" ng-model="input.lengthSeconds" placeholder="in seconds">
     <!--TODO: add slider-->
-    <button ng-submit>Add</button>
-  </form>
-</div>
+    <div class="buttons">
+      <button type="button" ng-click="addPhase(input)">Add</button>
+    </div>
+  </div>
+</form>

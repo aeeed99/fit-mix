@@ -1,6 +1,7 @@
 <div id="user-menu">
   <span class="glyphicon glyphicon-menu-hamburger"></span>
 </div>
+<add-phase ng-hide="!showAddPhase"></add-phase>
 <div class="container clearfix">
   <div class="" id="mix-header">
     <h3><span class="dev-placeholder">My awesome Playlist</span></h3>
@@ -12,7 +13,7 @@
       </div>
     </div>
     <div id="phase-view">
-      <phase ng-repeat="phase in phases" phase-info="phase" class="dev-test"></phase>
+      <phase ng-repeat="phase in phases" phase-info="phase"></phase>
     </div>
     <!--NP this doesn't work. see issue 9-->
     <!--<div id="add-phase"><button class="btn">+</button></div>&ndash;&gt;-->
@@ -26,7 +27,7 @@
   </div>
   <div id="action-buttons"> <!--TODO: (NP) This will become a series of states -->
     <button class="btn" type="button" ng-click="addSelectedTrackToMix()">Add to Mix</button>
-    <button class="btn" type="button" ng-click="addPhaseDialogue()">+ New Phase</button>
+    <button class="btn" type="button" ng-click="toggleAddPhase()">+ New Phase</button>
   </div>
 
   <div class="progress progress-striped active" id="progress-bar">
