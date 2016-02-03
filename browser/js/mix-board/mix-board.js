@@ -12,58 +12,39 @@ app.config(function ($stateProvider) {
     })
 });
 
-app.controller('MixBoardController', function ($scope, tracks, MixBoardFactory) {
+app.controller('MixBoardController', function ($scope, $document, tracks, MixBoardFactory) {
+        // HARD CODED RIGHT NOW
+        $scope.mixLength = 60;
+        $scope.workouts = [
+            {name: "STRETCH",
+             duration: 10,
+             color: "one"
+             },
+            {name: "WARM UP",
+             duration: 10,
+             color: "two"
+             },
+            {name: "SPRINT",
+             duration: 20,
+             color: "three"
 
-$scope.mixLength = 60;
-$scope.slider1 = {
-  value: 23,
-    min: 30,
-    max: 100,
-  options: {
-    floor: 0,
-    ceil: $scope.mixLength,
-
-   // draggableRange: true,
-  // showTicks: true,
-//showTicksValues: true
- }
-};
-
-$scope.slider2 = {
-  value: 23,
-    min: 30,
-    max: 100,
-  options: {
-    floor: 0,
-    ceil: $scope.mixLength,
-  // showTicks: true,
- }
-};
-
-$scope.slider3 = {
-  value: 23,
-    min: 30,
-    max: 100,
-  options: {
-    floor: 0,
-    ceil: $scope.mixLength,
-  // showTicks: true,
- }
-};
+             },
+            {name: "COOL DOWN",
+             duration: 20,
+             color: "one"
+             }
+        ]
 
 
+    $scope.durSum = function(){
+        var sum = 0;
+        $scope.workouts.forEach(function(workout){
+            sum+=workout.duration;
+        })
+        return sum
+    };
 
-$scope.minSlider = {
 
-  options: {
-    // floor: 0,
-    // ceil: 450,
-    stepsArray: ['Stretch', 'Warmup', 'Ramp Up', 'Peak', 'Cool Down'],
-draggableRange: true,
-showTicks: true,
-showTicksValues: true
-  }
-};
     $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = [] //NP List of songs on the mix bar.
     $scope.library = tracks

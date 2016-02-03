@@ -15,41 +15,22 @@
     <!--<div id="add-phase"><button class="btn">+</button></div>&ndash;&gt;-->
   </div>
 <div>
-    <rzslider
-         rz-slider-model="slider1.value"
-         rz-slider-options="slider1.options">
-    </rzslider>
-</div>
-<div>
-    <rzslider
-         rz-slider-model="slider2.value"
-         rz-slider-options="slider2.options">
-    </rzslider>
-</div>
-<div>
-    <rzslider
-         rz-slider-model="slider3.value"
-         rz-slider-options="slider3.options">
-    </rzslider>
-</div>
-<!-- <rzslider
-    rz-slider-model= "1"
-    rs-slider-high = "2"
-    rz-slider-options="minSlider.options">
-</rzslider> -->
-            <div class="row workout-element">
-                <div id="one" style="width: {{slider1.value}}px;">
-                    <p>WARM UP</p>
-                </div>
-                <div id="two" style="width: {{slider2.value}}px;">
-                    <p>PUSHUPS</p>
-                </div>
-                <div id="three" style="width: {{slider3.value}}px;">
-                    <p>SQUATS</p>
-                </div>
 
 
-            </div>
+<div id="upper-panel">
+  <div id="mix-board">
+    <div id="mix-view">
+              <div class="row resizable">
+                  <section ng-repeat="workout in workouts" id="{{workout.color}}" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="workout.duration">
+                      <p>{{workout.name}}</p>
+                      <p>{{workout.duration}} MIN</p>
+
+                  </section>
+              </div>
+          </div>
+  </div>
+</div>
+
   <div id="library">
     <!--{{ library }}-->
     <div ng-repeat="track in library">
