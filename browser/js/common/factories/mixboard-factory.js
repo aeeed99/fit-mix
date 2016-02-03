@@ -60,6 +60,7 @@ app.factory('MixBoardFactory', function(){
             track.end = track.duration;
             }
              mix.push(track);
+             console.log(mix);
         }
     };
 

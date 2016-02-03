@@ -145,10 +145,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
         });
 
     $scope.reorder = function (index, item, event, array) {
-        console.log("reorder has been called with")
-        console.log(arguments)
-        MixBoardFactory.reorderInPlace(index, item, event, array)
-        $(document).find(".drop-area").class
+        MixBoardFactory.reorderInPlace(index, item, event, array);
     };
 
     $scope.stylizer = function(track){

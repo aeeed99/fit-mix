@@ -1,5 +1,5 @@
 <div id="user-menu">
-  <span class="glyphicon glyphicon-menu-hamburger"></span>
+    <span class="glyphicon glyphicon-menu-hamburger"></span>
 </div>
 <div class="container clearfix">
   <div class="" id="mix-header">
@@ -57,14 +57,16 @@
 
   <div class="progress progress-striped active" id="progress-bar">
     <div class="progress-bar progress-bar-info">
-    </div>
-  </div>
-  <div id="track-timeline">
-
-  </div>
-
-  <div id="track-preview">
-
-  </div>
-
-</div>
+            <div id="action-buttons">
+                <button class="btn" type="button">Upload Songs to Library</button>
+                <button class="btn" type="button" ng-click="addSelectedTrackToMix(selectedTrack, mix)">Add to Mix</button>
+            </div>
+            <div class="progress progress-striped active" id="progress-bar">
+                <div class="progress-bar progress-bar-info">
+                </div>
+            </div>
+            <div id="track-timeline">
+            </div>
+            <div id="track-preview">
+            </div>
+        </div>
