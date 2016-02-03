@@ -41,6 +41,14 @@ var schema = new mongoose.Schema({
     file: {
         mime: String,
         bin: Buffer
+    },
+    start: {
+        type: Number,
+        default: null
+    },
+    end: {
+        type: Number,
+        default: null
     }
 });
 

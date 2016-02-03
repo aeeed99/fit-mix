@@ -11,7 +11,7 @@
                 <!--<div id="track-info-wrapper" ng-repeat="track in library | limitTo: 3 ">-->
                 <!--<mix-clip track-info="track"></mix-clip>-->
                 <!--</div>-->
-                <div ng-repeat="track in mix track by $index" ng-style=" {width: '{{ track.duration / 3600 * 100}}' + '%', float: 'left', height: '100%'} " ng-drop="true" ng-drop-success="reorder($index, $data, $event, mix)">
+                <div ng-repeat="track in mix track by $index" ng-style="stylizer(track)" ng-drop="true" ng-drop-success="reorder($index, $data, $event, mix)">
                     <div id="mix-clip" ng-drag="true" ng-drag-data="track">
                         <!--NP: TODO: replace hardcode 1200 with dynamic custom length -->
                         <span class="">{{ track.name }}</span> {{(track.duration - track.duration % 60)/60}}:{{track.duration %}}
@@ -42,13 +42,14 @@
             </div>
             <div id="library">
                 <!--{{ library }}-->
-                <div ng-repeat="track in library">
-                    <track-panel track-info="track" ng-click="prevWave(track)"></track-panel>
+                <div ng-repeat="track in library track by $index">
+                    <track-panel panel-identifier="stylizeTrack(track)" track-info="track" ng-click="prevWave(track)"></track-panel>
                 </div>
             </div>
             <div id="action-buttons">
                 <button class="btn" type="button">Upload Songs to Library</button>
                 <button class="btn" type="button" ng-click="addSelectedTrackToMix(selectedTrack, mix)">Add to Mix</button>
+                <button class="btn" type="button" ng-click="addSegmentToLibrary(selectedTrack)">Add to Library</button>
             </div>
             <div class="progress progress-striped active" id="progress-bar">
                 <div class="progress-bar progress-bar-info">
