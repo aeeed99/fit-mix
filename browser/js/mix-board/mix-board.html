@@ -11,11 +11,12 @@
         <!--<div id="track-info-wrapper" ng-repeat="track in library | limitTo: 3 ">-->
           <!--<mix-clip track-info="track"></mix-clip>-->
         <!--</div>-->
-        <div ng-repeat="track in mix track by $index" ng-style=" {width: '{{ track.duration / 3600 * 100}}' + '%', float: 'left', height: '100%'} " ng-drop="true" ng-drop-success="reorderMix($index, $data, $event, mix)">
+        <div ng-repeat="track in mix track by $index" ng-style="stylizer(track)" ng-drop="true" ng-drop-success="reorder($index, $data, $event, mix)" class="drop-area">
           <div id="mix-clip" ng-drag="true" ng-drag-data="track">
           <!--NP: TODO: replace hardcode 1200 with dynamic custom length -->
           <span class="">{{ track.name }}</span>
-          {{track.duration / 3600 * 100}}
+          <p ng-model="lengthModels[track.length]">{{track.duration / 3600 * 100}}</p>
+          <p>{{lengthModels}}</p>
           </div>
         </div>
         <!--<mix-clip track-info="library[0]"></mix-clip>-->
@@ -33,11 +34,12 @@
   <div id="mix-board">
     <div id="mix-view">
               <div class="row resizable">
-                  <section ng-repeat="workout in workouts" id="{{workout.color}}" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="workout.duration">
+                <section ng-repeat="workout in workouts" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="workout.duration" ng-drop="true" ng-drop-success="reorder($index, $data, $event, workouts)">
+                  <div style="{width: '100%', height: '100%'}" id="{{workout.color}}" ng-drag="true" ng-drag-data="workout">
                       <p>{{workout.name}}</p>
                       <p>{{workout.duration}} MIN</p>
-
-                  </section>
+                  </div>
+                </section>
               </div>
           </div>
   </div>

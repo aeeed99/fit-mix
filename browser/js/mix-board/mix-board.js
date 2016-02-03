@@ -66,7 +66,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
             wavesurfer.destroy();
             $("#track-preview").empty();
         }
-
+        $scope.lengthModels = {};
         $scope.currentTrack = MixBoardFactory.getCurrentSong($scope.library, track)
         $scope.currentTrack.hasRegion = $scope.currentTrack.hasRegion ? $scope.currentTrack.hasRegion : false;
 
@@ -144,10 +144,22 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
              }
         });
 
-    $scope.reorderMix = function (index, track, event, mix) {
-        MixBoardFactory.reorderInPlace(index, track, event, mix)
+    $scope.reorder = function (index, item, event, array) {
+        console.log("reorder has been called with")
+        console.log(arguments)
+        MixBoardFactory.reorderInPlace(index, item, event, array)
+        $(document).find(".drop-area").class
     };
 
+    $scope.stylizer = function(track){
+        let style = {
+            float: 'left',
+            height: '100%'
+        };
+        style.width = (track.duration / 3600 * 100) + '%';
+        console.log(style);
+        return style;
+    }
 
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function (track, mix) {
