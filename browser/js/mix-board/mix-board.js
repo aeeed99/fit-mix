@@ -48,6 +48,9 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     $scope.mix = [] //NP List of songs on the mix bar.
     $scope.library = tracks;
 
+    $scope.editTitle = false;
+    $scope.mixName = "My awesome Playlist";
+
     $scope.isLoaded = false;
     $scope.isPlaying = false;
     $scope.region;
@@ -56,7 +59,9 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack)
     var wavesurfer;
     var loadingPrev = false
-
+    $scope.fillContainer = function(){
+        return {width: '100%', height: '100%'};
+    }
     $scope.prevWave = function (track) {
         // CHES - "isLoaded" is for loading pre-saved data
         $scope.isLoaded = false;
@@ -145,9 +150,25 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
              }
         });
 
-    $scope.reorder = function (index, item, event, array) {
-        MixBoardFactory.reorderInPlace(index, item, event, array);
+    $scope.reorderMix = function (index, item, event, array) {
+        //phases don't have artists, so this ensures no dragging between phases and mix
+        if(item.artist){
+            MixBoardFactory.reorderInPlace(index, item, event, array);
+        }
     };
+    $scope.reorderPhase = function (index, item, event, array) {
+        //phases don't have artists, so this ensures no dragging between phases and mix
+        if(!item.artist){
+            MixBoardFactory.reorderInPlace(index, item, event, array);
+        }
+    };
+    $scope.toggleEdit = function(){
+        $scope.editTitle = !$scope.editTitle;
+        if(!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
+    }
+    $scope.prettyDuration = function(track){
+        return (track.duration - track.duration % 60) / 60 + ":" + track.duration % 60;
+    }
     $scope.addSegmentToLibrary = function(track){
         let newTrack = track;
         MixBoardFactory.saveSegment(newTrack);
