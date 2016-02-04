@@ -52,14 +52,17 @@ app.factory('MixBoardFactory', function(){
         if (track) {
             // EC - adds start and end times based on region/no region
             if (track.hasRegion){
-            track.start = track.region.start;
-            track.end = track.region.end;
-            track.duration = track.end - track.start;
+                track.start = track.region.start;
+                track.end = track.region.end;
+                track.duration = track.end - track.start;
             } else {
-            track.start =0;
-            track.end = track.duration;
+                track.start =0;
+                track.end = track.wavesurfer.getDuration();
+                track.duration = track.wavesurfer.getDuration();
             }
-             mix.push(track);
+            // EC - makes a copy so this isn't pass by reference
+            var copy = jQuery.extend( {}, track)
+             mix.push(copy);
              console.log(mix);
         }
     };
@@ -81,6 +84,11 @@ app.factory('MixBoardFactory', function(){
                 dropArray[idx] = originalArray[idx + 1];
             }
         }
+    };
+
+    MixBoardFactory.saveSegment = function(track){
+        track.start = track.region.start;
+        track.end = track.region.end;
     };
     return MixBoardFactory;
 })

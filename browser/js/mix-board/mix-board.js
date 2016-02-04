@@ -13,39 +13,38 @@ app.config(function ($stateProvider) {
 });
 
 app.controller('MixBoardController', function ($scope, $document, tracks, MixBoardFactory) {
-        // HARD CODED RIGHT NOW
-        $scope.mixLength = 60;
-        $scope.workouts = [
-            {name: "STRETCH",
-             duration: 10,
-             color: "one"
-             },
-            {name: "WARM UP",
-             duration: 10,
-             color: "two"
-             },
-            {name: "SPRINT",
-             duration: 20,
-             color: "three"
+    // HARD CODED RIGHT NOW
+    $scope.mixLength = 600;
+    $scope.phases = [
+        {name: "STRETCH",
+         duration: 120,
+         color: "one"
+         },
+        {name: "WARM UP",
+         duration: 120,
+         color: "two"
+         },
+        {name: "SPRINT",
+         duration: 300,
+         color: "three"
 
-             },
-            {name: "COOL DOWN",
-             duration: 20,
-             color: "one"
-             }
-        ]
-
+         },
+        {name: "COOL DOWN",
+         duration: 60,
+         color: "one"
+         }
+    ]
 
     $scope.durSum = function(){
         var sum = 0;
-        $scope.workouts.forEach(function(workout){
-            sum+=workout.duration;
+        $scope.phases.forEach(function(phase){
+            sum+=phase.duration;
         })
         return sum
     };
 
 
-    $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
+    // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = [] //NP List of songs on the mix bar.
     $scope.library = tracks;
 
@@ -68,7 +67,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
         $scope.isLoaded = false;
         // CHES - remove previous wavesurfer if exists
         if (wavesurfer) {
-            wavesurfer.destroy();
+            //wavesurfer.destroy();
             $("#track-preview").empty();
         }
         $scope.lengthModels = {};
@@ -99,9 +98,11 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
             $scope.isPlaying = true;
         });
 
-        wavesurfer.on('region-updated', function () {
+        wavesurfer.on('region-updated', function (region) {
+            $scope.currentTrack.region = region;
             $scope.currentTrack.region.startTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.start);
             $scope.currentTrack.region.endTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.end);
+
             $scope.$digest()
         });
 
@@ -131,8 +132,8 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
         wavesurfer.on('destroy', hideProgress);
         wavesurfer.on('error', hideProgress);
         wavesurfer.load(track.src);
-        $scope.selectedTrack = track;
-
+      //  $scope.selectedTrack = track;
+       // EC - TESTING REMOVING THIS TO SEE IF WE NEED IT
         $scope.currentTrack.wavesurfer = wavesurfer
     };
 
@@ -152,13 +153,17 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     $scope.reorder = function (index, item, event, array) {
         MixBoardFactory.reorderInPlace(index, item, event, array);
     };
-
     $scope.toggleEdit = function(){
         $scope.editTitle = !$scope.editTitle;
         if(!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
     }
     $scope.prettyDuration = function(track){
         return (track.duration - track.duration % 60) / 60 + ":" + track.duration % 60;
+    }
+    $scope.addSegmentToLibrary = function(track){
+        let newTrack = track;
+        MixBoardFactory.saveSegment(newTrack);
+        $scope.library.push(newTrack);
     }
     $scope.stylizer = function(track){
         let style = {
@@ -168,11 +173,59 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
         style.width = (track.duration / $scope.mixLength) + '%';
         return style;
     }
-
+    $scope.stylizeTrack = function(track){
+        if(track.end || track.start){
+            console.log("this sumbitch should have the style of panel-3");
+            return "track-panel-3";
+        }
+        return "track-panel-1";
+    };
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function (track, mix) {
-        MixBoardFactory.addTrackToMix(track, mix);
+        MixBoardFactory.addTrackToMix(track, $scope.mix);
     };
+
+    $scope.currentMixTrack;
+
+    $scope.pauseMix=function(){
+        $scope.currentMixTrack.wavesurfer.pause()
+    }
+
+    $scope.playClip = function(restart){
+        // EC - checks whether we are restartign or continuing from prev
+        if (restart){ $scope.currentMixTrack = null; }
+        var track;
+        var trackIndex = $scope.currentMixTrack ? $scope.mix.indexOf($scope.currentMixTrack) : 0;
+        var startTime;
+
+        if ($scope.currentMixTrack){
+             startTime  = $scope.currentMixTrack.currentProgress ? $scope.currentMixTrack.currentProgress : $scope.currentMixTrack.start;
+        } else {
+            startTime = $scope.mix[trackIndex].start;
+        }
+
+        track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[0];
+
+        $scope.currentMixTrack = track;
+        track.wavesurfer.play(startTime, track.end);
+
+        track.wavesurfer.on('audioprocess', function(process){
+            if ($scope.currentMixTrack && track){
+                $scope.currentMixTrack.currentProgress = process;
+                if (track.end - process < .5  ){
+                    track.wavesurfer.pause();
+                    track=undefined;
+                    if (trackIndex+1 < $scope.mix.length){
+                        $scope.currentMixTrack = $scope.mix[trackIndex+1];
+                        $scope.currentMixTrack.currentProgress = 0;
+                        $scope.playClip()
+                    } else {
+                        console.log("no more left!!");
+                        $scope.currentMixTrack = null; }
+                }
+            }
+        })
+    }
 
     /* Progress bar */
     var progressDiv = document.querySelector('#progress-bar');

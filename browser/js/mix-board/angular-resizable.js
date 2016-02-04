@@ -84,7 +84,7 @@ angular.module('angularResizable', [])
                             // console.log("newWidth", newWidth);
                             // console.log("oldWidth", oldWidth);
 
-                            if (scope.durSum<60 || newWidth < oldWidth ) {
+                            if (scope.durSum<scope.mixLength || newWidth < oldWidth ) {
                                 scope.workoutLen = Math.ceil((scope.mixLength* newWidth)/scope.maxTrackPix);
                                 scope.$apply();
                                 element[0].style[prop] = w - (offset * vx) + 'px';
