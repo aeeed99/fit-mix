@@ -55,7 +55,7 @@
             </div>
             <div id="action-buttons">
                 <button class="btn" type="button">Upload Songs to Library</button>
-                <button class="btn" type="button" ng-click="addSelectedTrackToMix(selectedTrack, mix)">Add to Mix</button>
+                <button class="btn" type="button" ng-click="addSelectedTrackToMix(currentTrack, mix)">Add to Mix</button>
                 <button class="btn" type="button" ng-click="addSegmentToLibrary(selectedTrack)">Add to Library</button>
             </div>
             <div class="progress progress-striped active" id="progress-bar">
@@ -67,11 +67,6 @@
             <div id="track-preview">
             </div>
       </div>
-      <div id="library">
-        <!--{{ library }}-->
-        <div ng-repeat="track in library">
-          <track-panel track-info="track" ng-click="prevWave(track)"></track-panel>
-        </div>
-    </div>
+
   </div>
 
