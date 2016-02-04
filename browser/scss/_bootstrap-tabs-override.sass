@@ -1,0 +1,23 @@
+$nav-tab: #ecafff
+$nav-tab-active: #ff00f2
+
+.nav-tabs
+  border: none
+
+li a
+  color: $nav-tab
+  font-weight: bold
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus
+  background-color: transparent
+  color: $nav-tab-active
+  border: none
+  margin: 0
+  border-bottom: 1px double $nav-tab-active
+
+//hovered, inactive tab
+.nav-tabs > li > a:hover
+  border-color: transparent
+.nav > li > a:hover
+  background-color: transparent
+  color: $nav-tab-active
