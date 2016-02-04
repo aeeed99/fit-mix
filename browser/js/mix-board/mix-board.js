@@ -33,19 +33,10 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
          duration: 60,
          color: "one"
          }
-    ]
-
-    $scope.durSum = function(){
-        var sum = 0;
-        $scope.phases.forEach(function(phase){
-            sum+=phase.duration;
-        })
-        return sum
-    };
-
+    ];
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
-    $scope.mix = [] //NP List of songs on the mix bar.
+    $scope.mix = []; //NP List of songs on the mix bar.
     $scope.library = tracks;
 
     $scope.editTitle = false;
@@ -56,12 +47,12 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     $scope.region;
     $scope.currentTrack;
     // CHES - have not had to use index variable yet but may come in handy..
-    $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack)
+    $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     var wavesurfer;
-    var loadingPrev = false
+    var loadingPrev = false;
     $scope.fillContainer = function(){
         return {width: '100%', height: '100%'};
-    }
+    };
     $scope.prevWave = function (track) {
         // CHES - "isLoaded" is for loading pre-saved data
         $scope.isLoaded = false;
@@ -71,7 +62,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
             $("#track-preview").empty();
         }
         $scope.lengthModels = {};
-        $scope.currentTrack = MixBoardFactory.getCurrentSong($scope.library, track)
+        $scope.currentTrack = MixBoardFactory.getCurrentSong($scope.library, track);
         $scope.currentTrack.hasRegion = $scope.currentTrack.hasRegion ? $scope.currentTrack.hasRegion : false;
 
         // CHES - create waveform
@@ -83,8 +74,8 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
             hideProgress();
             $scope.$digest();
             // CHES - creates track timeline
-            var timeline = MixBoardFactory.createTimeline(wavesurfer)
-            MixBoardFactory.enableDragSelection(wavesurfer)
+            var timeline = MixBoardFactory.createTimeline(wavesurfer);
+            MixBoardFactory.enableDragSelection(wavesurfer);
 
             // CHES - if it finds a pre-existing region, it will preload it
             if ($scope.currentTrack.region) {
@@ -121,7 +112,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
                 // CHES remove region on dbclick - from waveform AND curent track
                 region.on('dblclick', function () {
                     $scope.currentTrack.hasRegion = false;
-                    region.remove()
+                    region.remove();
                     $scope.currentTrack.region = undefined;
                     $scope.$digest();
                 })
@@ -150,42 +141,15 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
              }
         });
 
-    $scope.reorderMix = function (index, item, event, array) {
-        //phases don't have artists, so this ensures no dragging between phases and mix
-        if(item.artist){
-            MixBoardFactory.reorderInPlace(index, item, event, array);
-        }
-    };
-    $scope.reorderPhase = function (index, item, event, array) {
-        //phases don't have artists, so this ensures no dragging between phases and mix
-        if(!item.artist){
-            MixBoardFactory.reorderInPlace(index, item, event, array);
-        }
-    };
-    $scope.toggleEdit = function(){
-        $scope.editTitle = !$scope.editTitle;
-        if(!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
-    }
-    $scope.prettyDuration = function(track){
-        return (track.duration - track.duration % 60) / 60 + ":" + track.duration % 60;
-    }
-    $scope.addSegmentToLibrary = function(track){
-        let newTrack = track;
-        MixBoardFactory.saveSegment(newTrack);
-        $scope.library.push(newTrack);
-    }
-    $scope.stylizer = function(track){
-        let style = {
-            float: 'left',
-            height: '100%'
-        };
-        style.width = (track.duration / $scope.mixLength) * 100 + '%';
-        return style;
-    }
+    //
+    //$scope.toggleEdit = function(){
+    //    $scope.editTitle = !$scope.editTitle;
+    //    if(!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
+    //}
     $scope.stylizeTrack = function(track){
         if(track.end || track.start){
             console.log("this sumbitch should have the style of panel-3");
-            return "track-panel-3";
+            return "tr ack-panel-3";
         }
         return "track-panel-1";
     };
@@ -198,7 +162,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
 
     $scope.pauseMix=function(){
         $scope.currentMixTrack.wavesurfer.pause()
-    }
+    };
 
     $scope.playClip = function(restart){
         // EC - checks whether we are restartign or continuing from prev
@@ -234,7 +198,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
                 }
             }
         })
-    }
+    };
 
     /* Progress bar */
     var progressDiv = document.querySelector('#progress-bar');
@@ -250,4 +214,51 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     };
 });
 
+app.controller('mixEditController', function($scope, MixBoardFactory){
+    $scope.durSum = function(){
+        var sum = 0;
+        $scope.phases.forEach(function(phase){
+            sum+=phase.duration;
+        });
+        return sum
+    };
+    $scope.reorderMix = function (index, item, event, array) {
+        //phases don't have artists, so this ensures no dragging between phases and mix
+        if(item.artist){
+            MixBoardFactory.reorderInPlace(index, item, event, array);
+        }
+    };
+    $scope.reorderPhase = function (index, item, event, array) {
+        //phases don't have artists, so this ensures no dragging between phases and mix
+        if(!item.artist){
+            MixBoardFactory.reorderInPlace(index, item, event, array);
+        }
+    };
+    $scope.prettyDuration = function(track){
+        return (track.duration - track.duration % 60) / 60 + ":" + track.duration % 60;
+    };
+    $scope.stylizer = function(track){
+        let style = {
+            float: 'left',
+            height: '100%'
+        };
+        style.width = (track.duration / $scope.mixLength) * 100 + '%';
+        return style;
+    }
+});
 
+app.controller('actionButtonsController', function($scope, MixBoardFactory){
+    $scope.addSegmentToLibrary = function(track){
+        let newTrack = track;
+        MixBoardFactory.saveSegment(newTrack);
+        $scope.library.push(newTrack);
+    }
+});
+
+app.controller('mixHeaderController', function($scope){
+    $scope.toggleEdit = function(){
+        console.log("SCOPE", $scope.mixName);
+        $scope.editTitle = !$scope.editTitle;
+        if(!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
+    }
+});
