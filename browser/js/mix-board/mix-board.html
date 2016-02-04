@@ -32,9 +32,11 @@
             <div id="mix-board">
                 <div id="mix-view">
                     <div class="row resizable">
-                        <section ng-repeat="phase in phases" id="{{phase.color}}" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="phase.duration">
+                        <section ng-repeat="phase in phases" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="phase.duration" ng-drop="true" ng-drop-success="reorder($index, $data, $event, phases)">
+                        <div ng-drag="true" ng-drag-data="phase" id="{{phase.color}}">
                             <p>{{phase.name}}</p>
                             <p>{{phase.duration}} SEC</p>
+                        </div>
                         </section>
                     </div>
                 </div>
