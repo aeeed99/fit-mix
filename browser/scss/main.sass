@@ -1,6 +1,10 @@
 *
   box-sizing: border-box
 
+//for ui.bootstrap to work correctly
+.nav, .pagination, .carousel, panel-title a
+  cursor: pointer
+
 @mixin clearfix
   &:after
     content: ""
@@ -33,6 +37,7 @@
 @import 'tutorial/main'
 @import 'login/main'
 @import 'mix-board/mix-board'
+@import '_bootstrap-tabs-override'
 
 html
   background-color: $color-body
