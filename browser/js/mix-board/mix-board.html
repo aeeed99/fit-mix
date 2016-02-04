@@ -1,60 +1,68 @@
 <div id="user-menu">
-  <span class="glyphicon glyphicon-menu-hamburger"></span>
+    <span class="glyphicon glyphicon-menu-hamburger"></span>
 </div>
 <div class="container clearfix">
-  <div class="" id="mix-header">
-    <h3><span class="dev-placeholder">My awesome Playlist</span></h3>
-  </div>
-  <div id="upper-panel">
-    <div id="mix-board">
-      <div id="mix-view">
-
-        <div ng-repeat="track in mix track by $index" ng-style="stylizer(track)" ng-drop="true"
-             ng-drop-success="reorder($index, $data, $event, mix)">
-          <div id="mix-clip" ng-drag="true" ng-drag-data="track">
-            <!--NP: TODO: replace hardcode 1200 with dynamic custom length -->
-            <span class="">{{ track.name }}</span> {{(track.duration - track.duration % 60)/60}}:{{track.duration % 60}}
-          </div>
-        </div>
-
-      </div>
+    <div class="" id="mix-header">
+        <h3><span class="dev-placeholder">My awesome Playlist</span></h3>
     </div>
-    <div>
-      <div id="upper-panel">
-        <div id="mix-board">
-          <div id="mix-view">
-            <div class="row resizable">
-              <section ng-repeat="workout in workouts" resizable r-directions="['right']" r-flex="true"
-                       dur-sum="durSum()" mix-length="mixLength" workout-len="workout.duration" ng-drop="true"
-                       ng-drop-success="reorder($index, $data, $event, workouts)">
-                <div style="{width: '100%', height: '100%'}" id="{{workout.color}}" ng-drag="true"
-                     ng-drag-data="workout">
-                  <p>{{workout.name}}</p>
-                  <p>{{workout.duration}} MIN</p>
-                </div>
-              </section>
+
+    <div id="upper-panel">
+      <div id="mix-board">
+        <div id="mix-view">
+          <!--<div id="track-info-wrapper" ng-repeat="track in library | limitTo: 3 ">-->
+          <!--<mix-clip track-info="track"></mix-clip>-->
+          <!--</div>-->
+          <button ng-click="playClip()"> PLAY </button>
+          <button ng-click="playClip(true)"> RESTART </button>
+          <button ng-click="pauseMix()"> PAUSE </button>
+          <div ng-repeat="track in mix track by $index" ng-style="stylizer(track)" ng-drop="true" ng-drop-success="reorder($index, $data, $event, mix)">
+            <div id="mix-clip" ng-drag="true" ng-drag-data="track">
+              <!--NP: TODO: replace hardcode 1200 with dynamic custom length -->
+              <span class="">{{ track.name }}</span> {{(track.duration - track.duration % 60)/60}}:{{track.duration % 60}}
             </div>
           </div>
         </div>
-      </div>
-      <div id="library">
-        <!--{{ library }}-->
-        <div ng-repeat="track in library">
-          <track-panel track-info="track" ng-click="prevWave(track)"></track-panel>
-        </div>
-      </div>
-      <div id="action-buttons">
-        <button class="btn" type="button">Upload Songs to Library</button>
-        <button class="btn" type="button" ng-click="addSelectedTrackToMix(selectedTrack, mix)">Add to Mix</button>
-      </div>
-      <div class="progress progress-striped active" id="progress-bar">
-        <div class="progress-bar progress-bar-info">
-        </div>
-      </div>
-      <div id="track-timeline">
-      </div>
-      <div id="track-preview">
+          <!--NP this doesn't work. see issue 9-->
+          <!--<div id="add-phase"><button class="btn">+</button></div>&ndash;&gt;-->
       </div>
     </div>
-  </div>
+
+    <div>
+        <div id="upper-panel">
+            <div id="mix-board">
+                <div id="mix-view">
+                    <div class="row resizable">
+                        <section ng-repeat="phase in phases" id="{{phase.color}}" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="phase.duration">
+                            <p>{{phase.name}}</p>
+                            <p>{{phase.duration}} SEC</p>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="action-buttons">
+        <button class="btn" type="button" ng-click="addSelectedTrackToMix(currentTrack, mix)">Add to Mix</button>
+    </div>
+
+        <div>
+            <div id="library">
+                <div ng-repeat="track in library">
+                    <track-panel track-info="track" ng-click="prevWave(track)"></track-panel>
+                </div>
+            </div>
+            <div id="action-buttons">
+                <button class="btn" type="button">Upload Songs to Library</button>
+                <button class="btn" type="button" ng-click="addSelectedTrackToMix(selectedTrack, mix)">Add to Mix</button>
+            </div>
+            <div class="progress progress-striped active" id="progress-bar">
+                <div class="progress-bar progress-bar-info">
+                </div>
+            </div>
+            <div id="track-timeline">
+            </div>
+            <div id="track-preview">
+            </div>
+        </div>
 </div>
