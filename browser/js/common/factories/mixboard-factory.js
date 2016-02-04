@@ -85,5 +85,10 @@ app.factory('MixBoardFactory', function(){
             }
         }
     };
+
+    MixBoardFactory.saveSegment = function(track){
+        track.start = track.region.start;
+        track.end = track.region.end;
+    };
     return MixBoardFactory;
 })

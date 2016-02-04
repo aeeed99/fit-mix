@@ -148,7 +148,11 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     $scope.reorder = function (index, item, event, array) {
         MixBoardFactory.reorderInPlace(index, item, event, array);
     };
-
+    $scope.addSegmentToLibrary = function(track){
+        let newTrack = track;
+        MixBoardFactory.saveSegment(newTrack);
+        $scope.library.push(newTrack);
+    }
     $scope.stylizer = function(track){
         let style = {
             float: 'left',
@@ -157,7 +161,13 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
         style.width = (track.duration / 3600 * 100) + '%';
         return style;
     }
-
+    $scope.stylizeTrack = function(track){
+        if(track.end || track.start){
+            console.log("this sumbitch should have the style of panel-3");
+            return "track-panel-3";
+        }
+        return "track-panel-1";
+    };
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function (track, mix) {
         MixBoardFactory.addTrackToMix(track, $scope.mix);
