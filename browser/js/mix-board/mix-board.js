@@ -94,6 +94,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
             }
 
             // CHES - play track once ready
+            console.log("my new wavesurfer", wavesurfer)
             wavesurfer.play();
             $scope.isPlaying = true;
         });
@@ -202,7 +203,50 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
 
     $scope.playClip = function(restart){
         // EC - checks whether we are restartign or continuing from prev
-        if (restart){ $scope.currentMixTrack = null; }
+            var waveArray = new Float32Array(9);
+            waveArray[0] = 0.9;
+            waveArray[1] = 0.9;
+            waveArray[2] = 0.8;
+            waveArray[3] = 0.8;
+            waveArray[4] = 0.7;
+            waveArray[5] = 0.5;
+            waveArray[6] = 0.3;
+            waveArray[7] = 0.1;
+            waveArray[8] = 0.0;
+
+            var waveArrayUp = new Float32Array(9);
+            waveArrayUp[0] = 0.1;
+            waveArrayUp[1] = 0.1;
+            waveArrayUp[2] = 0.2;
+            waveArrayUp[3] = 0.2;
+            waveArrayUp[4] = 0.3;
+            waveArrayUp[5] = 0.5;
+            waveArrayUp[6] = 0.7;
+            waveArrayUp[7] = 0.9;
+            waveArrayUp[8] = 1.0;
+            //console.log("gain", gainNode);
+           // console.log("scope gain", $scope.mix[0])
+           // console.log("linearRampToValueAtTime", track.wavesurfer.backend.ac.currentTime + 5);
+            //gainNode.gain.linearRampToValueAtTime(0, 100);
+            // track.wavesurfer.backend.gainNode.gain.exponentialRampToValueAtTime( 0.01, Math.floor(track.wavesurfer.backend.ac.currentTime) + 2);
+          //  track.wavesurfer.backend.gainNode.gain.linearRampToValueAtTime( 0, Math.floor(track.wavesurfer.backend.ac.currentTime) + 5);
+
+        if (restart){
+            if ($scope.currentMixTrack){
+                console.log("pausing current");
+                $scope.currentMixTrack.wavesurfer.pause();
+            }
+            $scope.currentMixTrack = null;
+            $scope.mix.forEach(function(track){
+                track.wavesurfer.backend.gainNode.gain.value = 1;
+                track.fadeRegistered = false;
+               // track.wavesurfer.backend.gainNode.gain.setValueCurveAtTime([1], track.wavesurfer.backend.ac.currentTime, track.end);
+                track.wavesurfer.backend.gainNode.gain.setTargetAtTime(1.0, track.wavesurfer.backend.ac.currentTime + 1, 0.1);
+                console.log("new track", track)
+            })
+            console.log("edited mix", $scope.mix)
+
+        }
         var track;
         var trackIndex = $scope.currentMixTrack ? $scope.mix.indexOf($scope.currentMixTrack) : 0;
         var startTime;
@@ -213,15 +257,40 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
             startTime = $scope.mix[trackIndex].start;
         }
 
-        track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[0];
+        $scope.mix[0].fade = 4;
 
+        track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[0];
+        track.fadeRegistered;
         $scope.currentMixTrack = track;
+        console.log("track playing",  track)
+        console.log("wavesurfer", track.wavesurfer);
+        console.log("currentTime", track.wavesurfer.backend.ac.currentTime);
+        //$scope.currentMixTrack.wavesurfer.backend.ac.currentTime = 0;
+
         track.wavesurfer.play(startTime, track.end);
+        //track.wavesurfer.backend.gainNode.gain.value = 0;
+        // track.wavesurfer.backend.gainNode.gain.linearRampToValueAtTime(0, track.wavesurfer.backend.ac.currentTime + 5);
+  // currentTime/ x = start/finish
+  // ( 5 seconds * track.wavesurfer.backend.ac.currentTime)
+
 
         track.wavesurfer.on('audioprocess', function(process){
             if ($scope.currentMixTrack && track){
                 $scope.currentMixTrack.currentProgress = process;
-                if (track.end - process < .5  ){
+            //    console.log("process", process);
+             //   console.log("currentTime", $scope.currentMixTrack.wavesurfer.backend.ac.currentTime)
+            if ( !track.fadeRegistered && track.fade >= (track.end-process)){
+                console.log("FADING", track)
+                    console.log("I SHOULD HAPPEN ONCE")
+                    track.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, track.wavesurfer.backend.ac.currentTime, 4);
+                    track.fadeRegistered = true;
+                    $scope.currentMixTrack = $scope.mix[1];
+                    $scope.currentMixTrack.currentProgress = 0;
+                    // $scope.mix[1].wavesurfer.play($scope.mix[1].start, $scope.mix[1].end)
+                    //$scope.mix[2].wavesurfer.play(0, $scope.mix[2].end)
+                     $scope.playClip();
+                }
+                else if (track.end - process < .5  ){
                     track.wavesurfer.pause();
                     track=undefined;
                     if (trackIndex+1 < $scope.mix.length){
@@ -248,6 +317,59 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     var hideProgress = function () {
         progressDiv.style.display = 'none';
     };
+
+    $scope.gainTest = function(){
+        var track = $scope.mix[0];
+        console.log("track", track)
+        console.log("currentProgress", track.currentProgress)
+        var gainNode = track.wavesurfer.backend.gainNode;
+
+        function changeGain(){
+            //gainNode.gain.value = 0;
+            console.log("gain", gainNode);
+            console.log("scope gain", $scope.mix[0])
+            console.log("linearRampToValueAtTime", track.wavesurfer.backend.ac.currentTime + 5)
+            //gainNode.gain.linearRampToValueAtTime(0, 100);
+            // track.wavesurfer.backend.gainNode.gain.exponentialRampToValueAtTime( 0.01, Math.floor(track.wavesurfer.backend.ac.currentTime) + 2);
+            track.wavesurfer.backend.gainNode.gain.linearRampToValueAtTime( 0, Math.floor(track.wavesurfer.backend.ac.currentTime) + 5);
+
+            console.log("gain", gainNode);
+        }
+         changeGain();
+    }
+
+    $scope.gainCurveTest = function(){
+        var track = $scope.mix[0];
+        console.log("track", track)
+        console.log("currentProgress", track.currentProgress)
+        var gainNode = track.wavesurfer.backend.gainNode;
+
+        function changeGain(){
+            //gainNode.gain.value = 0;
+            var waveArray = new Float32Array(9);
+            waveArray[0] = 0.9;
+            waveArray[1] = 0.9;
+            waveArray[2] = 0.8;
+            waveArray[3] = 0.8;
+            waveArray[4] = 0.7;
+            waveArray[5] = 0.5;
+            waveArray[6] = 0.3;
+            waveArray[7] = 0.1;
+            waveArray[8] = 0.0;
+            console.log("gain", gainNode);
+            console.log("scope gain", $scope.mix[0])
+            console.log("linearRampToValueAtTime", track.wavesurfer.backend.ac.currentTime + 5);
+            //gainNode.gain.linearRampToValueAtTime(0, 100);
+            // track.wavesurfer.backend.gainNode.gain.exponentialRampToValueAtTime( 0.01, Math.floor(track.wavesurfer.backend.ac.currentTime) + 2);
+          //  track.wavesurfer.backend.gainNode.gain.linearRampToValueAtTime( 0, Math.floor(track.wavesurfer.backend.ac.currentTime) + 5);
+            track.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, track.wavesurfer.backend.ac.currentTime+4, 4)
+            track.fade = 4;
+            console.log("gain", gainNode);
+        }
+         changeGain();
+    }
+
+
 });
 
 

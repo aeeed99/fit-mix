@@ -54,9 +54,11 @@ app.factory('MixBoardFactory', function(){
             if (track.hasRegion){
                 track.start = track.region.start;
                 track.end = track.region.end;
+                track.currentProgress = track.region.start;
                 track.duration = track.end - track.start;
             } else {
                 track.start =0;
+                track.currentProgress = 0;
                 track.end = track.wavesurfer.getDuration();
                 track.duration = track.wavesurfer.getDuration();
             }
