@@ -1,0 +1,6 @@
+<div id="library">
+  <!--{{ library }}-->
+  <div ng-repeat="sfx in sfxBase | filter: {$: trackFilter} track by $index">
+    <sfx-panel panel-identifier="stylizeTrack(sfx)" sfx-info="sfx"></sfx-panel>
+  </div>
+</div>

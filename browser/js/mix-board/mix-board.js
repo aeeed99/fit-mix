@@ -7,12 +7,15 @@ app.config(function ($stateProvider) {
         resolve: {
             tracks: function (HomeFactory) {
                 return HomeFactory.getTracks();
+            },
+            sfx: function (HomeFactory) {
+                return HomeFactory.getSfx();
             }
         }
     })
 });
 
-app.controller('MixBoardController', function ($scope, $document, tracks, MixBoardFactory) {
+app.controller('MixBoardController', function ($scope, $document, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
     $scope.mixLength = 600;
     $scope.phases = [
@@ -38,6 +41,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = []; //NP List of songs on the mix bar.
     $scope.library = tracks;
+    $scope.sfxBase = sfx;
 
     $scope.editTitle = false;
     $scope.mixName = "My awesome Playlist";
@@ -55,8 +59,11 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     };
 
     $scope.stylizeTrack = function(track){
-        if((track.end < track.duration && track.end !== null) || track.start > 0){
-            console.log("this sumbitch should have the style of panel-3");
+        //MB: sfx have no artist, so sfx get t-p-4
+        if(!track.artist){
+            return "track-panel-4";
+        }
+        else if((track.end < track.duration && track.end !== null) || track.start > 0){
             return "track-panel-3";
         }
         return "track-panel-1";
