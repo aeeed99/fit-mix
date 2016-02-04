@@ -150,8 +150,17 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
              }
         });
 
-    $scope.reorder = function (index, item, event, array) {
-        MixBoardFactory.reorderInPlace(index, item, event, array);
+    $scope.reorderMix = function (index, item, event, array) {
+        //phases don't have artists, so this ensures no dragging between phases and mix
+        if(item.artist){
+            MixBoardFactory.reorderInPlace(index, item, event, array);
+        }
+    };
+    $scope.reorderPhase = function (index, item, event, array) {
+        //phases don't have artists, so this ensures no dragging between phases and mix
+        if(!item.artist){
+            MixBoardFactory.reorderInPlace(index, item, event, array);
+        }
     };
     $scope.toggleEdit = function(){
         $scope.editTitle = !$scope.editTitle;
@@ -170,7 +179,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
             float: 'left',
             height: '100%'
         };
-        style.width = (track.duration / $scope.mixLength) + '%';
+        style.width = (track.duration / $scope.mixLength) * 100 + '%';
         return style;
     }
     $scope.stylizeTrack = function(track){
