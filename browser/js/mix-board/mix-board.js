@@ -158,7 +158,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
             float: 'left',
             height: '100%'
         };
-        style.width = (track.duration / 3600 * 100) + '%';
+        style.width = (track.duration / $scope.mixLength * 100) + '%';
         return style;
     }
     $scope.stylizeTrack = function(track){
