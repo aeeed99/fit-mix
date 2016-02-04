@@ -19,8 +19,6 @@ app.factory('HomeFactory', function ($http) {
         return $http.get('/api/sfx')
             .then(sfx => {
                 sfx.data.forEach(function(sfx){
-                    sfx.time = { m: Math.floor(sfx.duration/60),
-                                   s: Math.ceil(sfx.duration%60)};
                     sfx.src = '/api/sfx/' + sfx._id.toString() + '.audio';
                 })
                 return sfx.data;
