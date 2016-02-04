@@ -1,0 +1,8 @@
+<p>search</p>
+<input ng-model="trackFilter">
+<div id="library">
+  <!--{{ library }}-->
+  <div ng-repeat="track in library | filter: {$: trackFilter} track by $index">
+    <track-panel panel-identifier="stylizeTrack(track)" track-info="track" ng-click="prevWave(track)"></track-panel>
+  </div>
+</div>
