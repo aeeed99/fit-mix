@@ -15,6 +15,18 @@ app.factory('HomeFactory', function ($http) {
             });
     };
 
+    HomeFactory.getSfx = function() {
+        return $http.get('/api/sfx')
+            .then(sfx => {
+                sfx.data.forEach(function(sfx){
+                    sfx.time = { m: Math.floor(sfx.duration/60),
+                                   s: Math.ceil(sfx.duration%60)};
+                    sfx.src = '/api/sfx/' + sfx._id.toString() + '.audio';
+                })
+                return sfx.data;
+            });
+    };
+
     HomeFactory.play = function(track) {
         if (isPlaying) {
             HomeFactory.pause();

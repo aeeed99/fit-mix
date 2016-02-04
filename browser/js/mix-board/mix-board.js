@@ -184,7 +184,6 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     }
     $scope.stylizeTrack = function(track){
         if(track.end || track.start){
-            console.log("this sumbitch should have the style of panel-3");
             return "track-panel-3";
         }
         return "track-panel-1";

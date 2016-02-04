@@ -30,6 +30,7 @@ router.param('songId', function (req, res, next, id) {
 
 router.route('/:songId.audio')
     .get(function (req, res, next) {
+        console.log(req.song);
         console.log("req: ", req.params);
         if (!req.song.extension) return next(new Error('No audio for song'));
         res.set('Content-Type', mime.lookup(req.song.extension));
