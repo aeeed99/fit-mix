@@ -3,7 +3,8 @@
 </div>
 <div class="container clearfix">
   <div class="" id="mix-header">
-    <h3><span class="dev-placeholder">My awesome Playlist</span></h3>
+    <h3><span class="dev-placeholder" ng-click="toggleEdit()" ng-hide="editTitle">{{mixName}}</span><input class="dev-placeholder" ng-style="{'background-color': '#434343', 'text-align': 'center'}" ng-model="mixName" ng-show="editTitle" ng-click="toggleEdit()"></h3>
+    <!--MB: above is more CSS that should be put in a stylesheet somewhere -->
   </div>
   <div id="upper-panel">
     <div id="mix-board">
@@ -13,7 +14,7 @@
              ng-drop-success="reorder($index, $data, $event, mix)">
           <div id="mix-clip" ng-drag="true" ng-drag-data="track">
             <!--NP: TODO: replace hardcode 1200 with dynamic custom length -->
-            <span class="">{{ track.name }}</span> {{(track.duration - track.duration % 60)/60}}:{{track.duration % 60}}
+            <span class="">{{ track.name }}</span> {{prettyDuration(track)}}
           </div>
         </div>
 
@@ -27,7 +28,8 @@
               <section ng-repeat="workout in workouts" resizable r-directions="['right']" r-flex="true"
                        dur-sum="durSum()" mix-length="mixLength" workout-len="workout.duration" ng-drop="true"
                        ng-drop-success="reorder($index, $data, $event, workouts)">
-                <div style="{width: '100%', height: '100%'}" id="{{workout.color}}" ng-drag="true"
+                       <!--MB: this fillContainer() should just be CSS somewhere -->
+                <div style="fillContainer()" id="{{workout.color}}" ng-drag="true"
                      ng-drag-data="workout">
                   <p>{{workout.name}}</p>
                   <p>{{workout.duration}} MIN</p>
