@@ -48,12 +48,108 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     $scope.currentTrack;
     // CHES - have not had to use index variable yet but may come in handy..
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
-    var wavesurfer;
-    var loadingPrev = false;
+    //var wavesurfer;
+    //var loadingPrev = false;
     $scope.fillContainer = function(){
         return {width: '100%', height: '100%'};
     };
+
+    $scope.stylizeTrack = function(track){
+        if(track.end || track.start){
+            console.log("this sumbitch should have the style of panel-3");
+            return "tr ack-panel-3";
+        }
+        return "track-panel-1";
+    };
+    // NP: Add-to-mix functionality (non-DnD version)
+    $scope.addSelectedTrackToMix = function (track, mix) {
+        MixBoardFactory.addTrackToMix(track, $scope.mix);
+    };
+
+    $scope.currentMixTrack;
+
+});
+
+app.controller('mixEditController', function($scope, MixBoardFactory){
+    $scope.durSum = function(){
+        var sum = 0;
+        $scope.phases.forEach(function(phase){
+            sum+=phase.duration;
+        });
+        return sum
+    };
+    $scope.reorderMix = function (index, item, event, array) {
+        //phases don't have artists, so this ensures no dragging between phases and mix
+        if(item.artist){
+            MixBoardFactory.reorderInPlace(index, item, event, array);
+        }
+    };
+    $scope.reorderPhase = function (index, item, event, array) {
+        //phases don't have artists, so this ensures no dragging between phases and mix
+        if(!item.artist){
+            MixBoardFactory.reorderInPlace(index, item, event, array);
+        }
+    };
+    $scope.prettyDuration = function(track){
+        return (track.duration - track.duration % 60) / 60 + ":" + track.duration % 60;
+    };
+    $scope.stylizer = function(track){
+        let style = {
+            float: 'left',
+            height: '100%'
+        };
+        style.width = (track.duration / $scope.mixLength) * 100 + '%';
+        return style;
+    }
+});
+
+app.controller('mixPlaybackController', function($scope){
+    $scope.pauseMix=function(){
+        $scope.currentMixTrack.wavesurfer.pause()
+    };
+
+    $scope.playClip = function(restart){
+        // EC - checks whether we are restartign or continuing from prev
+        if (restart){ $scope.currentMixTrack = null; }
+        var track;
+        var trackIndex = $scope.currentMixTrack ? $scope.mix.indexOf($scope.currentMixTrack) : 0;
+        var startTime;
+
+        if ($scope.currentMixTrack){
+            startTime  = $scope.currentMixTrack.currentProgress ? $scope.currentMixTrack.currentProgress : $scope.currentMixTrack.start;
+        } else {
+            startTime = $scope.mix[trackIndex].start;
+        }
+
+        track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[0];
+
+        $scope.currentMixTrack = track;
+        track.wavesurfer.play(startTime, track.end);
+
+        track.wavesurfer.on('audioprocess', function(process){
+            if ($scope.currentMixTrack && track){
+                $scope.currentMixTrack.currentProgress = process;
+                if (track.end - process < .5  ){
+                    track.wavesurfer.pause();
+                    track=undefined;
+                    if (trackIndex+1 < $scope.mix.length){
+                        $scope.currentMixTrack = $scope.mix[trackIndex+1];
+                        $scope.currentMixTrack.currentProgress = 0;
+                        $scope.playClip()
+                    } else {
+                        console.log("no more left!!");
+                        $scope.currentMixTrack = null; }
+                }
+            }
+        })
+    };
+});
+
+app.controller('prevWavController', function($scope, MixBoardFactory){
+    var wavesurfer;
+    var loadingPrev = false;
     $scope.prevWave = function (track) {
+
         // CHES - "isLoaded" is for loading pre-saved data
         $scope.isLoaded = false;
         // CHES - remove previous wavesurfer if exists
@@ -123,84 +219,10 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
         wavesurfer.on('destroy', hideProgress);
         wavesurfer.on('error', hideProgress);
         wavesurfer.load(track.src);
-      //  $scope.selectedTrack = track;
-       // EC - TESTING REMOVING THIS TO SEE IF WE NEED IT
+        //  $scope.selectedTrack = track;
+        // EC - TESTING REMOVING THIS TO SEE IF WE NEED IT
         $scope.currentTrack.wavesurfer = wavesurfer
     };
-
-
-     //PLAY / PAUSE FUNCTIONALITY
-        $(document).on('keyup', function(e) {
-              if (e.which == 32 && $scope.isLoaded) {
-                if ($scope.isPlaying){
-                    wavesurfer.pause();
-                } else{
-                     wavesurfer.play();
-                }
-                $scope.isPlaying = !$scope.isPlaying
-             }
-        });
-
-    //
-    //$scope.toggleEdit = function(){
-    //    $scope.editTitle = !$scope.editTitle;
-    //    if(!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
-    //}
-    $scope.stylizeTrack = function(track){
-        if(track.end || track.start){
-            console.log("this sumbitch should have the style of panel-3");
-            return "tr ack-panel-3";
-        }
-        return "track-panel-1";
-    };
-    // NP: Add-to-mix functionality (non-DnD version)
-    $scope.addSelectedTrackToMix = function (track, mix) {
-        MixBoardFactory.addTrackToMix(track, $scope.mix);
-    };
-
-    $scope.currentMixTrack;
-
-    $scope.pauseMix=function(){
-        $scope.currentMixTrack.wavesurfer.pause()
-    };
-
-    $scope.playClip = function(restart){
-        // EC - checks whether we are restartign or continuing from prev
-        if (restart){ $scope.currentMixTrack = null; }
-        var track;
-        var trackIndex = $scope.currentMixTrack ? $scope.mix.indexOf($scope.currentMixTrack) : 0;
-        var startTime;
-
-        if ($scope.currentMixTrack){
-             startTime  = $scope.currentMixTrack.currentProgress ? $scope.currentMixTrack.currentProgress : $scope.currentMixTrack.start;
-        } else {
-            startTime = $scope.mix[trackIndex].start;
-        }
-
-        track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[0];
-
-        $scope.currentMixTrack = track;
-        track.wavesurfer.play(startTime, track.end);
-
-        track.wavesurfer.on('audioprocess', function(process){
-            if ($scope.currentMixTrack && track){
-                $scope.currentMixTrack.currentProgress = process;
-                if (track.end - process < .5  ){
-                    track.wavesurfer.pause();
-                    track=undefined;
-                    if (trackIndex+1 < $scope.mix.length){
-                        $scope.currentMixTrack = $scope.mix[trackIndex+1];
-                        $scope.currentMixTrack.currentProgress = 0;
-                        $scope.playClip()
-                    } else {
-                        console.log("no more left!!");
-                        $scope.currentMixTrack = null; }
-                }
-            }
-        })
-    };
-
-    /* Progress bar */
     var progressDiv = document.querySelector('#progress-bar');
     var progressBar = progressDiv.querySelector('.progress-bar');
 
@@ -212,39 +234,17 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     var hideProgress = function () {
         progressDiv.style.display = 'none';
     };
-});
-
-app.controller('mixEditController', function($scope, MixBoardFactory){
-    $scope.durSum = function(){
-        var sum = 0;
-        $scope.phases.forEach(function(phase){
-            sum+=phase.duration;
-        });
-        return sum
-    };
-    $scope.reorderMix = function (index, item, event, array) {
-        //phases don't have artists, so this ensures no dragging between phases and mix
-        if(item.artist){
-            MixBoardFactory.reorderInPlace(index, item, event, array);
+    //PLAY / PAUSE FUNCTIONALITY
+    $(document).on('keyup', function(e) {
+        if (e.which == 32 && $scope.isLoaded) {
+            if ($scope.isPlaying){
+                wavesurfer.pause();
+            } else{
+                wavesurfer.play();
+            }
+            $scope.isPlaying = !$scope.isPlaying
         }
-    };
-    $scope.reorderPhase = function (index, item, event, array) {
-        //phases don't have artists, so this ensures no dragging between phases and mix
-        if(!item.artist){
-            MixBoardFactory.reorderInPlace(index, item, event, array);
-        }
-    };
-    $scope.prettyDuration = function(track){
-        return (track.duration - track.duration % 60) / 60 + ":" + track.duration % 60;
-    };
-    $scope.stylizer = function(track){
-        let style = {
-            float: 'left',
-            height: '100%'
-        };
-        style.width = (track.duration / $scope.mixLength) * 100 + '%';
-        return style;
-    }
+    });
 });
 
 app.controller('actionButtonsController', function($scope, MixBoardFactory){
