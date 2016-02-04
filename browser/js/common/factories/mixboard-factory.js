@@ -49,11 +49,9 @@ app.factory('MixBoardFactory', function(){
     };
 
     MixBoardFactory.addTrackToMix = function (track, mix) {
-        console.log("addTrackToMix", track)
         if (track) {
             // EC - adds start and end times based on region/no region
             if (track.hasRegion){
-                console.log("I HAVE A REGION")
                 track.start = track.region.start;
                 track.end = track.region.end;
                 track.duration = track.end - track.start;
@@ -62,10 +60,9 @@ app.factory('MixBoardFactory', function(){
                 track.end = track.wavesurfer.getDuration();
                 track.duration = track.wavesurfer.getDuration();
             }
+            // EC - makes a copy so this isn't pass by reference
             var copy = jQuery.extend( {}, track)
-            console.log("copy", copy)
              mix.push(copy);
-             console.log("mix", mix)
         }
     };
 

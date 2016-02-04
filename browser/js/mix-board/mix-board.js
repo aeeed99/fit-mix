@@ -13,33 +13,32 @@ app.config(function ($stateProvider) {
 });
 
 app.controller('MixBoardController', function ($scope, $document, tracks, MixBoardFactory) {
-        // HARD CODED RIGHT NOW
-        $scope.mixLength = 600;
-        $scope.workouts = [
-            {name: "STRETCH",
-             duration: 100,
-             color: "one"
-             },
-            {name: "WARM UP",
-             duration: 100,
-             color: "two"
-             },
-            {name: "SPRINT",
-             duration: 200,
-             color: "three"
+    // HARD CODED RIGHT NOW
+    $scope.mixLength = 600;
+    $scope.phases = [
+        {name: "STRETCH",
+         duration: 120,
+         color: "one"
+         },
+        {name: "WARM UP",
+         duration: 120,
+         color: "two"
+         },
+        {name: "SPRINT",
+         duration: 300,
+         color: "three"
 
-             },
-            {name: "COOL DOWN",
-             duration: 200,
-             color: "one"
-             }
-        ]
-
+         },
+        {name: "COOL DOWN",
+         duration: 60,
+         color: "one"
+         }
+    ]
 
     $scope.durSum = function(){
         var sum = 0;
-        $scope.workouts.forEach(function(workout){
-            sum+=workout.duration;
+        $scope.phases.forEach(function(phase){
+            sum+=phase.duration;
         })
         return sum
     };
@@ -91,12 +90,10 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
 
             // CHES - play track once ready
             wavesurfer.play();
-            console.log("waveform", wavesurfer)
             $scope.isPlaying = true;
         });
 
         wavesurfer.on('region-updated', function (region) {
-            console.log("region-updated", region)
             $scope.currentTrack.region = region;
             $scope.currentTrack.region.startTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.start);
             $scope.currentTrack.region.endTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.end);
@@ -105,7 +102,6 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
         });
 
         wavesurfer.on('region-created', function (region) {
-            console.log("region-created")
             if ($scope.currentTrack.hasRegion && !loadingPrev) {
                 // CHES - the second loadingPrev checks for whether we are reloading saved data
                 region.remove()
@@ -153,28 +149,23 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
         MixBoardFactory.reorderInPlace(index, track, event, mix)
     };
 
-
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function (track, mix) {
-        console.log("track", track)
         MixBoardFactory.addTrackToMix(track, $scope.mix);
-        console.log("new mix", $scope.mix)
     };
 
     $scope.currentMixTrack;
 
     $scope.pauseMix=function(){
-        console.log("current", $scope.currentTrack.wavesurfer.getCurrentTime());
         $scope.currentMixTrack.wavesurfer.pause()
     }
 
     $scope.playClip = function(restart){
-        console.log("restart", restart)
+        // EC - checks whether we are restartign or continuing from prev
         if (restart){ $scope.currentMixTrack = null; }
         var track;
         var trackIndex = $scope.currentMixTrack ? $scope.mix.indexOf($scope.currentMixTrack) : 0;
         var startTime;
-
 
         if ($scope.currentMixTrack){
              startTime  = $scope.currentMixTrack.currentProgress ? $scope.currentMixTrack.currentProgress : $scope.currentMixTrack.start;
@@ -185,29 +176,17 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
         track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[0];
 
         $scope.currentMixTrack = track;
-        console.log("playingTrack", track);
-        console.log("trackIndex", trackIndex);
-        console.log("start time", startTime)
-        console.log("track end", track.end);
         track.wavesurfer.play(startTime, track.end);
 
         track.wavesurfer.on('audioprocess', function(process){
             if ($scope.currentMixTrack && track){
                 $scope.currentMixTrack.currentProgress = process;
-               // console.log("TRACK", track)
                 if (track.end - process < .5  ){
-                    console.log("OVER");
-                    console.log("length", $scope.mix.length);
-                    console.log("index", trackIndex);
-
                     track.wavesurfer.pause();
                     track=undefined;
                     if (trackIndex+1 < $scope.mix.length){
-                        console.log("THERES MORE")
                         $scope.currentMixTrack = $scope.mix[trackIndex+1];
                         $scope.currentMixTrack.currentProgress = 0;
-                        console.log("new index", trackIndex+1)
-                        console.log("next up", $scope.currentMixTrack)
                         $scope.playClip()
                     } else {
                         console.log("no more left!!");

@@ -11,8 +11,8 @@
         <!--<div id="track-info-wrapper" ng-repeat="track in library | limitTo: 3 ">-->
           <!--<mix-clip track-info="track"></mix-clip>-->
         <!--</div>-->
-        <button  ng-click="playClip()"> PLAY ALL </button>
-        <button  ng-click="playClip(true)">RESTART</button>
+        <button  ng-click="playClip()"> PLAY </button>
+        <button  ng-click="playClip(true)"> RESTART </button>
         <button  ng-click="pauseMix()"> PAUSE </button>
         <div ng-repeat="track in mix track by $index" ng-style=" {width: '{{ track.duration / mixLength * 100}}' + '%', float: 'left', height: '100%'} " ng-drop="true" ng-drop-success="reorderMix($index, $data, $event, mix)">
           <div id="mix-clip" ng-drag="true" ng-drag-data="track">
@@ -36,9 +36,9 @@
   <div id="mix-board">
     <div id="mix-view">
               <div class="row resizable">
-                  <section ng-repeat="workout in workouts" id="{{workout.color}}" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="workout.duration">
-                      <p>{{workout.name}}</p>
-                      <p>{{workout.duration}} MIN</p>
+                  <section ng-repeat="phase in phases" id="{{phase.color}}" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="phase.duration">
+                      <p>{{phase.name}}</p>
+                      <p>{{phase.duration}} SEC</p>
 
                   </section>
               </div>
