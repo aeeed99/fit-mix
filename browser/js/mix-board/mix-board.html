@@ -11,7 +11,10 @@
         <!--<div id="track-info-wrapper" ng-repeat="track in library | limitTo: 3 ">-->
           <!--<mix-clip track-info="track"></mix-clip>-->
         <!--</div>-->
-        <div ng-repeat="track in mix track by $index" ng-style=" {width: '{{ track.duration / 3600 * 100}}' + '%', float: 'left', height: '100%'} " ng-drop="true" ng-drop-success="reorderMix($index, $data, $event, mix)">
+        <button  ng-click="playClip()"> PLAY ALL </button>
+        <button  ng-click="playClip(true)">RESTART</button>
+        <button  ng-click="pauseMix()"> PAUSE </button>
+        <div ng-repeat="track in mix track by $index" ng-style=" {width: '{{ track.duration / mixLength * 100}}' + '%', float: 'left', height: '100%'} " ng-drop="true" ng-drop-success="reorderMix($index, $data, $event, mix)">
           <div id="mix-clip" ng-drag="true" ng-drag-data="track">
           <!--NP: TODO: replace hardcode 1200 with dynamic custom length -->
           <span class="">{{ track.name }}</span>
@@ -50,7 +53,7 @@
     </div>
   </div>
   <div id="action-buttons">
-    <button class="btn" type="button" ng-click="addSelectedTrackToMix(selectedTrack, mix)">Add to Mix</button>
+    <button class="btn" type="button" ng-click="addSelectedTrackToMix(currentTrack, mix)">Add to Mix</button>
   </div>
 
   <div class="progress progress-striped active" id="progress-bar">
