@@ -36,25 +36,12 @@
             </div>
           </div>
         </div>
-<<<<<<< HEAD
         <div>
-            <div id="upper-panel">
-                <div id="mix-board">
-                    <div id="mix-view">
-                        <div class="row resizable">
-                            <section ng-repeat="workout in workouts" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="workout.duration" ng-drop="true" ng-drop-success="reorder($index, $data, $event, workouts)">
-                                <div style="{width: '100%', height: '100%'}" id="{{workout.color}}" ng-drag="true" ng-drag-data="workout">
-                                    <p>{{workout.name}}</p>
-                                    <p>{{workout.duration}} MIN</p>
-                                </div>
-                            </section>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <input ng-model="trackFilter">
+          <p>searching for: {{trackFilter}}</p>
             <div id="library">
                 <!--{{ library }}-->
-                <div ng-repeat="track in library track by $index">
+                <div ng-repeat="track in library | filter: {name: trackFilter} track by $index">
                     <track-panel panel-identifier="stylizeTrack(track)" track-info="track" ng-click="prevWave(track)"></track-panel>
                 </div>
             </div>
@@ -71,7 +58,6 @@
             </div>
             <div id="track-preview">
             </div>
-=======
       </div>
       <div id="library">
         <!--{{ library }}-->
@@ -85,7 +71,6 @@
       </div>
       <div class="progress progress-striped active" id="progress-bar">
         <div class="progress-bar progress-bar-info">
->>>>>>> master
         </div>
       </div>
       <div id="track-timeline">
