@@ -1,5 +1,21 @@
-#home {
+/*play/pause button*/
 
+body {
+    background: #111;
+    text-align: center;
+}
+
+svg {
+    margin-top: 45vh;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+
+/*home*/
+
+#home {
     fullstack-logo {
         padding-top: 30px;
         width: 150px;
@@ -9,72 +25,4 @@
         margin-top: 40px;
         text-align: center;
     }
-}
-
-/*play/pause button*/
-.control {
-    border: 11.2px solid #ffb160;
-    border-radius: 50%;
-    margin: 20px;
-    padding: 28px;
-    width: 112px;
-    height: 112px;
-    font-size: 0;
-    white-space: nowrap;
-    text-align: center;
-    cursor: pointer;
-}
-
-.control,
-.control .left,
-.control .right,
-.control:before {
-    display: inline-block;
-    vertical-align: middle;
-    transition: border 0.4s, width 0.4s, height 0.4s, margin 0.4s;
-    transition-tiomig-function: cubic-bezier(1, 0, 0, 1);
-}
-
-.control:before {
-    content: "";
-    height: 112px;
-}
-
-.control.pause .left,
-.control.pause .right {
-    margin: 0;
-    border-left: 36.96px solid #ffb160;
-    border-top: 0 solid transparent;
-    border-bottom: 0 solid transparent;
-    height: 96.992px;
-}
-
-.control.pause .left {
-    border-right: 22.4px solid transparent;
-}
-
-.control.play .left {
-    margin-left: 18.66666667px;
-    border-left: 48.496px solid #ffb160;
-    border-top: 28px solid transparent;
-    border-bottom: 28px solid transparent;
-    border-right: 0px solid transparent;
-    height: 56px;
-}
-
-.control.play .right {
-    margin: 0;
-    border-left: 48.496px solid #ffb160;
-    border-top: 28px solid transparent;
-    border-bottom: 28px solid transparent;
-    height: 0px;
-}
-
-.control:hover {
-    border-color: #ff982d;
-}
-
-.control:hover .left,
-.control:hover .right {
-    border-left-color: #ff982d;
 }

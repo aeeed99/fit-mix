@@ -63,6 +63,7 @@ app.factory('MixBoardFactory', function(){
             // EC - makes a copy so this isn't pass by reference
             var copy = jQuery.extend( {}, track)
              mix.push(copy);
+             console.log(mix);
         }
     };
 
