@@ -17,6 +17,7 @@ module.exports = function(name) {
     var passedData={};
 
     var parser = mm(fs.createReadStream(name), { duration: true }, function (err, metadata) {
+        console.log("starting on: " + name + " hopefully this indicates the bad file");
         if(err) return reject(err);
         console.log("metadata", metadata);
         passedData.artist = metadata.artist ? metadata.artist[0] : 'Unknown Artist';
