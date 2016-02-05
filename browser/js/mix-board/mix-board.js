@@ -64,7 +64,8 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function (track) {
         MixBoardFactory.addTrackToMix(track);
-    };
+        console.log("scope mix", $scope.mix)
+  };
 
     $scope.currentMixTrack;
 
@@ -108,7 +109,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
         var track;
         var trackIndex;
 
-    $scope.mix = MixBoardFactory.getMix();
+    $scope.mix =  MixBoardFactory.getMix();
 
     // console.log("parent?", $scope.$parent.$parent.mix)
     $scope.pauseMix=function(){
@@ -151,6 +152,8 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
             $scope.currentMixTrack = null;
 
             MixBoardFactory.resetMix();
+           // $scope.mix =  MixBoardFactory.getCleanMix();
+            console.log("ive got a clean mix", $scope.mix)
 
         }
 
@@ -168,28 +171,29 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
         console.log("startTime", startTime)
         $scope.mix[0].fade = 4;
 
-        track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
+       // track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
 
         //debugger;
-        $scope.currentMixTrack = track;
+        $scope.currentMixTrack = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
 
         console.log("track playing",  $scope.currentMixTrack)
-        console.log("wavesurfer", track.wavesurfer);
-        console.log("currentTime", track.wavesurfer.backend.ac.currentTime);
+       // console.log("wavesurfer", track.wavesurfer);
+      //  console.log("currentTime", track.wavesurfer.backend.ac.currentTime);
 
-        $scope.currentMixTrack.wavesurfer.play(startTime, track.end);
+        $scope.currentMixTrack.wavesurfer.play(startTime, $scope.currentMixTrack.end);
         //debugger;
 
 
         $scope.currentMixTrack.wavesurfer.on('audioprocess', function(process){
             if ($scope.currentMixTrack){
-                console.log("process", process)
-                console.log("trackend", $scope.currentMixTrack.end)
+               // console.log("process", process)
+                //console.log("trackend", $scope.currentMixTrack.end)
                 $scope.currentMixTrack.currentProgress = process;
             //    console.log("process", process);
              //   console.log("currentTime", $scope.currentMixTrack.wavesurfer.backend.ac.currentTime)
-            if ( !track.fadeRegistered && track.fade >= (track.end-process)){
-                console.log("FADING", track)
+               // console.log("time? ", $scope.currentMixTrack.wavesurfer.getCurrentTime())
+            if ( !$scope.currentMixTrack.fadeRegistered && $scope.currentMixTrack.fade >= ($scope.currentMixTrack.end-$scope.currentMixTrack.wavesurfer.getCurrentTime() ) ){
+                    console.log("FADING", track)
                     console.log("I SHOULD HAPPEN ONCE")
                    // track.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, track.wavesurfer.backend.ac.currentTime, 4);
                  //   debugger;

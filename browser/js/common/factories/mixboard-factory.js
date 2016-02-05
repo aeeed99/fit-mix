@@ -2,16 +2,25 @@ app.factory('MixBoardFactory', function(){
     var MixBoardFactory = {};
 
     MixBoardFactory.currentMix = [];
+    MixBoardFactory.cleanMix = [];
 
     MixBoardFactory.getMix = function(){
         return MixBoardFactory.currentMix;
     };
+
+    MixBoardFactory.getCleanMix = function(){
+        console.log("cleanMix", MixBoardFactory.cleanMix)
+        console.log("copy?",jQuery.extend( {}, MixBoardFactory.cleanMix) )
+        var newClean  = jQuery.extend( {}, MixBoardFactory.cleanMix);
+        return newClean;
+    }
 
     MixBoardFactory.resetMix = function(){
         MixBoardFactory.currentMix.forEach(function(mixTrack, index, arr){
          // TEST GAIN RESET
              console.log("pre edit", MixBoardFactory.currentMix[index])
            //  MixBoardFactory.currentMix[index].wavesurfer.backend.gainNode = mixTrack.wavesurfer.backend.ac.createGain()
+
              MixBoardFactory.currentMix[index].wavesurfer.backend.gainNode.gain.value = 1;
              MixBoardFactory.currentMix[index].fadeRegistered = false;
              console.log("fadeRegistered should be false",  MixBoardFactory.currentMix[index].fadeRegistered)
@@ -87,9 +96,13 @@ app.factory('MixBoardFactory', function(){
                 track.duration = track.wavesurfer.getDuration();
             }
             // EC - makes a copy so this isn't pass by reference
-             var copy = jQuery.extend( {}, track)
-             MixBoardFactory.currentMix.push(copy);
+             var copy1 = jQuery.extend( {}, track)
+             var copy2 = jQuery.extend( {}, track)
+             MixBoardFactory.currentMix.push(copy1);
+             MixBoardFactory.cleanMix.push(copy2);
              console.log(MixBoardFactory.currentMix);
+             console.log("clean", MixBoardFactory.cleanMix);
+
         }
     };
 
