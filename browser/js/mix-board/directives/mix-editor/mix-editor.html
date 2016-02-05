@@ -1,17 +1,20 @@
 <mix-playback ng-controller="mixPlaybackController"></mix-playback>
 <div id="upper-panel">
-  <div class="add-component dev-test"></div>
   <div class="mix-frame">
-    <div ng-repeat="track in mix track by $index" ng-style="stylizer(track)" ng-drop="true"
-         ng-drop-success="reorderMix($index, $data, $event, mix)">
-      <div id="mix-clip" ng-drag="true" ng-drag-data="track">
-        <span class="">{{ track.name }}</span> {{prettyDuration(track)}}
+    <div class="add-component dev-test"></div>
+    <div><!--NP Wrapper div to seperate ng-repeat from add button-->
+      <div ng-repeat="track in mix track by $index" ng-style="stylizer(track)" ng-drop="true"
+           ng-drop-success="reorderMix($index, $data, $event, mix)">
+        <div id="mix-clip" ng-drag="true" ng-drag-data="track">
+          <span class="">{{ track.name }}</span> {{prettyDuration(track)}}
+        </div>
       </div>
     </div>
   </div>
 </div>
 <div id="lower-panel">
   <div class="row resizable mix-frame">
+    <div class="add-component dev-test"></div>
     <section ng-repeat="phase in phases" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()"
              mix-length="mixLength" workout-len="phase.duration" ng-drop="true"
              ng-drop-success="reorderPhase($index, $data, $event, phases)">
