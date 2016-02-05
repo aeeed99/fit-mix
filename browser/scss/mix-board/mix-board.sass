@@ -13,7 +13,7 @@ $phase-color-hover: rgba(18, 39, 21, 0.73)
 $phase-text: rgba(161, 162, 163, 0.56)
 $phase-text-hover: rgba(92, 184, 92, 0.56)
 
-$track-panel-color-1: #ffab40
+$track-panel-color-1: #ffb346
 $track-panel-color-2: #84d94a
 $track-panel-color-3: #f3a9ff
 $track-panel-color-4: #6fa8dc
@@ -36,6 +36,21 @@ $track-panel-color-4: #6fa8dc
 .body
   background-color: $color-body !important
 
+action-buttons, #mix-edit-buttons, #mix-edit-buttons
+  button, div
+    width: 120px
+    height: 20px
+    font-family: $font-standard
+    border-radius: 0
+    border: 1px solid #a4a4a4
+    background-color: #4500a7
+    padding: 0
+    color: #a4a4a4
+  button:hover
+    background-color: #9f00e8
+    color: #222
+
+
 #user-menu
   position: absolute
   top: 60px
@@ -46,12 +61,13 @@ $track-panel-color-4: #6fa8dc
   text-align: center
   padding-top: 4px
   font-size: 21px
-
+#phases-view
+  z-index: 1
 #upper-panel
   +inner-frame()
   margin: auto
   min-height: 40px
-  height: 13vh
+  height: 8vh
   background-color: transparent
   border: none
 
@@ -73,7 +89,29 @@ $track-panel-color-4: #6fa8dc
 #mix-header
   text-align: center
 
+#mix-edit-buttons //NP: This must stay below `action-buttons, #mix-edit-buttons` for proper styling
+  float: right
+  margin: 0 80px
+  div, button
+    height: 28px
+    position: block
+    top: -8px
+    border-bottom: none
+    display: inline-block
+    input
+      width: 40px
+      font-family: $font-digital-small
+      text-align: center
+      color: white
+      background: transparent
+      border: none
+      border-bottom: 1px solid white
+  #_offset //hacky, temp fix
+    top: -2px
+
 .mix-frame
+  position: relative
+  z-index: 4
   +inner-frame()
   display: block
   height: 100%
@@ -90,21 +128,6 @@ $track-panel-color-4: #6fa8dc
     display: inline-table
   #track-info-wrapper
     height: 100%
-
-
-action-buttons
-  button
-    width: 120px
-    height: 20px
-    font-family: $font-standard
-    border-radius: 0
-    border: 1px solid #a4a4a4
-    background-color: #4500a7
-    padding: 0
-    color: #a4a4a4
-  button:hover
-    background-color: #9f00e8
-    color: #222
 
 #add-phase
   display: inline
