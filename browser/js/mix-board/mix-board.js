@@ -62,6 +62,12 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
     //var loadingPrev = false;
+
+    $scope.hideDangit = function(){
+        if($scope.tab !== 'sfx'){
+            return {display: 'none'};
+        }
+    }
     $scope.hideForReal = function(){
         if($scope.tab !== 'music'){
             return {display: 'none'};

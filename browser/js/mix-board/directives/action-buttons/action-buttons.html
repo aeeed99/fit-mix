@@ -1,5 +1,6 @@
 <button type="button" ng-style="hideForReal()">Upload Songs to Library</button>
 <button type="button" ng-style="hideForReal()" ng-click="addSelectedTrackToMix(currentTrack, mix)">Add to Mix</button>
 <button type="button" ng-style="hideForReal()" ng-click="addSegmentToLibrary(selectedTrack)">Add to Library</button>
-<button type="button" ng-click="">Add to Mix</button>
-<button type="button" ng-click="">Preview Sound</button>
+<button type="button" ng-click="" ng-style="hideDangit()">Add to Mix at:</button>
+<input ng-model="sfxTrigger" placeholder="trigger time" ng-style="hideDangit()">
+<button type="button" ng-click="" ng-style="hideDangit()">Preview Sound</button>
