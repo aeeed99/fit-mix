@@ -173,16 +173,18 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
         //debugger;
         $scope.currentMixTrack = track;
 
-        console.log("track playing",  track)
+        console.log("track playing",  $scope.currentMixTrack)
         console.log("wavesurfer", track.wavesurfer);
         console.log("currentTime", track.wavesurfer.backend.ac.currentTime);
 
-        track.wavesurfer.play(startTime, track.end);
+        $scope.currentMixTrack.wavesurfer.play(startTime, track.end);
         //debugger;
 
 
-        track.wavesurfer.on('audioprocess', function(process){
-            if ($scope.currentMixTrack && track){
+        $scope.currentMixTrack.wavesurfer.on('audioprocess', function(process){
+            if ($scope.currentMixTrack){
+                console.log("process", process)
+                console.log("trackend", $scope.currentMixTrack.end)
                 $scope.currentMixTrack.currentProgress = process;
             //    console.log("process", process);
              //   console.log("currentTime", $scope.currentMixTrack.wavesurfer.backend.ac.currentTime)
@@ -191,7 +193,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
                     console.log("I SHOULD HAPPEN ONCE")
                    // track.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, track.wavesurfer.backend.ac.currentTime, 4);
                  //   debugger;
-                    track.fadeRegistered = true;
+                    $scope.currentMixTrack.fadeRegistered = true;
                     console.log("INDEX AFTER FADE", trackIndex)
                     trackIndex+=1
                     $scope.currentMixTrack = $scope.mix[trackIndex];
@@ -200,9 +202,12 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
                      $scope.playClip();
 
                 }
-                else if (track.end - process < .5  ){
+                else if ($scope.currentMixTrack.end - process < .5 && process < $scope.currentMixTrack.end ){
                    // debugger;
-                    track.wavesurfer.pause();
+                   console.log("track", $scope.currentMixTrack)
+                   console.log("process", process)
+
+                    $scope.currentMixTrack.wavesurfer.pause();
                     //track=undefined;
                     console.log("INDEX", trackIndex);
                     console.log("MIX LENGTH", $scope.mix.length)
