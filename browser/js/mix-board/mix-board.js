@@ -17,6 +17,11 @@ app.config(function ($stateProvider) {
 
 app.controller('MixBoardController', function ($scope, $document, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
+
+    String.prototype.capitalize = function() {
+    return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+    };
+    //MB: I LIVE ON THE EDGE ^^^^^^
     $scope.mixLength = 600;
     $scope.phases = [
         {name: "STRETCH",
@@ -47,6 +52,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 
     $scope.editTitle = false;
     $scope.mixName = "My awesome Playlist";
+    $scope.tab = "music";
 
     $scope.isLoaded = false;
     $scope.isPlaying = false;
@@ -56,6 +62,17 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
     //var loadingPrev = false;
+    $scope.hideForReal = function(){
+        if($scope.tab !== 'music'){
+            return {display: 'none'};
+        }
+    }
+    $scope.sfxTabClick = function(){
+        $scope.tab = "sfx";
+    }
+    $scope.musicTabClick = function(){
+        $scope.tab = "music";
+    }
     $scope.stylizeSfx = function(sfx){
         let style = {};
         style["margin-left"] = '60px';

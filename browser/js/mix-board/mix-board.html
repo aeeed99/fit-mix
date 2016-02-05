@@ -8,7 +8,7 @@
   <div ng-controller="prevWavController">
     <library-view></library-view>
     <action-buttons></action-buttons>
-    <div id="prev-wav">
+    <div id="prev-wav" ng-style="hideForReal()">
       <!--NP: This cannot be a directive because of a query selector. But edit with caution.
       collapsing recommended if not in use -->
       <div class="progress progress-striped active" id="progress-bar">
