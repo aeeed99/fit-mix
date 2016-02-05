@@ -26,32 +26,13 @@ var Track = Promise.promisifyAll(mongoose.model('Track'));
 var userData = require('./server/seeds/users.js')
 var trackData = require('./server/seeds/tracks.js')
 
-var seedUsers = function() {
-
-    function randUser () {
-        return new User({
-            photos: [randPhoto()],
-            email: emails.pop(),
-            password: chance.word()
-        });
-    }
-
-    var users = _.times(numUsers, randUser);
-
-    users.push(new User({
-        email: 'user@gmail.com',
-        password: 'user',
-        google: 'googleUser'
-    }));
-    users.push(new User({
-        email: 'testing@fsa.com',
-        password: 'password'
-    }));
-    users.push(new User({
-        email: 'obama@gmail.com',
-        password: 'potus'
-    }));
-    return User.createAsync(users);
+function seedUser(userData) {
+    console.log("seeding users")
+    var promises = []
+    userData.forEach(function (user) {
+        promises.push(User.create(user))
+    })
+    return Promise.all(promises)
 }
 
 function seedTracks(trackData) {
@@ -68,7 +49,7 @@ connectToDb.then(function () {
         return Promise.all([Track.remove({}), User.remove({})])
     })
     .then(function () {
-        return seedUsers();
+        return seedUser(userData);
     })
     .then(function () {
         return seedTracks(trackData);
