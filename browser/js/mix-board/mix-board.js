@@ -70,7 +70,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
 });
 
 app.controller('mixEditController', function($scope, MixBoardFactory, $uibModal){
-    $scope.mixLength = 300;
+    $scope.mixLength = 600;
     $scope.durSum = function(){
         var sum = 0;
         $scope.phases.forEach(function(phase){
@@ -101,7 +101,6 @@ app.controller('mixEditController', function($scope, MixBoardFactory, $uibModal)
         style.width = (track.duration / $scope.mixLength) * 100 + '%';
         return style;
     };
-    $scope.mixLength = 600
     $scope.openAddPhase = function(){
         var modal = $uibModal.open({
             animation: true,
