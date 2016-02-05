@@ -1,5 +1,6 @@
 <mix-playback ng-controller="mixPlaybackController"></mix-playback>
 <div id="upper-panel">
+  <div class="add-component dev-test"></div>
   <div class="mix-frame">
     <div ng-repeat="track in mix track by $index" ng-style="stylizer(track)" ng-drop="true"
          ng-drop-success="reorderMix($index, $data, $event, mix)">
