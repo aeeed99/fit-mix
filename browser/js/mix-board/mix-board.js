@@ -265,17 +265,29 @@ app.controller('mixHeaderController', function($scope){
 });
 
 app.controller('modalController', function($scope, $uibModal){
-
-    $scope.open = function(){
-
+    $scope.openAddPhase = function(){
         var modal = $uibModal.open({
             animation: true,
-            template: 'Hello!',
-            controller: 'modalInstanceController',
+            templateUrl: 'js/mix-board/modals/add-phase-modal.html',
+            controller: 'phaseModalController',
             size: 'sm',
-        })
+        });
+        modal.result.then(input => {
+            alert("the input is " + input)
+            $scope.phases.push({
+                name: input.name,
+                duration: input.duration,
+                color: "two"
+            });
+        });
     }
 });
-app.controller('modalInstanceController', function(){
-
+app.controller('phaseModalController', function($scope, $uibModalInstance){
+    $scope.input;
+    $scope.ok = function(){
+        $uibModalInstance.close($scope.input);
+    };
+    $scope.cancel = function(){
+        $uibModalInstance.dismiss('cancel');
+    };
 });
