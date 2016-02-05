@@ -163,9 +163,9 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
              startTime  = $scope.currentMixTrack.currentProgress ? $scope.currentMixTrack.currentProgress : $scope.currentMixTrack.start;
         } else {
             startTime = $scope.mix[trackIndex].start;
-            console.log("startTime", startTime)
         }
 
+        console.log("startTime", startTime)
         $scope.mix[0].fade = 4;
 
         track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
@@ -189,7 +189,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
             if ( !track.fadeRegistered && track.fade >= (track.end-process)){
                 console.log("FADING", track)
                     console.log("I SHOULD HAPPEN ONCE")
-                    track.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, track.wavesurfer.backend.ac.currentTime, 4);
+                   // track.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, track.wavesurfer.backend.ac.currentTime, 4);
                  //   debugger;
                     track.fadeRegistered = true;
                     console.log("INDEX AFTER FADE", trackIndex)
@@ -201,8 +201,9 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
 
                 }
                 else if (track.end - process < .5  ){
+                   // debugger;
                     track.wavesurfer.pause();
-                    track=undefined;
+                    //track=undefined;
                     console.log("INDEX", trackIndex);
                     console.log("MIX LENGTH", $scope.mix.length)
                     if (trackIndex+1 < $scope.mix.length){
@@ -212,8 +213,10 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
                         $scope.currentMixTrack.currentProgress = 0;
                         $scope.playClip()
                     } else {
+                        console.log("track stopping at", track)
                         console.log("no more left!!");
                         $scope.currentMixTrack = null;
+                        trackIndex=0;
                       }
                 }
             }
