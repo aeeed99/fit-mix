@@ -14,7 +14,6 @@ app.config(function ($stateProvider) {
 
 app.controller('MixBoardController', function ($scope, $document, tracks, MixBoardFactory) {
     // HARD CODED RIGHT NOW
-    $scope.mixLength = 600;
     $scope.phases = [
         {name: "STRETCH",
          duration: 120,
@@ -70,7 +69,8 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
 
 });
 
-app.controller('mixEditController', function($scope, MixBoardFactory){
+app.controller('mixEditController', function($scope, MixBoardFactory, $uibModal){
+    $scope.mixLength = 300;
     $scope.durSum = function(){
         var sum = 0;
         $scope.phases.forEach(function(phase){
@@ -100,6 +100,22 @@ app.controller('mixEditController', function($scope, MixBoardFactory){
         };
         style.width = (track.duration / $scope.mixLength) * 100 + '%';
         return style;
+    };
+    $scope.mixLength = 600
+    $scope.openAddPhase = function(){
+        var modal = $uibModal.open({
+            animation: true,
+            templateUrl: 'js/mix-board/modals/add-phase-modal.html',
+            controller: 'phaseModalController',
+            size: 'sm',
+        });
+        modal.result.then(input => {
+            $scope.phases.push({
+                name: input.name,
+                duration: input.duration,
+                color: "two"
+            });
+        });
     }
 });
 
@@ -264,24 +280,6 @@ app.controller('mixHeaderController', function($scope){
     }
 });
 
-app.controller('modalController', function($scope, $uibModal){
-    $scope.openAddPhase = function(){
-        var modal = $uibModal.open({
-            animation: true,
-            templateUrl: 'js/mix-board/modals/add-phase-modal.html',
-            controller: 'phaseModalController',
-            size: 'sm',
-        });
-        modal.result.then(input => {
-            alert("the input is " + input)
-            $scope.phases.push({
-                name: input.name,
-                duration: input.duration,
-                color: "two"
-            });
-        });
-    }
-});
 app.controller('phaseModalController', function($scope, $uibModalInstance){
     $scope.input;
     $scope.ok = function(){
