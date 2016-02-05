@@ -342,3 +342,19 @@ app.controller('mixHeaderController', function($scope){
         if(!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
     }
 });
+
+app.controller('modalController', function($scope, $uibModal){
+
+    $scope.open = function(){
+
+        var modal = $uibModal.open({
+            animation: true,
+            template: 'Hello!',
+            controller: 'modalInstanceController',
+            size: 'sm',
+        })
+    }
+});
+app.controller('modalInstanceController', function(){
+
+});
