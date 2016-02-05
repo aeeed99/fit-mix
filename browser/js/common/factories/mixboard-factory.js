@@ -1,6 +1,31 @@
 app.factory('MixBoardFactory', function(){
     var MixBoardFactory = {};
 
+    MixBoardFactory.currentMix = [];
+
+    MixBoardFactory.getMix = function(){
+        return MixBoardFactory.currentMix;
+    };
+
+    MixBoardFactory.resetMix = function(){
+        MixBoardFactory.currentMix.forEach(function(mixTrack, index, arr){
+         // TEST GAIN RESET
+             console.log("pre edit", MixBoardFactory.currentMix[index])
+           //  MixBoardFactory.currentMix[index].wavesurfer.backend.gainNode = mixTrack.wavesurfer.backend.ac.createGain()
+             MixBoardFactory.currentMix[index].wavesurfer.backend.gainNode.gain.value = 1;
+             MixBoardFactory.currentMix[index].fadeRegistered = false;
+             console.log("fadeRegistered should be false",  MixBoardFactory.currentMix[index].fadeRegistered)
+             MixBoardFactory.currentMix[index].currentProgress=0;
+            // track.wavesurfer.backend.gainNode.gain.setValueCurveAtTime([1], track.wavesurfer.backend.ac.currentTime, track.end);
+            // Below here is newest
+              //mixTrack.wavesurfer.backend.gainNode.gain.setTargetAtTime(1.0, mixTrack.wavesurfer.backend.ac.currentTime, 0.1);
+         //   debugger;
+             console.log("new track", MixBoardFactory.currentMix[index])
+        })
+
+        console.log("edited mix", MixBoardFactory.currentMix)
+    };
+
     MixBoardFactory.getTimeObject = function(regionTime){
         return { m: ('0' + Math.floor( regionTime/60)).slice(-2),
                s: ('0' + Math.ceil( regionTime%60)).slice(-2)};
@@ -48,7 +73,7 @@ app.factory('MixBoardFactory', function(){
 
     };
 
-    MixBoardFactory.addTrackToMix = function (track, mix) {
+    MixBoardFactory.addTrackToMix = function (track) {
         if (track) {
             // MB: are you EC or CHES? Make up your mind!
             // EC - adds start and end times based on region/no region
@@ -62,9 +87,9 @@ app.factory('MixBoardFactory', function(){
                 track.duration = track.wavesurfer.getDuration();
             }
             // EC - makes a copy so this isn't pass by reference
-            var copy = jQuery.extend( {}, track)
-             mix.push(copy);
-             console.log(mix);
+             var copy = jQuery.extend( {}, track)
+             MixBoardFactory.currentMix.push(copy);
+             console.log(MixBoardFactory.currentMix);
         }
     };
 
