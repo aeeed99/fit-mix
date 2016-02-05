@@ -1,24 +1,57 @@
 <div id="user-menu">
-  <span class="glyphicon glyphicon-menu-hamburger"></span>
+    <span class="glyphicon glyphicon-menu-hamburger"></span>
 </div>
 <div class="container clearfix">
   <mix-header ng-controller="mixHeaderController"></mix-header>
   <mix-editor ng-controller="mixEditController"></mix-editor>
-
   <div ng-controller="prevWavController">
     <library-view></library-view>
     <action-buttons></action-buttons>
     <div id="prev-wav" ng-style="hideForReal()">
-      <!--NP: This cannot be a directive because of a query selector. But edit with caution.
-      collapsing recommended if not in use -->
-      <div class="progress progress-striped active" id="progress-bar">
-        <div class="progress-bar progress-bar-info">
+            <div class="progress progress-striped active" id="progress-bar">
+                <div class="progress-bar progress-bar-info">
+                </div>
+            </div>
         </div>
-      </div>
-      <div id="track-timeline">
-      </div>
-      <div id="track-preview">
-      </div>
+        <div>
+            <div id="upper-panel">
+                <div id="mix-board">
+                    <div id="mix-view">
+                        <div class="row resizable">
+                            <section ng-repeat="phase in phases" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="phase.duration" ng-drop="true" ng-drop-success="reorderPhase($index, $data, $event, phases)">
+                                <div ng-drag="true" ng-drag-data="phase" id="{{phase.color}}">
+                                    <p>{{phase.name}}</p>
+                                    <p>{{phase.duration}} SEC</p>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <p>total length</p>
+            <input ng-model="mixLength">
+            <p>search</p>
+            <input ng-model="trackFilter">
+            <div id="library">
+                <!--{{ library }}-->
+                <div ng-repeat="track in library | filter: {$: trackFilter} track by $index">
+                    <track-panel panel-identifier="stylizeTrack(track)" track-info="track" ng-click="prevWave(track)"></track-panel>
+                </div>
+            </div>
+            <div id="action-buttons">
+                <button class="btn" type="button" ng-click="addSegmentToLibrary(selectedTrack)">Upload to Library</button>
+                <button class="btn" type="button" ng-click="addSelectedTrackToMix(currentTrack, mix)">Add to Mix</button>
+            </div>
+            <div class="progress progress-striped active" id="progress-bar">
+                <div class="progress-bar progress-bar-info">
+                </div>
+            </div>
+            <div id="track-timeline">
+            </div>
+            <div id="track-preview">
+            </div>
+        </div>
     </div>
-  </div>
 </div>
