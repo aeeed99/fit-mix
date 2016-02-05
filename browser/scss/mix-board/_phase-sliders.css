@@ -1,0 +1,173 @@
+.resizable {
+  position: relative;
+}
+.resizable.no-transition {
+  transition: none !important;
+}
+
+.rg-right, .rg-left, .rg-top, .rg-bottom {
+  display: block;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  position: absolute;
+  z-index: 1;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  background: transparent;
+}
+.rg-right span, .rg-left span, .rg-top span, .rg-bottom span {
+  position: absolute;
+  box-sizing: border-box;
+  display: block;
+  border: 1px solid #ccc;
+}
+
+.rg-right span, .rg-left span {
+  border-width: 0 1px;
+  top: 50%;
+  margin-top: -10px;
+  margin: -10px 0 0 3.5px;
+  height: 20px;
+  width: 7px;
+}
+
+.rg-top span, .rg-bottom span {
+  border-width: 1px 0;
+  left: 50%;
+  margin: 3.5px 0 0 -10px;
+  width: 20px;
+  height: 7px;
+}
+
+.rg-top {
+  cursor: row-resize;
+  width: 100%;
+  top: 0;
+  left: 0;
+  margin-top: -14px;
+}
+
+.rg-right {
+  cursor: col-resize;
+  height: 100%;
+  right: 0;
+  top: 0;
+  margin-right: -14px;
+}
+
+.rg-bottom {
+  cursor: row-resize;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  margin-bottom: -14px;
+}
+
+.rg-left {
+  cursor: col-resize;
+  height: 100%;
+  left: 0;
+  top: 0;
+  margin-left: -14px;
+}
+
+#one {
+  background: #7bd389;
+  color: #2d883c;
+}
+
+#two {
+  background: #aedcc0;
+  color: #49a86e;
+}
+
+.workout-element {
+  display: inline-flex;
+  max-width: 800px;
+}
+
+#three {
+  background: #38e4ae;
+  color: #107354;
+}
+
+.content {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: column nowrap;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+  -webkit-align-content: space-around;
+      -ms-flex-line-pack: distribute;
+          align-content: space-around;
+}
+
+.row {
+  min-height: 50px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+/*  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+  -webkit-align-content: space-around;
+      -ms-flex-line-pack: distribute;
+          align-content: space-around;*/
+}
+.row.resizable {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 300px;
+      -ms-flex: 0 0 300px;
+          flex: 0 0 300px;
+  margin-left: 0;
+}
+
+section {
+  box-sizing: border-box;
+  background: #ddd;
+  border: 2px solid #fff;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  min-width: 30px;
+}
+
+section p{
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+section div{
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+section.resizable {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 300px;
+      -ms-flex: 0 0 300px;
+          flex: 0 0 300px;
+}
+
+
