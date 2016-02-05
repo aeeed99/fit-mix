@@ -10,7 +10,9 @@
     </uib-tab>
     <uib-tab>
       <uib-tab-heading><i class="glyphicon glyphicon-equalizer"></i> SFX</uib-tab-heading>
-      <span style="color: white">Ipsum Ipsum!</span>
+      <div ng-repeat="sfx in sfxBase | filter: {$: trackFilter} track by $index">
+        <sfx-panel panel-identifier="stylizeTrack(sfx)" sfx-info="sfx"></sfx-panel>
+      </div>
     </uib-tab>
   </uib-tabset>
 </div>

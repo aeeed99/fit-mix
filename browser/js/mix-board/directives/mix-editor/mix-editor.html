@@ -1,4 +1,9 @@
 <mix-playback ng-controller="mixPlaybackController"></mix-playback>
+  <div class="row mix-frame">
+    <div ng-repeat="sfx in mixSfx track by $index">
+      <span class="glyphicon glyphicon-exclamation-sign sfx-marker" ng-style="stylizeSfx(sfx)"></span>
+    </div>
+  </div>
 <div id="upper-panel">
   <div class="mix-frame">
     <div ng-repeat="track in mix track by $index" ng-style="stylizer(track)" ng-drop="true"

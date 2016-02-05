@@ -7,7 +7,6 @@ app.directive('sfxPanel',function(){
             panelIdentifier: '='
         },
         link: function(scope, element) {
-            console.log("scope: ", scope.sfxInfo);
             element.on('click', function(){
                 $('sfx-panel').removeClass('track-selected');
                 $(this).addClass('track-selected');

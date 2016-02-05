@@ -40,6 +40,8 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = []; //NP List of songs on the mix bar.
+    $scope.mixSfx = [{name: "horn", trigger: 60},{name: "alarm", trigger: 120}];
+
     $scope.library = tracks;
     $scope.sfxBase = sfx;
 
@@ -54,6 +56,11 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
     //var loadingPrev = false;
+    $scope.stylizeSfx = function(sfx){
+        let style = {};
+        style["margin-left"] = '60px';
+        return style;
+    }
     $scope.fillContainer = function(){
         return {width: '100%', height: '100%'};
     };
