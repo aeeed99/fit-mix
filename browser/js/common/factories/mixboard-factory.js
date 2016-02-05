@@ -50,6 +50,7 @@ app.factory('MixBoardFactory', function(){
 
     MixBoardFactory.addTrackToMix = function (track, mix) {
         if (track) {
+            // MB: are you EC or CHES? Make up your mind!
             // EC - adds start and end times based on region/no region
             if (track.hasRegion){
                 track.start = track.region.start;

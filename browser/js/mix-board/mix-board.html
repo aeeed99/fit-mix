@@ -2,51 +2,40 @@
     <span class="glyphicon glyphicon-menu-hamburger"></span>
 </div>
 <div class="container clearfix">
-  <div class="" id="mix-header">
-    <h3><span class="dev-placeholder" ng-click="toggleEdit()" ng-hide="editTitle">{{mixName}}</span><input class="dev-placeholder" ng-style="{'background-color': '#434343', 'text-align': 'center'}" ng-model="mixName" ng-show="editTitle" ng-click="toggleEdit()"></h3>
-    <!--MB: above is more CSS that should be put in a stylesheet somewhere -->
-  </div>
-    <div id="upper-panel">
-      <div id="mix-board">
-        <div id="mix-view">
-          <!--<div id="track-info-wrapper" ng-repeat="track in library | limitTo: 3 ">-->
-          <!--<mix-clip track-info="track"></mix-clip>-->
-          <!--</div>-->
-          <button ng-click="playClip()"> PLAY </button>
-          <button ng-click="playClip(true)"> RESTART </button>
-          <button ng-click="pauseMix()"> PAUSE </button>
-          <div ng-repeat="track in mix track by $index" ng-style="stylizer(track)" ng-drop="true" ng-drop-success="reorderMix($index, $data, $event, mix)">
-            <div id="mix-clip" ng-drag="true" ng-drag-data="track">
-              <!--NP: TODO: replace hardcode 1200 with dynamic custom length -->
-              <span class="">{{ track.name }}</span> {{prettyDuration(track)}}
+    <mix-header ng-controller="mixHeaderController"></mix-header>
+    <mix-editor ng-controller="mixEditController"></mix-editor>
+    <div ng-controller="prevWavController">
+        <library-view></library-view>
+        <action-buttons></action-buttons>
+        <div id="prev-wav">
+            <!--NP: This cannot be a directive because of a query selector. But edit with caution.
+      collapsing recommended if not in use -->
+            <div class="progress progress-striped active" id="progress-bar">
+                <div class="progress-bar progress-bar-info">
+                </div>
             </div>
-          </div>
         </div>
-          <!--NP this doesn't work. see issue 9-->
-          <!--<div id="add-phase"><button class="btn">+</button></div>&ndash;&gt;-->
-      </div>
-    </div>
-    <div>
-        <div id="upper-panel">
-            <div id="mix-board">
-                <div id="mix-view">
-                    <div class="row resizable">
-                        <section ng-repeat="phase in phases" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="phase.duration" ng-drop="true" ng-drop-success="reorderPhase($index, $data, $event, phases)">
-                        <div ng-drag="true" ng-drag-data="phase" id="{{phase.color}}">
-                            <p>{{phase.name}}</p>
-                            <p>{{phase.duration}} SEC</p>
+        <div>
+            <div id="upper-panel">
+                <div id="mix-board">
+                    <div id="mix-view">
+                        <div class="row resizable">
+                            <section ng-repeat="phase in phases" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()" mix-length="mixLength" workout-len="phase.duration" ng-drop="true" ng-drop-success="reorderPhase($index, $data, $event, phases)">
+                                <div ng-drag="true" ng-drag-data="phase" id="{{phase.color}}">
+                                    <p>{{phase.name}}</p>
+                                    <p>{{phase.duration}} SEC</p>
+                                </div>
+                            </section>
                         </div>
-                        </section>
                     </div>
                 </div>
             </div>
-          </div>
         </div>
         <div>
-          <p>total length</p>
-          <input ng-model="mixLength">
-          <p>search</p>
-          <input ng-model="trackFilter">
+            <p>total length</p>
+            <input ng-model="mixLength">
+            <p>search</p>
+            <input ng-model="trackFilter">
             <div id="library">
                 <!--{{ library }}-->
                 <div ng-repeat="track in library | filter: {$: trackFilter} track by $index">
@@ -65,8 +54,6 @@
             </div>
             <div id="track-preview">
             </div>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
-

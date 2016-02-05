@@ -53,11 +53,18 @@ $track-panel-color-4: #6fa8dc
   height: 13vh
   background-color: transparent
   border: none
-  #mix-board
+
+#lower-panel
+  +inner-frame()
+  margin: auto
+  min-height: 40px
+
+.daw-interface
     width: 100%
     //margin: 0 2% 0 0
     height: 100%
     overflow: hidden
+
 
 #mix-upper
   //margin: 8vh 0
@@ -65,7 +72,7 @@ $track-panel-color-4: #6fa8dc
 #mix-header
   text-align: center
 
-#mix-view
+.mix-frame
   +inner-frame()
   display: block
   height: 100%
@@ -82,11 +89,9 @@ $track-panel-color-4: #6fa8dc
     display: inline-table
   #track-info-wrapper
     height: 100%
-  //.phase:hover
-  //  background-color: $phase-color-hover
-  //  color: $phase-text-hover
 
-#action-buttons
+
+action-buttons
   button
     width: 120px
     height: 20px
