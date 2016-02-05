@@ -14,6 +14,7 @@ app.config(function ($stateProvider) {
 
 app.controller('MixBoardController', function ($scope, $document, tracks, MixBoardFactory) {
     // HARD CODED RIGHT NOW
+    $scope.mixLength = 600;
     $scope.phases = [
         {name: "STRETCH",
          duration: 120,
@@ -69,8 +70,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
 
 });
 
-app.controller('mixEditController', function($scope, MixBoardFactory, $uibModal){
-    $scope.mixLength = 600;
+app.controller('mixEditController', function($scope, MixBoardFactory){
     $scope.durSum = function(){
         var sum = 0;
         $scope.phases.forEach(function(phase){
@@ -100,21 +100,6 @@ app.controller('mixEditController', function($scope, MixBoardFactory, $uibModal)
         };
         style.width = (track.duration / $scope.mixLength) * 100 + '%';
         return style;
-    };
-    $scope.openAddPhase = function(){
-        var modal = $uibModal.open({
-            animation: true,
-            templateUrl: 'js/mix-board/modals/add-phase-modal.html',
-            controller: 'phaseModalController',
-            size: 'sm',
-        });
-        modal.result.then(input => {
-            $scope.phases.push({
-                name: input.name,
-                duration: input.duration,
-                color: "two"
-            });
-        });
     }
 });
 
@@ -279,12 +264,18 @@ app.controller('mixHeaderController', function($scope){
     }
 });
 
-app.controller('phaseModalController', function($scope, $uibModalInstance){
-    $scope.input;
-    $scope.ok = function(){
-        $uibModalInstance.close($scope.input);
-    };
-    $scope.cancel = function(){
-        $uibModalInstance.dismiss('cancel');
-    };
+app.controller('modalController', function($scope, $uibModal){
+
+    $scope.open = function(){
+
+        var modal = $uibModal.open({
+            animation: true,
+            template: 'Hello!',
+            controller: 'modalInstanceController',
+            size: 'sm',
+        })
+    }
+});
+app.controller('modalInstanceController', function(){
+
 });

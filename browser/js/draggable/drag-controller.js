@@ -20,7 +20,7 @@ angular.module('ExampleApp', ['ngDraggable']).
                 $scope.mix.push(copyOfSong);
                 copyOfSong.onMix = true;
             }
-            //MB:index is    the index of the position where the draggable was dropped
+            //MB:index is the index of the position where the draggable was dropped
             var originalArray = $scope.mix.slice(0);
             var originIndex;
 
