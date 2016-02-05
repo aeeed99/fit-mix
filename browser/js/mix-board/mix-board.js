@@ -170,6 +170,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
 
         console.log("startTime", startTime)
         $scope.mix[0].fade = 4;
+        $scope.mix[1].fade = 4;
 
        // track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
 
