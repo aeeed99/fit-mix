@@ -70,7 +70,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     };
 });
 
-app.controller('mixEditController', function ($scope, MixBoardFactory, $uibModal) {
+app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFactory) {
     $scope.mixLength = 600;
     $scope.durSum = function () {
         var sum = 0;
@@ -102,21 +102,7 @@ app.controller('mixEditController', function ($scope, MixBoardFactory, $uibModal
         style.width = (track.duration / $scope.mixLength) * 100 + '%';
         return style;
     };
-    $scope.openAddPhase = function () {
-        var modal = $uibModal.open({
-            animation: true,
-            templateUrl: 'js/mix-board/modals/add-phase-modal.html',
-            controller: 'phaseModalController',
-            size: 'sm',
-        });
-        modal.result.then(input => {
-            $scope.phases.push({
-                name: input.name,
-                duration: input.duration,
-                color: "two"
-            });
-        });
-    }
+    $scope.openAddPhase = () => ModalFactory.openAddPhase($scope.phases);
 });
 
 app.controller('mixPlaybackController', function ($scope) {
@@ -267,12 +253,13 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
     });
 });
 
-app.controller('actionButtonsController', function ($scope, MixBoardFactory) {
+app.controller('actionButtonsController', function ($scope, MixBoardFactory, ModalFactory) {
     $scope.addSegmentToLibrary = function (track) {
         let newTrack = track;
         MixBoardFactory.saveSegment(newTrack);
         $scope.library.push(newTrack);
-    }
+    };
+    $scope.openUploadMusic = ModalFactory.openUploadMusic;
 });
 
 app.controller('mixHeaderController', function ($scope) {
@@ -283,11 +270,25 @@ app.controller('mixHeaderController', function ($scope) {
     }
 });
 
+app.controller('actionButtonsController', function ($scope, ModalFactory) {
+    $scope.openUploadMusic = ModalFactory.openUploadMusic;
+});
+
 app.controller('phaseModalController', function ($scope, $uibModalInstance) {
-    $scope.input;
     $scope.ok = function () {
         $uibModalInstance.close($scope.input);
     };
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+});
+
+app.controller('uploadModalController', function ($scope, $uibModalInstance) {
+    $scope.ok = function () {
+        $uibModalInstance.close("upload-field");
+    };
+    $uibModalInstance.dismiss('cancel');
+    //NP VVV Not working :( VVV
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
