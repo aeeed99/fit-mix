@@ -1,0 +1,171 @@
+@import '../design-variables'
+
+.resizable
+  position: relative
+  &.no-transition
+    transition: none !important
+
+.rg-right, .rg-left, .rg-top, .rg-bottom
+  display: block
+  width: 14px
+  height: 14px
+  line-height: 14px
+  position: absolute
+  z-index: 1
+  -moz-user-select: -moz-none
+  -ms-user-select: none
+  -webkit-user-select: none
+  user-select: none
+  background: transparent
+
+.rg-right span, .rg-left span, .rg-top span, .rg-bottom span
+  position: absolute
+  box-sizing: border-box
+  display: block
+  border: 1px solid #ccc
+
+.rg-right span, .rg-left span
+  border-width: 0 1px
+  top: 50%
+  margin-top: -10px
+  margin: -10px 0 0 -3px
+  height: 20px
+  width: 7px
+  border-color: transparent
+
+.rg-top span, .rg-bottom span
+  border-width: 1px 0
+  left: 50%
+  margin: 3.5px 0 0 -10px
+  width: 20px
+  height: 7px
+
+.rg-top
+  cursor: row-resize
+  width: 100%
+  top: 0
+  left: 0
+  margin-top: -14px
+
+.rg-right
+  cursor: col-resize
+  height: 100%
+  right: 0
+  top: 0
+  margin-right: -14px
+
+.rg-bottom
+  cursor: row-resize
+  width: 100%
+  bottom: 0
+  left: 0
+  margin-bottom: -14px
+
+.rg-left
+  cursor: col-resize
+  height: 100%
+  left: 0
+  top: 0
+  margin-left: -14px
+
+#phases-view > section
+  background: transparent
+  border: 1px solid $color1-dark
+  border-right: none
+
+#one
+  background: $color1-bright-accent
+  height: 44px //NP Don't know why it doesn't work with auto. This is not the best fix
+  .dragging
+    background: $color2-bright-accent
+
+#two
+  background: $color1-light1
+  height: 44px
+  .dragging
+    background: $color2-bright-accent
+
+.workout-element
+  display: inline-flex
+  max-width: 800px
+
+
+#three
+  background: $color2-light1
+  color: #107354
+  height: 44px
+  .dragging
+    background: $color2-bright-accent
+
+.dragging
+  background: rgba(69, 0, 255, 0.54) !important
+  color: white
+  position: relative !important
+  z-index: 1 !important
+
+#one.dragging, #two.dragging, #three.dragging
+  background: rgba(255, 0, 147, 0.54) !important
+  position: relative !important
+  z-index: 1 !important
+.content
+  -webkit-box-flex: 1
+  -webkit-flex: 1
+  -ms-flex: 1
+  flex: 1
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-flex-flow: column nowrap
+  -ms-flex-flow: column nowrap
+  flex-flow: column nowrap
+  -webkit-justify-content: space-around
+  -ms-flex-pack: distribute
+  justify-content: space-around
+  -webkit-align-content: space-around
+  -ms-flex-line-pack: distribute
+  align-content: space-around
+
+.row
+  min-height: 50px
+  -webkit-box-flex: 1
+  -webkit-flex: 1
+  -ms-flex: 1
+  flex: 1
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-flex-flow: row nowrap
+  -ms-flex-flow: row nowrap
+  flex-flow: row nowrap
+  /*  -webkit-justify-content: space-around;
+   *    -ms-flex-pack: distribute;
+   *        justify-content: space-around;
+   *-webkit-align-content: space-around;
+   *    -ms-flex-line-pack: distribute;
+   *        align-content: space-around;
+  &.resizable
+    -webkit-box-flex: 0
+    -webkit-flex: 0 0 300px
+    -ms-flex: 0 0 300px
+    flex: 0 0 300px
+    margin-left: 0
+
+section
+  box-sizing: border-box
+  background: #ddd
+  border: 2px solid #fff
+  -webkit-box-flex: 1
+  -webkit-flex: 1
+  -ms-flex: 1
+  flex: 1
+  min-width: 30px
+  p, div
+    padding-bottom: 0px
+    margin-bottom: 0px
+  &.resizable
+    -webkit-box-flex: 0
+    -webkit-flex: 0 0 300px
+    -ms-flex: 0 0 300px
+    flex: 0 0 300px
