@@ -305,6 +305,10 @@ app.controller('actionButtonsController', function($scope, MixBoardFactory){
         MixBoardFactory.saveSegment(newTrack);
         $scope.library.push(newTrack);
     }
+    $scope.addSfxToMix = function(){
+        let sfx = angular.element(document.querySelector('#track-panel-selected'));
+        mixSfx.push({ effect: sfx, trigger: $scope.sfxTrigger });
+    }
 });
 
 app.controller('mixHeaderController', function($scope){
