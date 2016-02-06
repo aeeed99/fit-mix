@@ -7,13 +7,20 @@ app.config(function ($stateProvider) {
         resolve: {
             tracks: function (HomeFactory) {
                 return HomeFactory.getTracks();
+            },
+            sfx: function (HomeFactory) {
+                return HomeFactory.getSfx();
             }
         }
     })
 });
 
-app.controller('MixBoardController', function ($scope, $document, tracks, MixBoardFactory) {
+app.controller('MixBoardController', function ($scope, $document, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
+    String.prototype.capitalize = function() {
+    return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+    };
+    //MB: I LIVE ON THE EDGE ^^^^^^
     $scope.phases = [
         {
             name: "STRETCH",
@@ -40,10 +47,14 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = []; //NP List of songs on the mix bar.
+    $scope.mixSfx = [{name: "horn", trigger: 60},{name: "alarm", trigger: 120}];
+
     $scope.library = tracks;
+    $scope.sfxBase = sfx;
 
     $scope.editTitle = false;
     $scope.mixName = "My awesome Playlist";
+    $scope.tab = "music";
 
     $scope.isLoaded = false;
     $scope.isPlaying = false;
@@ -53,17 +64,45 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
     //var loadingPrev = false;
+    $scope.hideDangit = function(){
+        if($scope.tab !== 'sfx'){
+            return {display: 'none'};
+        }
+    }
+    $scope.hideForReal = function(){
+        if($scope.tab !== 'music'){
+            return {display: 'none'};
+        }
+    }
+    $scope.sfxTabClick = function(){
+        $scope.tab = "sfx";
+    }
+    $scope.musicTabClick = function(){
+        $scope.tab = "music";
+    }
+    $scope.stylizeSfx = function(sfx){
+        let style = {};
+        style["margin-left"] = '60px';
+        return style;
+    }
+    $scope.fillContainer = function(){
+        return {width: '100%', height: '100%'};
+    };
+
+    $scope.stylizeTrack = function(track){
+        //MB: sfx have no artist, so sfx get t-p-4
+        if(!track.artist){
+            return "track-panel-4";
+        }
+        else if((track.end < track.duration && track.end !== null) || track.start > 0){
+            return "track-panel-3";
+        }
+        return "track-panel-1";
+    }
     $scope.fillContainer = function () {
         return {width: '100%', height: '100%'};
     };
 
-    $scope.stylizeTrack = function (track) {
-        if ((track.end < track.duration && track.end !== null) || track.start > 0) {
-            console.log("this sumbitch should have the style of panel-3");
-            return "track-panel-3";
-        }
-        return "track-panel-1";
-    };
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function (track, mix) {
         MixBoardFactory.addTrackToMix(track, $scope.mix);
@@ -258,7 +297,11 @@ app.controller('actionButtonsController', function ($scope, MixBoardFactory, Mod
         let newTrack = track;
         MixBoardFactory.saveSegment(newTrack);
         $scope.library.push(newTrack);
-    };
+    }
+    $scope.addSfxToMix = function(){
+        let sfx = angular.element(document.querySelector('#track-panel-selected'));
+        mixSfx.push({ effect: sfx, trigger: $scope.sfxTrigger });
+    }
     $scope.openUploadMusic = ModalFactory.openUploadMusic;
 });
 
