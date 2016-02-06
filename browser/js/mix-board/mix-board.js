@@ -110,7 +110,6 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
     var trackIndex;
     $scope.mix =  MixBoardFactory.getMix();
 
-    // console.log("parent?", $scope.$parent.$parent.mix)
     $scope.pauseMix=function(){
         $scope.currentMixTrack.wavesurfer.pause()
     };
@@ -276,10 +275,8 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
         wavesurfer.on('destroy', hideProgress);
         wavesurfer.on('error', hideProgress);
         wavesurfer.load(track.src);
-        //  $scope.selectedTrack = track;
-        // EC - TESTING REMOVING THIS TO SEE IF WE NEED IT
-        $scope.currentTrack.wavesurfer = wavesurfer
 
+        $scope.currentTrack.wavesurfer = wavesurfer
 
 };
 
