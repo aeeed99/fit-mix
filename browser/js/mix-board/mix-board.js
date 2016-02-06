@@ -131,14 +131,10 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
             $scope.currentMixTrack = null;
 
             MixBoardFactory.resetMix();
-           // $scope.mix =  MixBoardFactory.getCleanMix();
-            console.log("ive got a clean mix", $scope.mix)
 
         }
 
-        console.log('edited scope.mix', $scope.mix);
         trackIndex =  trackIndex ? trackIndex : 0;
-        console.log("computed index", trackIndex)
         var startTime;
 
         if ($scope.currentMixTrack){
@@ -147,63 +143,31 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
             startTime = $scope.mix[trackIndex].start;
         }
 
-        console.log("startTime", startTime)
-       // $scope.mix[0].fade = 4;
-        //$scope.mix[1].fade = 4;
-
-       // track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
-
-        //debugger;
         $scope.currentMixTrack = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
 
-        console.log("track playing",  $scope.currentMixTrack)
-       // console.log("wavesurfer", track.wavesurfer);
-      //  console.log("currentTime", track.wavesurfer.backend.ac.currentTime);
-
         $scope.currentMixTrack.wavesurfer.play(startTime, $scope.currentMixTrack.end);
-        //debugger;
-
 
         $scope.currentMixTrack.wavesurfer.on('audioprocess', function(process){
             if ($scope.currentMixTrack){
-               // console.log("process", process)
-                //console.log("trackend", $scope.currentMixTrack.end)
                 $scope.currentMixTrack.currentProgress = process;
-            //    console.log("process", process);
-             //   console.log("currentTime", $scope.currentMixTrack.wavesurfer.backend.ac.currentTime)
-               // console.log("time? ", $scope.currentMixTrack.wavesurfer.getCurrentTime())
-            if ( !$scope.currentMixTrack.fadeRegistered && $scope.currentMixTrack.fade >= ($scope.currentMixTrack.end-$scope.currentMixTrack.wavesurfer.getCurrentTime() ) ){
-                    console.log("FADING", $scope.currentMixTrack)
-                    console.log("I SHOULD HAPPEN ONCE")
-                    $scope.currentMixTrack.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, $scope.currentMixTrack.wavesurfer.backend.ac.currentTime, $scope.currentMixTrack.fade);
-                 //   debugger;
-                    $scope.currentMixTrack.fadeRegistered = true;
-                    console.log("INDEX AFTER FADE", trackIndex)
-                    trackIndex+=1
-                    $scope.currentMixTrack = $scope.mix[trackIndex];
-
-                    $scope.currentMixTrack.currentProgress = 0;
-                    console.log("next up after fade", $scope.currentMixTrack);
-                     if ($scope.currentMixTrack) {$scope.playClip() };
-
+                if (!$scope.currentMixTrack.fadeRegistered && $scope.currentMixTrack.fade >= ($scope.currentMixTrack.end-$scope.currentMixTrack.wavesurfer.getCurrentTime() ) ){
+                        console.log("FADING", $scope.currentMixTrack)
+                        $scope.currentMixTrack.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, $scope.currentMixTrack.wavesurfer.backend.ac.currentTime, $scope.currentMixTrack.fade);
+                        $scope.currentMixTrack.fadeRegistered = true;
+                        trackIndex+=1
+                        $scope.currentMixTrack = $scope.mix[trackIndex];
+                        $scope.currentMixTrack.currentProgress = 0;
+                        console.log("next up after fade", $scope.currentMixTrack);
+                        if ($scope.currentMixTrack) {$scope.playClip() };
                 }
-                else if ($scope.currentMixTrack.end - process < .5 && process < $scope.currentMixTrack.end ){
-                   // debugger;
-                   console.log("track", $scope.currentMixTrack)
-                   console.log("process", process)
-
+                else if ($scope.currentMixTrack.end - process < .5 && process < $scope.currentMixTrack.end ) {
                     $scope.currentMixTrack.wavesurfer.pause();
-                    //track=undefined;
-                    console.log("INDEX", trackIndex);
-                    console.log("MIX LENGTH", $scope.mix.length)
                     if (trackIndex+1 < $scope.mix.length){
-                        console.log("next track up")
                         trackIndex+=1
                         $scope.currentMixTrack = $scope.mix[trackIndex];
                         $scope.currentMixTrack.currentProgress = 0;
                         $scope.playClip()
                     } else {
-                        console.log("track stopping at", $scope.currentMixTrack)
                         console.log("no more left!!");
                         $scope.currentMixTrack = null;
                         trackIndex=0;
@@ -221,8 +185,6 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
 
     $scope.prevWave = function (track) {
 
-
-
         // CHES - "isLoaded" is for loading pre-saved data
         $scope.isLoaded = false;
         // CHES - remove previous wavesurfer if exists
@@ -233,10 +195,10 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
         $scope.lengthModels = {};
         $scope.currentTrack = MixBoardFactory.getCurrentSong($scope.library, track);
         $scope.currentTrack.hasRegion = $scope.currentTrack.hasRegion ? $scope.currentTrack.hasRegion : false;
-
-            $scope.slider = {
-                value: $scope.currentTrack.hasRegion ? $scope.currentTrack.region.start : 0,
-                options: {
+        // EC - Setting up fader
+        $scope.slider = {
+            value: $scope.currentTrack.hasRegion ? $scope.currentTrack.region.start : 0,
+            options: {
                 floor: $scope.currentTrack.hasRegion ? $scope.currentTrack.region.start : 0,
                 ceil: $scope.currentTrack.hasRegion ? $scope.currentTrack.region.end : $scope.currentTrack.duration,
                 translate: function(value) {
@@ -246,8 +208,8 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
                 onChange: function(id, modelValue, highValue){
                     $scope.currentTrack.fade = $scope.currentTrack.hasRegion ? $scope.currentTrack.region.end - modelValue : $scope.currentTrack.duration - modelValue;
                 }
-                }
-           };
+            }
+        };
 
         // CHES - create waveform
         wavesurfer = MixBoardFactory.createWaveForm();

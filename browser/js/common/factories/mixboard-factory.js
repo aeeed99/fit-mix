@@ -10,7 +10,6 @@ app.factory('MixBoardFactory', function(){
 
     MixBoardFactory.getCleanMix = function(){
         console.log("cleanMix", MixBoardFactory.cleanMix)
-        console.log("copy?",jQuery.extend( {}, MixBoardFactory.cleanMix) )
         var newClean  = jQuery.extend( {}, MixBoardFactory.cleanMix);
         return newClean;
     }
