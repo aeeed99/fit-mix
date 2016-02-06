@@ -1,22 +1,5 @@
-$font-title: 'Cabin', Arial, sans-serif
-$font-standard: Arial, sans-serif
-$font-digital: 'Share Tech Mono', monospace
-$font-digital-small: 'Nova Mono', monospace
-
-$color-body: #434343
-$color-inner: #222222
-$color-inner-line: #c1c1c1
-$font-color: #eaeaea
-
-$phase-color: #161616
-$phase-color-hover: rgba(18, 39, 21, 0.73)
-$phase-text: rgba(161, 162, 163, 0.56)
-$phase-text-hover: rgba(92, 184, 92, 0.56)
-
-$track-panel-color-1: #ffb346
-$track-panel-color-2: #84d94a
-$track-panel-color-3: #f3a9ff
-$track-panel-color-4: #6fa8dc
+@import '../_design-variables'
+@import '../_compatibility'
 
 =inner-frame()
   background-color: $color-inner
@@ -26,6 +9,7 @@ $track-panel-color-4: #6fa8dc
   @media screen and (min-width: 800px)
     max-width: 1000px !important
   width: auto
+  +shadow(inset 0 0 10px $color-inner-shadow)
 
 
 // ===Begin styling===

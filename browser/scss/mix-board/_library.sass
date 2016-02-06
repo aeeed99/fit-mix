@@ -1,3 +1,4 @@
+//@import '../_compatibility'
 #library
   +inner-frame()
   padding: 0 8px
@@ -5,10 +6,13 @@
   height: 55vh
   overflow-y: auto
 
+@import '../_compatibility'
 =track-panel
   height: 48px
   width: 128px
-  +boarder-radius(2px)
+  float: left
+  //+shadow(0 .05em 0)
+  //+boarder-radius(2px)
   margin: 10px
   padding: 1px 4px
   font-family: $font-standard
@@ -26,7 +30,7 @@
       font-family: $font-digital-small
     .time
       font-weight: bold
-    .bpm
+    .bpmtr
       float: right
 
 .track-selected > #track-panel-1, .track-selected > #track-panel-2, .track-selected > #track-panel-3, .track-selected > #track-panel-4
@@ -48,4 +52,6 @@
 #search-bar
   float: right
   margin: 10px
-  border-radius: 4px
+  border-radius: 12px
+  padding: 0 8px
+  width: 16%
