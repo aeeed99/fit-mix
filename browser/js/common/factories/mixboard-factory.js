@@ -12,7 +12,12 @@ app.factory('MixBoardFactory', function(){
         console.log("cleanMix", MixBoardFactory.cleanMix)
         var newClean  = jQuery.extend( {}, MixBoardFactory.cleanMix);
         return newClean;
-    }
+    };
+
+    MixBoardFactory.removeTrack = function(index){
+        MixBoardFactory.currentMix.splice(index, 1);
+        MixBoardFactory.cleanMix.splice(index, 1);
+    };
 
     MixBoardFactory.resetMix = function(){
         MixBoardFactory.currentMix.forEach(function(mixTrack, index, arr){
