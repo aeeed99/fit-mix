@@ -12,7 +12,7 @@ app.config(function ($stateProvider) {
     })
 });
 
-app.controller('MixBoardController', function ($scope, $document, tracks, MixBoardFactory) {
+app.controller('MixBoardController', function ($scope, $document, tracks, MixBoardFactory, UploadFactory) {
     // HARD CODED RIGHT NOW
     $scope.mixLength = 600;
     $scope.phases = [
@@ -65,9 +65,6 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     $scope.addSelectedTrackToMix = function (track, mix) {
         MixBoardFactory.addTrackToMix(track, $scope.mix);
     };
-
-    $scope.currentMixTrack;
-
 });
 
 app.controller('mixEditController', function($scope, MixBoardFactory){
@@ -272,7 +269,7 @@ app.controller('modalController', function($scope, $uibModal){
             animation: true,
             template: 'Hello!',
             controller: 'modalInstanceController',
-            size: 'sm',
+            size: 'sm'
         })
     }
 });
