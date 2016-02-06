@@ -2,3 +2,12 @@
   -moz-box-shadow: $value
   -webkit-box-shadow: $value
   box-shadow: $value
+
+=inner-frame()
+  background-color: $color-inner
+  border: 1px solid $color-inner-line
+  @media screen and (max-width: 799px)
+    max-width: 10vw
+  @media screen and (min-width: 800px)
+    max-width: 1000px !important
+  width: auto

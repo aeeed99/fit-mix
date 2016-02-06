@@ -162,7 +162,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
          var waveArray = MixBoardFactory.createWaveArray();
 
         if (restart){
-            console.log("restarting")
+            console.log("restarting");
 
             if ($scope.currentMixTrack){
                 console.log("pausing current");
