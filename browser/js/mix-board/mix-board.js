@@ -64,7 +64,6 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
     //var loadingPrev = false;
-
     $scope.hideDangit = function(){
         if($scope.tab !== 'sfx'){
             return {display: 'none'};
@@ -96,9 +95,14 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
             return "track-panel-4";
         }
         else if((track.end < track.duration && track.end !== null) || track.start > 0){
+            return "track-panel-3";
+        }
+        return "track-panel-1";
+    }
     $scope.fillContainer = function () {
         return {width: '100%', height: '100%'};
     };
+
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function (track, mix) {
         MixBoardFactory.addTrackToMix(track, $scope.mix);
