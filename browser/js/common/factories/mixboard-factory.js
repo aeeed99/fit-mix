@@ -35,6 +35,21 @@ app.factory('MixBoardFactory', function(){
         console.log("edited mix", MixBoardFactory.currentMix)
     };
 
+    MixBoardFactory.createWaveArray = function (){
+        var waveArray = new Float32Array(9);
+        waveArray[0] = 0.9;
+        waveArray[1] = 0.9;
+        waveArray[2] = 0.8;
+        waveArray[3] = 0.8;
+        waveArray[4] = 0.7;
+        waveArray[5] = 0.5;
+        waveArray[6] = 0.3;
+        waveArray[7] = 0.1;
+        waveArray[8] = 0.0;
+
+        return waveArray;
+    };
+
     MixBoardFactory.getTimeObject = function(regionTime){
         return { m: ('0' + Math.floor( regionTime/60)).slice(-2),
                s: ('0' + Math.ceil( regionTime%60)).slice(-2)};

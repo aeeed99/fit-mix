@@ -8,6 +8,13 @@
   <div ng-controller="prevWavController">
     <library-view></library-view>
     <action-buttons></action-buttons>
+<div ng-show="isLoaded">
+  <h3>FADE</h3>
+    <rzslider
+         rz-slider-model="slider.value"
+         rz-slider-options="slider.options">
+    </rzslider>
+</div>
     <div id="prev-wav">
       <!--NP: This cannot be a directive because of a query selector. But edit with caution.
       collapsing recommended if not in use -->
