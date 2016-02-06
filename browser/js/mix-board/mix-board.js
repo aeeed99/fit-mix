@@ -175,7 +175,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
             if ( !$scope.currentMixTrack.fadeRegistered && $scope.currentMixTrack.fade >= ($scope.currentMixTrack.end-$scope.currentMixTrack.wavesurfer.getCurrentTime() ) ){
                     console.log("FADING", $scope.currentMixTrack)
                     console.log("I SHOULD HAPPEN ONCE")
-                  //  $scope.currentMixTrack.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, $scope.currentMixTrack.wavesurfer.backend.ac.currentTime, 4);
+                    $scope.currentMixTrack.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, $scope.currentMixTrack.wavesurfer.backend.ac.currentTime, $scope.currentMixTrack.fade);
                  //   debugger;
                     $scope.currentMixTrack.fadeRegistered = true;
                     console.log("INDEX AFTER FADE", trackIndex)
@@ -218,7 +218,10 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
     var wavesurfer;
     var loadingPrev = false;
 
+
     $scope.prevWave = function (track) {
+
+
 
         // CHES - "isLoaded" is for loading pre-saved data
         $scope.isLoaded = false;
@@ -231,18 +234,11 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
         $scope.currentTrack = MixBoardFactory.getCurrentSong($scope.library, track);
         $scope.currentTrack.hasRegion = $scope.currentTrack.hasRegion ? $scope.currentTrack.hasRegion : false;
 
-        // CHES - create waveform
-        wavesurfer = MixBoardFactory.createWaveForm();
-
-        wavesurfer.on('ready', function () {
-            $scope.isLoaded = true;
-            // CHES - removes loading bar
-
             $scope.slider = {
-                value: 0,
+                value: $scope.currentTrack.hasRegion ? $scope.currentTrack.region.start : 0,
                 options: {
-                floor: 0,
-                ceil: $scope.currentTrack.duration,
+                floor: $scope.currentTrack.hasRegion ? $scope.currentTrack.region.start : 0,
+                ceil: $scope.currentTrack.hasRegion ? $scope.currentTrack.region.end : $scope.currentTrack.duration,
                 translate: function(value) {
                     if (value === 0){ return '0:00'}
                   return ('0' + Math.floor( value/60)).slice(-2) + ':' + ('0' + Math.ceil( value%60)).slice(-2);
@@ -253,7 +249,12 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
                 }
            };
 
+        // CHES - create waveform
+        wavesurfer = MixBoardFactory.createWaveForm();
 
+        wavesurfer.on('ready', function () {
+            $scope.isLoaded = true;
+            // CHES - removes loading bar
 
             $scope.currentTrack.fade = $scope.currentTrack.fade ? $scope.currentTrack.fade : undefined;
             hideProgress();
@@ -278,7 +279,9 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
             $scope.currentTrack.region = region;
             $scope.currentTrack.region.startTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.start);
             $scope.currentTrack.region.endTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.end);
-
+            $scope.slider.options.floor = $scope.currentTrack.region.start;
+            $scope.slider.options.ceil = $scope.currentTrack.region.end;
+            $scope.slider.value = $scope.currentTrack.region.start;
             $scope.$digest()
         });
 
@@ -299,6 +302,9 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
                     $scope.currentTrack.hasRegion = false;
                     region.remove();
                     $scope.currentTrack.region = undefined;
+                    $scope.slider.options.floor = 0;
+                    $scope.slider.options.ceil = $scope.currentTrack.duration;
+                    $scope.slider.value = 0;
                     $scope.$digest();
                 })
             }
