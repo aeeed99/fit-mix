@@ -1,4 +1,4 @@
-app.factory('ModalFactory', function($uibModal){
+app.factory('ModalFactory', function($uibModal, $http){
     return {
         openAddPhase: function (pushTo) {
             var modal = $uibModal.open({
@@ -24,21 +24,22 @@ app.factory('ModalFactory', function($uibModal){
             });
             modal.result.then((id) => {
                 console.log("Called with id " + id);
-                var files = document.getElementById(id).files;
-                console.log("FIES", files);
-                for (var k in files) {
-                    if (Number.isNaN(parseInt(k))) continue;
-                    (function (file) {
-                        var fileReader = new FileReader();
-                        fileReader.onload = function(e) {
-                            //get file content
-                            var text = e.target.result;
-                            console.log("result", text);
-                        };
-                    })(files[k])
-                    //What do after files???
-                }
+                //make an array of all the files to pass to backend
+                var files = toArray(document.getElementById(id).files);
+                console.log(Array.isArray(files));
+                return $http.post('/api/upload', {files: files});
             });
         }
     }
 });
+
+function toArray(obj){
+    let result = [];
+    for (let k in obj){
+        let n = parseInt(k)
+        if(!Number.isNaN(n)){
+            result[n] = obj[k]
+        }
+    }
+    return result;
+}
