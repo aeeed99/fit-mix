@@ -4,6 +4,11 @@
   <div id="_offset">Length: <input ng-model="mixLength"></div>
 </div>
 <br>
+<div class="row mix-frame">
+  <div ng-repeat="sfx in mixSfx track by $index">
+    <span class="glyphicon glyphicon-exclamation-sign sfx-marker" ng-style="stylizeSfx(sfx)"></span>
+  </div>
+</div>
 <div id="upper-panel">
   <div class="mix-frame">
     <div><!--NP Wrapper div to seperate ng-repeat from add button-->

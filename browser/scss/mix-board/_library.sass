@@ -30,7 +30,7 @@
     .bpm
       float: right
 
-.track-selected > #track-panel-1
+.track-selected > #track-panel-1, .track-selected > #track-panel-2, .track-selected > #track-panel-3, .track-selected > #track-panel-4
   background-color: #dc9cde !important
   border: 3px solid #ea00de
 
@@ -40,6 +40,10 @@
 
 #track-panel-3
   background-color: $track-panel-color-3
+  +track-panel
+
+#track-panel-4
+  background-color: $track-panel-color-4
   +track-panel
 
 #search-bar
