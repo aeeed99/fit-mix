@@ -17,11 +17,11 @@ app.factory('HomeFactory', function ($http) {
 
     HomeFactory.getSfx = function() {
         return $http.get('/api/sfx')
-            .then(sfx => {
-                sfx.data.forEach(function(sfx){
+            .then(sfxes => {
+                sfxes.data.forEach(function(sfx){
                     sfx.src = '/api/sfx/' + sfx._id.toString() + '.audio';
                 })
-                return sfx.data;
+                return sfxes.data;
             });
     };
 
