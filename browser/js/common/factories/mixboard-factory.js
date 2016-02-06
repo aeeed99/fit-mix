@@ -1,6 +1,59 @@
 app.factory('MixBoardFactory', function(){
     var MixBoardFactory = {};
 
+    MixBoardFactory.currentMix = [];
+    MixBoardFactory.cleanMix = [];
+
+    MixBoardFactory.getMix = function(){
+        return MixBoardFactory.currentMix;
+    };
+
+    MixBoardFactory.getCleanMix = function(){
+        console.log("cleanMix", MixBoardFactory.cleanMix)
+        var newClean  = jQuery.extend( {}, MixBoardFactory.cleanMix);
+        return newClean;
+    };
+
+    MixBoardFactory.removeTrack = function(index){
+        MixBoardFactory.currentMix.splice(index, 1);
+        MixBoardFactory.cleanMix.splice(index, 1);
+    };
+
+    MixBoardFactory.resetMix = function(){
+        MixBoardFactory.currentMix.forEach(function(mixTrack, index, arr){
+         // TEST GAIN RESET
+             console.log("pre edit", MixBoardFactory.currentMix[index])
+           //  MixBoardFactory.currentMix[index].wavesurfer.backend.gainNode = mixTrack.wavesurfer.backend.ac.createGain()
+
+             MixBoardFactory.currentMix[index].wavesurfer.backend.gainNode.gain.value = 1;
+             MixBoardFactory.currentMix[index].fadeRegistered = false;
+             console.log("fadeRegistered should be false",  MixBoardFactory.currentMix[index].fadeRegistered)
+             MixBoardFactory.currentMix[index].currentProgress=0;
+            // track.wavesurfer.backend.gainNode.gain.setValueCurveAtTime([1], track.wavesurfer.backend.ac.currentTime, track.end);
+            // Below here is newest
+              //mixTrack.wavesurfer.backend.gainNode.gain.setTargetAtTime(1.0, mixTrack.wavesurfer.backend.ac.currentTime, 0.1);
+         //   debugger;
+             console.log("new track", MixBoardFactory.currentMix[index])
+        })
+
+        console.log("edited mix", MixBoardFactory.currentMix)
+    };
+
+    MixBoardFactory.createWaveArray = function (){
+        var waveArray = new Float32Array(9);
+        waveArray[0] = 0.9;
+        waveArray[1] = 0.9;
+        waveArray[2] = 0.8;
+        waveArray[3] = 0.8;
+        waveArray[4] = 0.7;
+        waveArray[5] = 0.5;
+        waveArray[6] = 0.3;
+        waveArray[7] = 0.1;
+        waveArray[8] = 0.0;
+
+        return waveArray;
+    };
+
     MixBoardFactory.getTimeObject = function(regionTime){
         return { m: ('0' + Math.floor( regionTime/60)).slice(-2),
                s: ('0' + Math.ceil( regionTime%60)).slice(-2)};
@@ -48,7 +101,7 @@ app.factory('MixBoardFactory', function(){
 
     };
 
-    MixBoardFactory.addTrackToMix = function (track, mix) {
+    MixBoardFactory.addTrackToMix = function (track) {
         if (track) {
             // MB: are you EC or CHES? Make up your mind!
             // EC - adds start and end times based on region/no region
@@ -62,9 +115,13 @@ app.factory('MixBoardFactory', function(){
                 track.duration = track.wavesurfer.getDuration();
             }
             // EC - makes a copy so this isn't pass by reference
-            var copy = jQuery.extend( {}, track)
-             mix.push(copy);
-             console.log(mix);
+             var copy1 = jQuery.extend( {}, track)
+             var copy2 = jQuery.extend( {}, track)
+             MixBoardFactory.currentMix.push(copy1);
+             MixBoardFactory.cleanMix.push(copy2);
+             console.log(MixBoardFactory.currentMix);
+             console.log("clean", MixBoardFactory.cleanMix);
+
         }
     };
 
