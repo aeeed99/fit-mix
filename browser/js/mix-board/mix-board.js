@@ -22,23 +22,27 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     };
     //MB: I LIVE ON THE EDGE ^^^^^^
     $scope.phases = [
-        {name: "STRETCH",
-         duration: 120,
-         color: "one"
-         },
-        {name: "WARM UP",
-         duration: 120,
-         color: "two"
-         },
-        {name: "SPRINT",
-         duration: 300,
-         color: "three"
+        {
+            name: "STRETCH",
+            duration: 120,
+            color: "one"
+        },
+        {
+            name: "WARM UP",
+            duration: 120,
+            color: "two"
+        },
+        {
+            name: "SPRINT",
+            duration: 300,
+            color: "three"
 
-         },
-        {name: "COOL DOWN",
-         duration: 60,
-         color: "one"
-         }
+        },
+        {
+            name: "COOL DOWN",
+            duration: 60,
+            color: "one"
+        }
     ];
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
@@ -92,44 +96,40 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
             return "track-panel-4";
         }
         else if((track.end < track.duration && track.end !== null) || track.start > 0){
-            return "track-panel-3";
-        }
-        return "track-panel-1";
+    $scope.fillContainer = function () {
+        return {width: '100%', height: '100%'};
     };
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function (track, mix) {
         MixBoardFactory.addTrackToMix(track, $scope.mix);
     };
-
-    $scope.currentMixTrack;
-
 });
 
-app.controller('mixEditController', function($scope, MixBoardFactory, $uibModal){
+app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFactory) {
     $scope.mixLength = 600;
-    $scope.durSum = function(){
+    $scope.durSum = function () {
         var sum = 0;
-        $scope.phases.forEach(function(phase){
-            sum+=phase.duration;
+        $scope.phases.forEach(function (phase) {
+            sum += phase.duration;
         });
         return sum
     };
     $scope.reorderMix = function (index, item, event, array) {
         //phases don't have artists, so this ensures no dragging between phases and mix
-        if(item.artist){
+        if (item.artist) {
             MixBoardFactory.reorderInPlace(index, item, event, array);
         }
     };
     $scope.reorderPhase = function (index, item, event, array) {
         //phases don't have artists, so this ensures no dragging between phases and mix
-        if(!item.artist){
+        if (!item.artist) {
             MixBoardFactory.reorderInPlace(index, item, event, array);
         }
     };
-    $scope.prettyDuration = function(track){
+    $scope.prettyDuration = function (track) {
         return (track.duration - track.duration % 60) / 60 + ":" + track.duration % 60;
     };
-    $scope.stylizer = function(track){
+    $scope.stylizer = function (track) {
         let style = {
             float: 'left',
             height: '100%'
@@ -137,37 +137,25 @@ app.controller('mixEditController', function($scope, MixBoardFactory, $uibModal)
         style.width = (track.duration / $scope.mixLength) * 100 + '%';
         return style;
     };
-    $scope.openAddPhase = function(){
-        var modal = $uibModal.open({
-            animation: true,
-            templateUrl: 'js/mix-board/modals/add-phase-modal.html',
-            controller: 'phaseModalController',
-            size: 'sm',
-        });
-        modal.result.then(input => {
-            $scope.phases.push({
-                name: input.name,
-                duration: input.duration,
-                color: "two"
-            });
-        });
-    }
+    $scope.openAddPhase = () => ModalFactory.openAddPhase($scope.phases);
 });
 
-app.controller('mixPlaybackController', function($scope){
-    $scope.pauseMix=function(){
+app.controller('mixPlaybackController', function ($scope) {
+    $scope.pauseMix = function () {
         $scope.currentMixTrack.wavesurfer.pause()
     };
 
-    $scope.playClip = function(restart){
+    $scope.playClip = function (restart) {
         // EC - checks whether we are restartign or continuing from prev
-        if (restart){ $scope.currentMixTrack = null; }
+        if (restart) {
+            $scope.currentMixTrack = null;
+        }
         var track;
         var trackIndex = $scope.currentMixTrack ? $scope.mix.indexOf($scope.currentMixTrack) : 0;
         var startTime;
 
-        if ($scope.currentMixTrack){
-            startTime  = $scope.currentMixTrack.currentProgress ? $scope.currentMixTrack.currentProgress : $scope.currentMixTrack.start;
+        if ($scope.currentMixTrack) {
+            startTime = $scope.currentMixTrack.currentProgress ? $scope.currentMixTrack.currentProgress : $scope.currentMixTrack.start;
         } else {
             startTime = $scope.mix[trackIndex].start;
         }
@@ -177,26 +165,27 @@ app.controller('mixPlaybackController', function($scope){
         $scope.currentMixTrack = track;
         track.wavesurfer.play(startTime, track.end);
 
-        track.wavesurfer.on('audioprocess', function(process){
-            if ($scope.currentMixTrack && track){
+        track.wavesurfer.on('audioprocess', function (process) {
+            if ($scope.currentMixTrack && track) {
                 $scope.currentMixTrack.currentProgress = process;
-                if (track.end - process < .5  ){
+                if (track.end - process < .5) {
                     track.wavesurfer.pause();
-                    track=undefined;
-                    if (trackIndex+1 < $scope.mix.length){
-                        $scope.currentMixTrack = $scope.mix[trackIndex+1];
+                    track = undefined;
+                    if (trackIndex + 1 < $scope.mix.length) {
+                        $scope.currentMixTrack = $scope.mix[trackIndex + 1];
                         $scope.currentMixTrack.currentProgress = 0;
                         $scope.playClip()
                     } else {
                         console.log("no more left!!");
-                        $scope.currentMixTrack = null; }
+                        $scope.currentMixTrack = null;
+                    }
                 }
             }
         })
     };
 });
 
-app.controller('prevWavController', function($scope, MixBoardFactory){
+app.controller('prevWavController', function ($scope, MixBoardFactory) {
     var wavesurfer;
     var loadingPrev = false;
     $scope.prevWave = function (track) {
@@ -287,11 +276,11 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
         progressDiv.style.display = 'none';
     };
     //PLAY / PAUSE FUNCTIONALITY
-    $(document).on('keyup', function(e) {
+    $(document).on('keyup', function (e) {
         if (e.which == 32 && $scope.isLoaded) {
-            if ($scope.isPlaying){
+            if ($scope.isPlaying) {
                 wavesurfer.pause();
-            } else{
+            } else {
                 wavesurfer.play();
             }
             $scope.isPlaying = !$scope.isPlaying
@@ -299,8 +288,8 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
     });
 });
 
-app.controller('actionButtonsController', function($scope, MixBoardFactory){
-    $scope.addSegmentToLibrary = function(track){
+app.controller('actionButtonsController', function ($scope, MixBoardFactory, ModalFactory) {
+    $scope.addSegmentToLibrary = function (track) {
         let newTrack = track;
         MixBoardFactory.saveSegment(newTrack);
         $scope.library.push(newTrack);
@@ -309,25 +298,37 @@ app.controller('actionButtonsController', function($scope, MixBoardFactory){
         let sfx = angular.element(document.querySelector('#track-panel-selected'));
         mixSfx.push({ effect: sfx, trigger: $scope.sfxTrigger });
     }
+    $scope.openUploadMusic = ModalFactory.openUploadMusic;
 });
 
-app.controller('mixHeaderController', function($scope){
-    $scope.toggleEdit = function(){
+app.controller('mixHeaderController', function ($scope) {
+    $scope.toggleEdit = function () {
         console.log("SCOPE", $scope.mixName);
         $scope.editTitle = !$scope.editTitle;
-        if(!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
+        if (!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
     }
 });
 
-app.controller('phaseModalController', function($scope, $uibModalInstance){
-    $scope.input;
-    $scope.ok = function(){
+app.controller('actionButtonsController', function ($scope, ModalFactory) {
+    $scope.openUploadMusic = ModalFactory.openUploadMusic;
+});
+
+app.controller('phaseModalController', function ($scope, $uibModalInstance) {
+    $scope.ok = function () {
         $uibModalInstance.close($scope.input);
     };
-    $scope.cancel = function(){
+    $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
 });
-app.controller('modalInstanceController', function(){
 
+app.controller('uploadModalController', function ($scope, $uibModalInstance) {
+    $scope.ok = function () {
+        $uibModalInstance.close("upload-field");
+    };
+    $uibModalInstance.dismiss('cancel');
+    //NP VVV Not working :( VVV
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
 });
