@@ -7,7 +7,6 @@ app.directive('trackPanel',function(){
             panelIdentifier: '='
         },
         link: function(scope, element) {
-            console.log("scope: ", scope.trackInfo);
             element.on('click', function(){
                 $('track-panel').removeClass('track-selected');
                 $(this).addClass('track-selected');
