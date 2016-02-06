@@ -170,4 +170,14 @@ section.resizable {
           flex: 0 0 300px;
 }
 
+rzslider#faders .rz-bar {
+  background: #B27DC7;
+}
 
+rzslider#faders .rz-pointer {
+  background: #B27DC7;
+}
+
+rzslider#faders .rz-pointer.rz-active:after {
+  background: #fff;
+}
