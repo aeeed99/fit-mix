@@ -2,3 +2,28 @@
   -moz-box-shadow: $value
   -webkit-box-shadow: $value
   box-shadow: $value
+
+=inner-frame()
+  background-color: $color-inner
+  border: 1px solid $color-inner-line
+  @media screen and (max-width: 799px)
+    max-width: 10vw
+  @media screen and (min-width: 800px)
+    max-width: 1000px !important
+  width: auto
+
+=header()
+  display: block
+  background: $color1-dark-accent
+  +shadow(0 2px 5px rgba(203, 4, 188, 0.67))
+  margin: 0 0 80px 0
+  padding: 6px 0
+
+=modal-header()
+  display: block
+  font-weight: bold
+  color: white
+  background: $color2-bright-accent
+  +shadow(0 2px 5px rgba(203, 4, 188, 0.67))
+  margin: 0 0 8px 0
+  padding: 6px 0

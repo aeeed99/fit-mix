@@ -1,17 +1,6 @@
 @import '../_design-variables'
 @import '../_compatibility'
 
-=inner-frame()
-  background-color: $color-inner
-  border: 1px solid $color-inner-line
-  @media screen and (max-width: 799px)
-    max-width: 10vw
-  @media screen and (min-width: 800px)
-    max-width: 1000px !important
-  width: auto
-  +shadow(inset 0 0 10px $color-inner-shadow)
-
-
 // ===Begin styling===
 
 .inner
@@ -36,6 +25,17 @@ action-buttons, #mix-edit-buttons, #mix-edit-buttons
     background-color: #9f00e8
     color: #222
 
+mix-header
+  display: block
+  background: $color1-dark-accent
+  +shadow(0 2px 5px rgba(203, 4, 188, 0.67))
+  margin: 0 0 80px 0
+  padding: 6px 0
+
+mix-header > h3
+  margin: 0
+  font-size: 18px
+  font-weight: bold
 
 #user-menu
   position: absolute
@@ -47,36 +47,9 @@ action-buttons, #mix-edit-buttons, #mix-edit-buttons
   text-align: center
   padding-top: 4px
   font-size: 21px
+
 #phases-view
   z-index: 1
-#upper-panel
-  +inner-frame()
-  margin: auto
-  min-height: 40px
-  height: 8vh
-  background-color: transparent
-  border: none
-
-#lower-panel
-  +inner-frame()
-  margin: auto
-  min-height: 40px
-
-.daw-interface
-    width: 100%
-    //margin: 0 2% 0 0
-    height: 100%
-    overflow: hidden
-
-.add-component
-  width: 48px
-  height: 100%
-
-#mix-header
-  text-align: center
-
-.sfx-marker
-  color: Crimson
 
 #mix-edit-buttons //NP: This must stay below `action-buttons, #mix-edit-buttons` for proper styling
   float: right
@@ -137,3 +110,4 @@ action-buttons, #mix-edit-buttons, #mix-edit-buttons
 @import '_mix-clip'
 @import '_phase-sliders'
 @import '_modals'
+@import '_mix-editor'
