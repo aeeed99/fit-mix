@@ -1,7 +1,11 @@
-<h1>Hello, World</h1>
-<div>
-  Name: <input ng-model="input.name" type="text" /><br/>
-  Modal Length: <input id="add-phase-input" ng-model="input.duration" type="number" min="1" default="60" aria-selected="true"/>
+<div id="header">Hello, World</div>
+<div id="body">
+  <div id="modal-inputs">
+    <div><span>Name:</span><input ng-model="input.name" type="text"/></div>
+    <div><span>Modal Length:</span><input id="add-phase-input" ng-model="input.duration" type="number" min="1" default="60" aria-selected="true"/></div>
+  </div>
+  <div id="modal-buttons">
+    <button type="button" class="btn-primary" ng-click="ok()">Make it!</button>
+    <button type="button" class="btn-warning" ng-click="cancel()">Cancel</button>
+  </div>
 </div>
-<button type="button" class="btn-primary" ng-click="ok()">Make it!</button>
-<button type="button" class="btn-warning" ng-click="cancel()">Cancel</button>

@@ -1,9 +1,8 @@
 <div id="user-menu">
   <span class="glyphicon glyphicon-menu-hamburger"></span>
 </div>
+<mix-header ng-controller="mixHeaderController"></mix-header>
 <div class="container clearfix">
-  <mix-header ng-controller="mixHeaderController"></mix-header>
-  <mix-playback ng-controller="mixPlaybackController"></mix-playback>
   <mix-editor ng-controller="mixEditController"></mix-editor>
   <div ng-controller="prevWavController">
     <library-view></library-view>
