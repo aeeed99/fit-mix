@@ -353,11 +353,11 @@ app.controller('actionButtonsController', function ($scope, MixBoardFactory, Mod
         let newTrack = track;
         MixBoardFactory.saveSegment(newTrack);
         $scope.library.push(newTrack);
-    }
+    };
     $scope.addSfxToMix = function(){
         let sfx = angular.element(document.querySelector('#track-panel-selected'));
         mixSfx.push({ effect: sfx, trigger: $scope.sfxTrigger });
-    }
+    };
     $scope.openUploadMusic = ModalFactory.openUploadMusic;
 });
 
@@ -368,6 +368,7 @@ app.controller('mixHeaderController', function ($scope) {
         if (!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
     }
 });
+
 
 app.controller('actionButtonsController', function ($scope, ModalFactory) {
     $scope.openUploadMusic = ModalFactory.openUploadMusic;
@@ -391,4 +392,7 @@ app.controller('uploadModalController', function ($scope, $uibModalInstance) {
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
+});
+app.controller('modalInstanceController', function(){
+
 });
