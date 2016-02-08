@@ -78,11 +78,19 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
             return {display: 'none'};
         }
     }
+    $scope.hideYo = function(){
+        if($scope.tab !== 'voice'){
+            return {display: 'none'};
+        }
+    }
     $scope.sfxTabClick = function(){
         $scope.tab = "sfx";
     }
     $scope.musicTabClick = function(){
         $scope.tab = "music";
+    }
+    $scope.voiceTabClick = function(){
+        $scope.tab = "voice";
     }
     $scope.stylizeSfx = function(sfx){
         let style = {};
@@ -91,6 +99,12 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     }
     $scope.fillContainer = function(){
         return {width: '100%', height: '100%'};
+    };
+
+    $scope.addVoiceToMix = function(trigger){
+        console.log("triggered");
+        let voice = voiceText;
+        mixSfx.push({ effect: voice, trigger: $scope.voiceTrigger, type: 'voice' });
     };
 
     $scope.stylizeTrack = function(track){
