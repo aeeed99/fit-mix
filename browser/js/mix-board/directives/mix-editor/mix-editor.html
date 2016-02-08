@@ -1,13 +1,19 @@
-<mix-playback ng-controller="mixPlaybackController"></mix-playback>
-<div id="mix-edit-buttons" ng-controller="modalController">
-  <button type="button" ng-click="open()">+ Segment</button>
+<div id="mix-edit-buttons">
+  <button type="button" ng-click="openAddPhase()">+ Section</button>
   <div id="_offset">Length: <input ng-model="mixLength"></div>
 </div>
-<br>
+<div id="sfx-panel">
+  <div class="row mix-frame">
+    <div ng-repeat="sfx in mixSfx track by $index">
+      <span class="glyphicon glyphicon-exclamation-sign sfx-marker" ng-style="stylizeSfx(sfx)"></span>
+    </div>
+  </div>
+</div>
 <div id="upper-panel">
   <div class="mix-frame">
     <div><!--NP Wrapper div to seperate ng-repeat from add button-->
-      <div ng-repeat="track in mix track by $index" ng-style="stylizer(track)" ng-drop="true"
+      <div ng-dblclick="removeTrack($index)" ng-repeat="track in mix track by $index" ng-style="stylizer(track)"
+           ng-drop="true"
            ng-drop-success="reorderMix($index, $data, $event, mix)">
         <div id="mix-clip" ng-drag="true" ng-drag-data="track">
           <span>{{ track.name }}</span> {{prettyDuration(track)}}

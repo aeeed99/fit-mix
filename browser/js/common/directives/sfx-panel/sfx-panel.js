@@ -1,14 +1,14 @@
-app.directive('trackPanel',function(){
+app.directive('sfxPanel',function(){
     return {
         restrict: 'E',
-        templateUrl: 'js/common/directives/track-panel/track-panel.html',
+        templateUrl: 'js/common/directives/sfx-panel/sfx-panel.html',
         scope: {
-            trackInfo: '=',
+            sfxInfo: '=',
             panelIdentifier: '='
         },
         link: function(scope, element) {
             element.on('click', function(){
-                $('track-panel').removeClass('track-selected');
+                $('sfx-panel').removeClass('track-selected');
                 $(this).addClass('track-selected');
             });
         }

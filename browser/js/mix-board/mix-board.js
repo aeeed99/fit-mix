@@ -7,40 +7,53 @@ app.config(function ($stateProvider) {
         resolve: {
             tracks: function (HomeFactory) {
                 return HomeFactory.getTracks();
+            },
+            sfx: function (HomeFactory) {
+                return HomeFactory.getSfx();
             }
         }
     })
 });
 
-app.controller('MixBoardController', function ($scope, $document, tracks, MixBoardFactory) {
+app.controller('MixBoardController', function ($scope, $document, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
-    $scope.mixLength = 600;
+    String.prototype.capitalize = function() {
+    return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+    };
+    //MB: I LIVE ON THE EDGE ^^^^^^
     $scope.phases = [
-        {name: "STRETCH",
-         duration: 120,
-         color: "one"
-         },
-        {name: "WARM UP",
-         duration: 120,
-         color: "two"
-         },
-        {name: "SPRINT",
-         duration: 300,
-         color: "three"
+        {
+            name: "STRETCH",
+            duration: 120,
+            color: "one"
+        },
+        {
+            name: "WARM UP",
+            duration: 120,
+            color: "two"
+        },
+        {
+            name: "SPRINT",
+            duration: 300,
+            color: "three"
 
-         },
-        {name: "COOL DOWN",
-         duration: 60,
-         color: "one"
-         }
+        },
+        {
+            name: "COOL DOWN",
+            duration: 60,
+            color: "one"
+        }
     ];
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
-    $scope.mix = []; //NP List of songs on the mix bar.
+    $scope.mix = MixBoardFactory.getMix(); //NP List of songs on the mix bar.
+    $scope.mixSfx = [{name: "horn", trigger: 60},{name: "alarm", trigger: 120}];
     $scope.library = tracks;
+    $scope.sfxBase = sfx;
 
     $scope.editTitle = false;
     $scope.mixName = "My awesome Playlist";
+    $scope.tab = "music";
 
     $scope.isLoaded = false;
     $scope.isPlaying = false;
@@ -50,116 +63,195 @@ app.controller('MixBoardController', function ($scope, $document, tracks, MixBoa
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
     //var loadingPrev = false;
+    $scope.hideDangit = function(){
+        if($scope.tab !== 'sfx'){
+            return {display: 'none'};
+        }
+    }
+    $scope.hideForReal = function(){
+        if($scope.tab !== 'music'){
+            return {display: 'none'};
+        }
+    }
+    $scope.sfxTabClick = function(){
+        $scope.tab = "sfx";
+    }
+    $scope.musicTabClick = function(){
+        $scope.tab = "music";
+    }
+    $scope.stylizeSfx = function(sfx){
+        let style = {};
+        style["margin-left"] = '60px';
+        return style;
+    }
     $scope.fillContainer = function(){
         return {width: '100%', height: '100%'};
     };
 
     $scope.stylizeTrack = function(track){
-        if((track.end < track.duration && track.end !== null) || track.start > 0){
-            console.log("this sumbitch should have the style of panel-3");
+        //MB: sfx have no artist, so sfx get t-p-4
+        if(!track.artist){
+            return "track-panel-4";
+        }
+        else if((track.end < track.duration && track.end !== null) || track.start > 0){
             return "track-panel-3";
         }
         return "track-panel-1";
+    }
+    $scope.fillContainer = function () {
+        return {width: '100%', height: '100%'};
     };
+
     // NP: Add-to-mix functionality (non-DnD version)
-    $scope.addSelectedTrackToMix = function (track, mix) {
-        MixBoardFactory.addTrackToMix(track, $scope.mix);
+    $scope.addSelectedTrackToMix = function (track) {
+        MixBoardFactory.addTrackToMix(track);
+        console.log("scope mix", $scope.mix)
     };
 
     $scope.currentMixTrack;
 
 });
 
-app.controller('mixEditController', function($scope, MixBoardFactory){
-    $scope.durSum = function(){
+app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFactory) {
+    $scope.mixLength = 600;
+    $scope.durSum = function () {
         var sum = 0;
-        $scope.phases.forEach(function(phase){
-            sum+=phase.duration;
+        $scope.phases.forEach(function (phase) {
+            sum += phase.duration;
         });
         return sum
     };
     $scope.reorderMix = function (index, item, event, array) {
         //phases don't have artists, so this ensures no dragging between phases and mix
-        if(item.artist){
+        if (item.artist) {
             MixBoardFactory.reorderInPlace(index, item, event, array);
+            $scope.$digest();
         }
     };
     $scope.reorderPhase = function (index, item, event, array) {
         //phases don't have artists, so this ensures no dragging between phases and mix
-        if(!item.artist){
+        if (!item.artist) {
             MixBoardFactory.reorderInPlace(index, item, event, array);
         }
     };
-    $scope.prettyDuration = function(track){
+    $scope.prettyDuration = function (track) {
         return (track.duration - track.duration % 60) / 60 + ":" + track.duration % 60;
     };
-    $scope.stylizer = function(track){
+    $scope.stylizer = function (track) {
         let style = {
             float: 'left',
             height: '100%'
         };
         style.width = (track.duration / $scope.mixLength) * 100 + '%';
         return style;
-    }
+    };
+    $scope.openAddPhase = () => ModalFactory.openAddPhase($scope.phases);
 });
 
-app.controller('mixPlaybackController', function($scope){
+app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
+
+    var trackIndex;
+    $scope.mix =  MixBoardFactory.getMix();
+
     $scope.pauseMix=function(){
         $scope.currentMixTrack.wavesurfer.pause()
     };
 
-    $scope.playClip = function(restart){
+    $scope.playClip = function (restart) {
         // EC - checks whether we are restartign or continuing from prev
-        if (restart){ $scope.currentMixTrack = null; }
-        var track;
-        var trackIndex = $scope.currentMixTrack ? $scope.mix.indexOf($scope.currentMixTrack) : 0;
+         var waveArray = MixBoardFactory.createWaveArray();
+
+        if (restart){
+            console.log("restarting");
+
+            if ($scope.currentMixTrack){
+                console.log("pausing current");
+                $scope.currentMixTrack.wavesurfer.pause();
+            }
+
+            trackIndex = 0;
+            $scope.currentMixTrack = null;
+
+            MixBoardFactory.resetMix();
+
+        }
+
+        trackIndex =  trackIndex ? trackIndex : 0;
         var startTime;
 
         if ($scope.currentMixTrack){
-            startTime  = $scope.currentMixTrack.currentProgress ? $scope.currentMixTrack.currentProgress : $scope.currentMixTrack.start;
+             startTime  = $scope.currentMixTrack.currentProgress ? $scope.currentMixTrack.currentProgress : $scope.currentMixTrack.start;
         } else {
             startTime = $scope.mix[trackIndex].start;
         }
 
-        track = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[0];
+        $scope.currentMixTrack = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
 
-        $scope.currentMixTrack = track;
-        track.wavesurfer.play(startTime, track.end);
+        $scope.currentMixTrack.wavesurfer.play(startTime, $scope.currentMixTrack.end);
 
-        track.wavesurfer.on('audioprocess', function(process){
-            if ($scope.currentMixTrack && track){
+        $scope.currentMixTrack.wavesurfer.on('audioprocess', function(process){
+            if ($scope.currentMixTrack){
                 $scope.currentMixTrack.currentProgress = process;
-                if (track.end - process < .5  ){
-                    track.wavesurfer.pause();
-                    track=undefined;
+                if (!$scope.currentMixTrack.fadeRegistered && $scope.currentMixTrack.fade >= ($scope.currentMixTrack.end-$scope.currentMixTrack.wavesurfer.getCurrentTime() ) ){
+                        console.log("FADING", $scope.currentMixTrack)
+                        $scope.currentMixTrack.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, $scope.currentMixTrack.wavesurfer.backend.ac.currentTime, $scope.currentMixTrack.fade);
+                        $scope.currentMixTrack.fadeRegistered = true;
+                        trackIndex+=1
+                        $scope.currentMixTrack = $scope.mix[trackIndex];
+                        $scope.currentMixTrack.currentProgress = 0;
+                        console.log("next up after fade", $scope.currentMixTrack);
+                        if ($scope.currentMixTrack) {$scope.playClip() };
+                }
+                else if ($scope.currentMixTrack.end - process < .5 && process < $scope.currentMixTrack.end ) {
+                    $scope.currentMixTrack.wavesurfer.pause();
                     if (trackIndex+1 < $scope.mix.length){
-                        $scope.currentMixTrack = $scope.mix[trackIndex+1];
+                        trackIndex+=1
+                        $scope.currentMixTrack = $scope.mix[trackIndex];
                         $scope.currentMixTrack.currentProgress = 0;
                         $scope.playClip()
                     } else {
                         console.log("no more left!!");
-                        $scope.currentMixTrack = null; }
+                        $scope.currentMixTrack = null;
+                        trackIndex=0;
+                      }
                 }
             }
-        })
+        });
     };
 });
 
-app.controller('prevWavController', function($scope, MixBoardFactory){
+app.controller('prevWavController', function ($scope, MixBoardFactory) {
     var wavesurfer;
     var loadingPrev = false;
+
+
     $scope.prevWave = function (track) {
 
         // CHES - "isLoaded" is for loading pre-saved data
         $scope.isLoaded = false;
         // CHES - remove previous wavesurfer if exists
         if (wavesurfer) {
-            //wavesurfer.destroy();
+            wavesurfer.pause();
             $("#track-preview").empty();
         }
         $scope.lengthModels = {};
         $scope.currentTrack = MixBoardFactory.getCurrentSong($scope.library, track);
         $scope.currentTrack.hasRegion = $scope.currentTrack.hasRegion ? $scope.currentTrack.hasRegion : false;
+        // EC - Setting up fader
+        $scope.slider = {
+            value: $scope.currentTrack.hasRegion ? $scope.currentTrack.region.start : 0,
+            options: {
+                floor: $scope.currentTrack.hasRegion ? $scope.currentTrack.region.start : 0,
+                ceil: $scope.currentTrack.hasRegion ? $scope.currentTrack.region.end : $scope.currentTrack.duration,
+                translate: function(value) {
+                    if (value === 0){ return '0:00'}
+                  return ('0' + Math.floor( value/60)).slice(-2) + ':' + ('0' + Math.ceil( value%60)).slice(-2);
+                },
+                onChange: function(id, modelValue, highValue){
+                    $scope.currentTrack.fade = $scope.currentTrack.hasRegion ? $scope.currentTrack.region.end - modelValue : $scope.currentTrack.duration - modelValue;
+                }
+            }
+        };
 
         // CHES - create waveform
         wavesurfer = MixBoardFactory.createWaveForm();
@@ -167,6 +259,8 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
         wavesurfer.on('ready', function () {
             $scope.isLoaded = true;
             // CHES - removes loading bar
+
+            $scope.currentTrack.fade = $scope.currentTrack.fade ? $scope.currentTrack.fade : undefined;
             hideProgress();
             $scope.$digest();
             // CHES - creates track timeline
@@ -189,7 +283,9 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
             $scope.currentTrack.region = region;
             $scope.currentTrack.region.startTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.start);
             $scope.currentTrack.region.endTime = MixBoardFactory.getTimeObject($scope.currentTrack.region.end);
-
+            $scope.slider.options.floor = $scope.currentTrack.region.start;
+            $scope.slider.options.ceil = $scope.currentTrack.region.end;
+            $scope.slider.value = $scope.currentTrack.region.start;
             $scope.$digest()
         });
 
@@ -210,6 +306,9 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
                     $scope.currentTrack.hasRegion = false;
                     region.remove();
                     $scope.currentTrack.region = undefined;
+                    $scope.slider.options.floor = 0;
+                    $scope.slider.options.ceil = $scope.currentTrack.duration;
+                    $scope.slider.value = 0;
                     $scope.$digest();
                 })
             }
@@ -219,10 +318,11 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
         wavesurfer.on('destroy', hideProgress);
         wavesurfer.on('error', hideProgress);
         wavesurfer.load(track.src);
-        //  $scope.selectedTrack = track;
-        // EC - TESTING REMOVING THIS TO SEE IF WE NEED IT
+
         $scope.currentTrack.wavesurfer = wavesurfer
+
     };
+
     /* Progress bar */
     var progressDiv = document.querySelector('#progress-bar');
     var progressBar = progressDiv.querySelector('.progress-bar');
@@ -236,11 +336,11 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
         progressDiv.style.display = 'none';
     };
     //PLAY / PAUSE FUNCTIONALITY
-    $(document).on('keyup', function(e) {
+    $(document).on('keyup', function (e) {
         if (e.which == 32 && $scope.isLoaded) {
-            if ($scope.isPlaying){
+            if ($scope.isPlaying) {
                 wavesurfer.pause();
-            } else{
+            } else {
                 wavesurfer.play();
             }
             $scope.isPlaying = !$scope.isPlaying
@@ -248,33 +348,50 @@ app.controller('prevWavController', function($scope, MixBoardFactory){
     });
 });
 
-app.controller('actionButtonsController', function($scope, MixBoardFactory){
-    $scope.addSegmentToLibrary = function(track){
+app.controller('actionButtonsController', function ($scope, MixBoardFactory, ModalFactory) {
+    $scope.addSegmentToLibrary = function (track) {
         let newTrack = track;
         MixBoardFactory.saveSegment(newTrack);
         $scope.library.push(newTrack);
-    }
+    };
+    $scope.addSfxToMix = function(){
+        let sfx = angular.element(document.querySelector('#track-panel-selected'));
+        mixSfx.push({ effect: sfx, trigger: $scope.sfxTrigger });
+    };
+    $scope.openUploadMusic = ModalFactory.openUploadMusic;
 });
 
-app.controller('mixHeaderController', function($scope){
-    $scope.toggleEdit = function(){
+app.controller('mixHeaderController', function ($scope) {
+    $scope.toggleEdit = function () {
         console.log("SCOPE", $scope.mixName);
         $scope.editTitle = !$scope.editTitle;
-        if(!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
+        if (!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
     }
 });
 
-app.controller('modalController', function($scope, $uibModal){
 
-    $scope.open = function(){
+app.controller('actionButtonsController', function ($scope, ModalFactory) {
+    $scope.openUploadMusic = ModalFactory.openUploadMusic;
+});
 
-        var modal = $uibModal.open({
-            animation: true,
-            template: 'Hello!',
-            controller: 'modalInstanceController',
-            size: 'sm',
-        })
-    }
+app.controller('phaseModalController', function ($scope, $uibModalInstance) {
+    $scope.ok = function () {
+        $uibModalInstance.close($scope.input);
+    };
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+});
+
+app.controller('uploadModalController', function ($scope, $uibModalInstance) {
+    $scope.ok = function () {
+        $uibModalInstance.close("upload-field");
+    };
+    $uibModalInstance.dismiss('cancel');
+    //NP VVV Not working :( VVV
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
 });
 app.controller('modalInstanceController', function(){
 

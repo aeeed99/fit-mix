@@ -1,0 +1,36 @@
+@import '../_compatibility'
+@import '../design-variables'
+
+div.modal-content > #body
+  margin: 10px 20px 10px
+
+div.modal-content
+  border: 2px solid $color-inner-line
+  margin: 140px 5px 10px
+  border-radius: 0
+  color: white
+  padding: 0
+  min-height: 200px
+  background: $color-inner
+  span
+    float: left
+  input
+    color: black
+    float: right
+    border-radius: 12px
+    padding: 0 12px
+    width: 120px
+
+div.modal-dialog.modal-sm
+  text-align: center
+  #header
+    +modal-header()
+
+div#modal-inputs
+  padding: 10px 0 0 0
+  display: block
+  height: 100px
+  div
+    display: inline-block
+    width: 100%
+    margin: 0 0 6px 0

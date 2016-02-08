@@ -1,13 +1,24 @@
 <div id="user-menu">
   <span class="glyphicon glyphicon-menu-hamburger"></span>
 </div>
+<mix-header ng-controller="mixHeaderController"></mix-header>
 <div class="container clearfix">
-  <mix-header ng-controller="mixHeaderController"></mix-header>
+  <mix-playback></mix-playback>
   <mix-editor ng-controller="mixEditController"></mix-editor>
-
   <div ng-controller="prevWavController">
     <library-view></library-view>
     <action-buttons></action-buttons>
+  <div class="row" ng-show="isLoaded">
+    <div class="col-xs-1">
+      <h5> FADE </h5>
+    </div>
+    <div class="col-xs-11">
+      <rzslider id="faders"
+           rz-slider-model="slider.value"
+           rz-slider-options="slider.options">
+      </rzslider>
+    </div>
+  </div>
     <div id="prev-wav">
       <!--NP: This cannot be a directive because of a query selector. But edit with caution.
       collapsing recommended if not in use -->
