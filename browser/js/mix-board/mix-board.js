@@ -63,6 +63,11 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
     //var loadingPrev = false;
+    $scope.voices = responsiveVoice.getVoices();
+    //MB: you all can hear them too, right?
+    $scope.read = function(text, voice){
+        responsiveVoice.speak(text, voice);
+    }
     $scope.hideDangit = function(){
         if($scope.tab !== 'sfx'){
             return {display: 'none'};

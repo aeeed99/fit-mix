@@ -12,6 +12,13 @@
         <sfx-panel panel-identifier="stylizeTrack(sfx)" sfx-info="sfx"></sfx-panel>
       </div>
     </uib-tab>
+    <uib-tab>
+      <uib-tab-heading ng-click="voiceTabClick()"><i class="glyphicon glyphicon-bullhorn"></i> Voice</uib-tab-heading>
+        <textarea class="form-control" rows="5" ng-model="voiceText" placeholder="probably gonna wanna size this down"></textarea>
+        <button ng-click="read(voiceText, chosenVoice)">preview</button>
+        <button ng-click="addVoice(voiceText, voiceTime)">add to mix at:</button>
+        <input ng-model="voiceTime" placeholder="trigger time">
+    </uib-tab>
     <input id="search-bar" ng-model="trackFilter" placeholder=" search"/>
   </uib-tabset>
 </div>
