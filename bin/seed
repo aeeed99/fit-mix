@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 'use strict'
-
+console.log("HEREEEE")
 require('babel/register');
 require('./seedRun')
