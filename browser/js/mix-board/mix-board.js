@@ -47,7 +47,10 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = MixBoardFactory.getMix(); //NP List of songs on the mix bar.
-    $scope.mixSfx = [{name: "horn", trigger: 60},{name: "alarm", trigger: 120}];
+
+    //sample: one sfx and one voice. distinction is mostly important for styling; anything
+    //not a string is considered a sfx
+    $scope.mixEffects = [{effect: 130, trigger: 60},{effect: "alarm", trigger: 120}];
     $scope.library = tracks;
     $scope.sfxBase = sfx;
 
@@ -92,19 +95,20 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.voiceTabClick = function(){
         $scope.tab = "voice";
     }
-    $scope.stylizeSfx = function(sfx){
+    $scope.stylizeEffect = function(effect){
         let style = {};
-        style["margin-left"] = '60px';
+        //they're inverted!
+        if (typeof(effect.effect) === 'string') style.color = "rgba(35,235,195,.75)";
+        else style.color = "rgba(220,20,60,.75)";
         return style;
     }
     $scope.fillContainer = function(){
         return {width: '100%', height: '100%'};
     };
 
-    $scope.addVoiceToMix = function(trigger){
-        console.log("triggered");
-        let voice = voiceText;
-        mixSfx.push({ effect: voice, trigger: $scope.voiceTrigger, type: 'voice' });
+    $scope.addVoiceToMix = function(text, trigger){
+        let voice = text;
+        $scope.mixEffects.push({ effect: voice, trigger: $scope.voiceTrigger});
     };
 
     $scope.stylizeTrack = function(track){
@@ -375,7 +379,7 @@ app.controller('actionButtonsController', function ($scope, MixBoardFactory, Mod
     };
     $scope.addSfxToMix = function(){
         let sfx = angular.element(document.querySelector('#track-panel-selected'));
-        mixSfx.push({ effect: sfx, trigger: $scope.sfxTrigger });
+        mixEffects.push({ effect: sfx, trigger: $scope.sfxTrigger });
     };
     $scope.openUploadMusic = ModalFactory.openUploadMusic;
 });
