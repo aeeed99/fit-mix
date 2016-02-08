@@ -65,8 +65,8 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     //var loadingPrev = false;
     $scope.voices = responsiveVoice.getVoices();
     //MB: you all can hear them too, right?
-    $scope.read = function(text, voice){
-        responsiveVoice.speak(text, voice);
+    $scope.read = function(text){
+        responsiveVoice.speak(text, "US English Female");
     }
     $scope.hideDangit = function(){
         if($scope.tab !== 'sfx'){
