@@ -10,7 +10,7 @@ router.route('/')
             .then(null, next)
     })
     .post(function (req, res, next) {
-        User.create(req.body).exec()
+        User.create(req.body)
             .then(user => res.status(201).send(user))
             .then(null, next)
     });
