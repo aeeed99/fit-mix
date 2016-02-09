@@ -56,7 +56,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.sfxBase = sfx;
 
     $scope.editTitle = false;
-    $scope.mixName = "My awesome Playlist";
+    $scope.mixName = "FitMix";
     $scope.tab = "music";
 
     $scope.isLoaded = false;
@@ -252,7 +252,11 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
 app.controller('prevWavController', function ($scope, MixBoardFactory) {
     var wavesurfer;
     var loadingPrev = false;
+    $scope.addFade;
 
+    $scope.showFader = function(){
+        $scope.addFade = !$scope.addFade;
+    }
 
     $scope.prevWave = function (track) {
 
