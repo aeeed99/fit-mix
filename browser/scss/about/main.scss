@@ -1,5 +1,6 @@
 @import url(//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css);
-@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+@import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css);
+
 .stats {
     text-align: center;
     text-shadow: 1px 1px 0px #fff;
@@ -7,7 +8,7 @@
 }
 
 .stats li {
-    width: 125px;
+    width: 120px;
 }
 
 .stats span {
@@ -19,11 +20,13 @@
     line-height: 1em;
 }
 
+
 /* Large desktop */
 @media (min-width: 1200px) {}
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {}
+
 
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
@@ -40,3 +43,76 @@
 
 /* Landscape phones and down */
 @media (max-width: 480px) {}
+
+/*Squircle*/
+a.social {
+    position: relative;
+    display: inline-block;
+    margin: .333rem .25rem;
+    border-radius: .75rem;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    line-height: 3rem;
+    width: 3rem;
+    height: 3rem;
+    font-size: 0;
+    transition: color .333s;
+    &::after {
+        font-family: 'fontawesome', sans-serif;
+        font-size: 1.25rem;
+    }
+    &::before {
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 5px;
+        bottom: 5px;
+        border-radius: .6875rem;
+        content: '';
+    }
+}
+
+/*Specific Network Coloring*/
+$network_names: twitter,facebook,google,linkedin,pintrest,tumblr;
+$network_urls:'https://twitter','http://www.facebook','https://plus.google','http://www.linkedin','http://pinterest','http://www.tumblr';
+$network_colors:#00aced,#3b5998,#dd4b39,#007bb6,#cb2027,#32506d;
+$network_icons:'\f099','\f09a','\f0d5','\f0e1','\f0d2','\f173';
+
+@for $i from 1 through length($network_names) {
+    a.social {
+        &.social-#{nth($network_names, $i)},
+        &[href^='#{nth($network_urls, $i)}'] {
+            background-color: nth($network_colors, $i);
+            &::after {
+                content: nth($network_icons, $i);
+            }
+            &::before {
+                box-shadow: 0 0 0 6px nth($network_colors, $i);
+            }
+        }
+    }
+}
+
+.music {
+  list-style: none;
+  background: #663399;
+  padding: 10px;
+  font-family: Helvetica;
+  font-weight: bold;
+  color: #ee82ee;
+  width: 100%;
+  font-size: 20px;
+  margin-left: -1%;
+}
+.music:nth-child(odd) {
+  background: #ee82ee;
+  color:#663399;
+}
+
+/*Body*/
+/*body {
+    margin: 0 auto;
+    padding: 1.5rem 3em;
+    text-align: center;
+}*/
