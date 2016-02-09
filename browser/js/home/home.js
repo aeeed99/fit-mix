@@ -47,8 +47,8 @@ app.controller('HomeCtrl', function ($scope, $state, HomeFactory, tracks) {
     };
 
 });
-app.controller('wizardController', function($scope){
-    $scope.structure = [
+app.controller('wizardController', function($scope, $state){
+    $scope.structures = [
         {
             name: "HIIT",
             description: "A \"High Intensity Interval Training\" structure that alternates between "+
@@ -56,8 +56,22 @@ app.controller('wizardController', function($scope){
         },
         {
             name: "Spin Class",
-            description: "A long structure based on "
+            description: "A long structure based on a basic loop sequence. Includes recommended "+
+                "riding positions that are repeated three times."
+        },
+        {
+            name: "3-cycle Shred",
+            description: "Inspired by Jillian Michaels' routines. Provdes a series of 3/2/1-minute "+
+                "sections, with cardio/strength/abs recommended for each section respectively"
+        },
+        {
+            name: "none",
+            description: "Start with no structure and build your own."
         }
-    ]
+    ];
+
+    $scope.startMix = function(){
+        $state.go('mix-board')
+    }
 
 });
