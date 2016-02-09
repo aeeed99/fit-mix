@@ -24,6 +24,7 @@ const extractMetaData = function (path) {
 };
 
 const clearDb = function () {
+  console.log("HERE")
     return Promise.map(['Track', 'User'], function (modelName) {
         console.log("model", modelName);
         return mongoose.model(modelName).remove()
@@ -33,10 +34,12 @@ const clearDb = function () {
 connectToDb.bind({docsToSave: {}})
     .then(function () {
         //clear database
+        console.log("clearing")
         return clearDb()
     })
     .then(function () {
         // get song metadata
+        console.log("metadata")
         return extractMetaData(dir)
     })
 
@@ -52,6 +55,7 @@ connectToDb.bind({docsToSave: {}})
     .then(function (songs) {
         var promises = [];
         songs.forEach(function (song) {
+          console.log("song", song)
             var newSong = new Track({
                 name: song.name,
                 artist: song.artist,
@@ -66,14 +70,14 @@ connectToDb.bind({docsToSave: {}})
             });
             promises.push(Track.create(newSong))
         });
-        return;
-        Promise.all(promises)
+        return Promise.all(promises)
     })
 
     // move the files to a directory on the server
     .then(function (songs) {
         console.log("move files");
         this.songs = songs;
+        console.log("the songs", this.songs)
         //console.log("files", this.files)
         return Promise.map(this.songs, function (file) {
             return new Promise(function (resolve, reject) {
