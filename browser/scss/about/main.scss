@@ -1,38 +1,46 @@
-#about {
-
-  margin: 0 auto;
-  width: 90%;
-  @include clearfix;
-
-  p {
-    width: 40%;
-    margin: 0 auto;
-    text-align: justify;
-    font-size: 22px;
-    font-weight: 300;
-    float: left;
-  }
-
-  .carousel {
-    float: right;
-    width: 55%;
-    overflow: hidden;
-    margin: 0 auto;
-    .carousel-inner {
-      height: 500px !important;
-    }
-    .carousel-control {
-      background: none;
-    }
-    .carousel-indicators {
-      display: none;
-    }
-    img {
-      max-width: 100%;
-      max-height: 500px;
-      display: block;
-      margin: 0 auto;
-    }
-  }
-
+@import url(//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css);
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+body {
+    padding-top: 25px !important;
 }
+
+.stats {
+    text-align: center;
+    text-shadow: 1px 1px 0px #fff;
+    margin-top: 25px;
+}
+
+.stats li {
+    width: 125px;
+}
+
+.stats span {
+    font-family: Helvetica;
+    font-weight: bold;
+    text-shadow: 1px 1px 0px #fff;
+    font-size: 4em;
+    display: block;
+    line-height: 1em;
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+    .profile img {
+        width: 75px;
+    }
+    .profile h2 {
+        font-size: 1.7em;
+    }
+    .stats span {
+        font-size: 2em;
+    }
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) {}
