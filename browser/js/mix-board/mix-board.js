@@ -21,29 +21,30 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
     };
     //MB: I LIVE ON THE EDGE ^^^^^^
-    $scope.phases = [
-        {
-            name: "STRETCH",
-            duration: 120,
-            color: "one"
-        },
-        {
-            name: "WARM UP",
-            duration: 120,
-            color: "two"
-        },
-        {
-            name: "SPRINT",
-            duration: 300,
-            color: "three"
+    // $scope.phases = [
+    //     {
+    //         name: "STRETCH",
+    //         duration: 120,
+    //         color: "one"
+    //     },
+    //     {
+    //         name: "WARM UP",
+    //         duration: 120,
+    //         color: "two"
+    //     },
+    //     {
+    //         name: "SPRINT",
+    //         duration: 300,
+    //         color: "three"
 
-        },
-        {
-            name: "COOL DOWN",
-            duration: 60,
-            color: "one"
-        }
-    ];
+    //     },
+    //     {
+    //         name: "COOL DOWN",
+    //         duration: 60,
+    //         color: "one"
+    //     }
+    // ];
+    $scope.phases = [];
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = MixBoardFactory.getMix(); //NP List of songs on the mix bar.
