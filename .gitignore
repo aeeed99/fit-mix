@@ -5,3 +5,4 @@ public
 .DS_Store
 coverage
 server/audio/**
+server/sfx/**

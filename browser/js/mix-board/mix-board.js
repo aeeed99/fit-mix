@@ -18,29 +18,30 @@ app.config(function ($stateProvider) {
 app.controller('MixBoardController', function ($scope, $document, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
     //MB: I LIVE ON THE EDGE ^^^^^^
-    $scope.phases = [
-        {
-            name: "STRETCH",
-            duration: 120,
-            color: "one"
-        },
-        {
-            name: "WARM UP",
-            duration: 120,
-            color: "two"
-        },
-        {
-            name: "SPRINT",
-            duration: 300,
-            color: "three"
+    // $scope.phases = [
+    //     {
+    //         name: "STRETCH",
+    //         duration: 120,
+    //         color: "one"
+    //     },
+    //     {
+    //         name: "WARM UP",
+    //         duration: 120,
+    //         color: "two"
+    //     },
+    //     {
+    //         name: "SPRINT",
+    //         duration: 300,
+    //         color: "three"
 
-        },
-        {
-            name: "COOL DOWN",
-            duration: 60,
-            color: "one"
-        }
-    ];
+    //     },
+    //     {
+    //         name: "COOL DOWN",
+    //         duration: 60,
+    //         color: "one"
+    //     }
+    // ];
+    $scope.phases = [];
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = MixBoardFactory.getMix(); //NP List of songs on the mix bar.
@@ -190,7 +191,6 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
     $scope.playClip = function (restart) {
         // EC - checks whether we are restartign or continuing from prev
          var waveArray = MixBoardFactory.createWaveArray();
-
         if (restart){
             console.log("restarting");
 
@@ -201,8 +201,8 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
 
             trackIndex = 0;
             $scope.currentMixTrack = null;
-
-            MixBoardFactory.resetMix();
+           // $scope.mix = MixBoardFactory.getCleanMix();
+           MixBoardFactory.resetMix();
 
         }
 
@@ -217,12 +217,15 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
 
         $scope.currentMixTrack = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
 
+        console.log("now up", $scope.currentMixTrack)
+      //  debugger;
         $scope.currentMixTrack.wavesurfer.play(startTime, $scope.currentMixTrack.end);
 
         $scope.currentMixTrack.wavesurfer.on('audioprocess', function(process){
+            console.log("process", process)
             if ($scope.currentMixTrack){
                 $scope.currentMixTrack.currentProgress = process;
-                if (!$scope.currentMixTrack.fadeRegistered && $scope.currentMixTrack.fade >= ($scope.currentMixTrack.end-$scope.currentMixTrack.wavesurfer.getCurrentTime() ) ){
+                if ($scope.currentMixTrack.fade >$scope.currentMixTrack.startTime && !$scope.currentMixTrack.fadeRegistered && $scope.currentMixTrack.fade >= ($scope.currentMixTrack.end-$scope.currentMixTrack.wavesurfer.getCurrentTime() ) ){
                         console.log("FADING", $scope.currentMixTrack)
                         $scope.currentMixTrack.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, $scope.currentMixTrack.wavesurfer.backend.ac.currentTime, $scope.currentMixTrack.fade);
                         $scope.currentMixTrack.fadeRegistered = true;
@@ -232,12 +235,15 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
                         console.log("next up after fade", $scope.currentMixTrack);
                         if ($scope.currentMixTrack) {$scope.playClip() };
                 }
-                else if ($scope.currentMixTrack.end - process < .5 && process < $scope.currentMixTrack.end ) {
+                else if ($scope.currentMixTrack.end - $scope.currentMixTrack.currentProgress < .2 && $scope.currentMixTrack.currentProgress < $scope.currentMixTrack.end ) {
+                    //debugger;
                     $scope.currentMixTrack.wavesurfer.pause();
                     if (trackIndex+1 < $scope.mix.length){
+                        console.log("next")
                         trackIndex+=1
                         $scope.currentMixTrack = $scope.mix[trackIndex];
                         $scope.currentMixTrack.currentProgress = 0;
+                        console.log("track", $scope.currentMixTrack)
                         $scope.playClip()
                     } else {
                         console.log("no more left!!");
