@@ -17,9 +17,6 @@ app.config(function ($stateProvider) {
 
 app.controller('MixBoardController', function ($scope, $document, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
-    String.prototype.capitalize = function() {
-    return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
-    };
     //MB: I LIVE ON THE EDGE ^^^^^^
     // $scope.phases = [
     //     {
@@ -48,12 +45,13 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = MixBoardFactory.getMix(); //NP List of songs on the mix bar.
-
+    $scope.mixEffects = [];
     //sample: one sfx and one voice. distinction is mostly important for styling; anything
     //not a string is considered a sfx
-    $scope.mixEffects = [{effect: 130, trigger: 60},{effect: "alarm", trigger: 120}];
+
     $scope.library = tracks;
     $scope.sfxBase = sfx;
+    $scope.instructions = [];
 
     $scope.editTitle = false;
     $scope.mixName = "My awesome Playlist";
@@ -63,6 +61,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.isPlaying = false;
     $scope.region;
     $scope.currentTrack;
+    $scope.currentSfx;
     // CHES - have not had to use index variable yet but may come in handy..
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
@@ -72,21 +71,6 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.read = function(text){
         responsiveVoice.speak(text, "US English Female");
     }
-    $scope.hideDangit = function(){
-        if($scope.tab !== 'sfx'){
-            return {display: 'none'};
-        }
-    }
-    $scope.hideForReal = function(){
-        if($scope.tab !== 'music'){
-            return {display: 'none'};
-        }
-    }
-    $scope.hideYo = function(){
-        if($scope.tab !== 'voice'){
-            return {display: 'none'};
-        }
-    }
     $scope.sfxTabClick = function(){
         $scope.tab = "sfx";
     }
@@ -94,7 +78,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
         $scope.tab = "music";
     }
     $scope.voiceTabClick = function(){
-        $scope.tab = "voice";
+        $scope.tab = "instructions";
     }
     $scope.stylizeEffect = function(effect){
         let style = {};
@@ -106,10 +90,20 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.fillContainer = function(){
         return {width: '100%', height: '100%'};
     };
-
+    $scope.selectSfx = function(sfx){
+        console.log("shot got called");
+        $scope.currentSfx = sfx;
+        console.log($scope.currentSfx);
+    }
     $scope.addVoiceToMix = function(text, trigger){
         let voice = text;
-        $scope.mixEffects.push({ effect: voice, trigger: $scope.voiceTrigger});
+        trigger = +trigger;
+        $scope.mixEffects.push({ effect: voice, trigger: trigger});
+        $scope.mixEffects.sort(function(a, b){
+            if (a.trigger > b.trigger) return 1;
+            if (b. trigger > a.trigger) return -1;
+            return 0;
+        });
     };
 
     $scope.stylizeTrack = function(track){
@@ -130,6 +124,19 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.addSelectedTrackToMix = function (track) {
         MixBoardFactory.addTrackToMix(track);
         console.log("scope mix", $scope.mix)
+    };
+
+    $scope.addEffectToMix = function(effectTrigger){
+        let effect = $scope.currentSfx;
+        let trigger = +effectTrigger;
+        $scope.mixEffects.push({ effect: effect, trigger: trigger });
+        $scope.mixEffects.sort(function(a, b){
+            console.log(a);
+            console.log(b);
+            if (a.trigger > b.trigger) return 1;
+            if (b. trigger > a.trigger) return -1;
+            return 0;
+        });
     };
 
     $scope.currentMixTrack;
@@ -378,29 +385,14 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
 });
 
 app.controller('actionButtonsController', function ($scope, MixBoardFactory, ModalFactory) {
-    $scope.addSegmentToLibrary = function (track) {
-        let newTrack = track;
-        MixBoardFactory.saveSegment(newTrack);
-        $scope.library.push(newTrack);
-    };
-    $scope.addSfxToMix = function(){
-        let sfx = angular.element(document.querySelector('#track-panel-selected'));
-        mixEffects.push({ effect: sfx, trigger: $scope.sfxTrigger });
-    };
     $scope.openUploadMusic = ModalFactory.openUploadMusic;
 });
 
 app.controller('mixHeaderController', function ($scope) {
     $scope.toggleEdit = function () {
-        console.log("SCOPE", $scope.mixName);
         $scope.editTitle = !$scope.editTitle;
         if (!$scope.mixName && !$scope.editTitle) $scope.mixName = "click to edit title";
     }
-});
-
-
-app.controller('actionButtonsController', function ($scope, ModalFactory) {
-    $scope.openUploadMusic = ModalFactory.openUploadMusic;
 });
 
 app.controller('phaseModalController', function ($scope, $uibModalInstance) {
