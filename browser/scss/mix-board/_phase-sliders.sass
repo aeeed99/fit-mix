@@ -98,7 +98,8 @@
     background: $color2-bright-accent
 
 .dragging
-  background: rgba(69, 0, 255, 0.54) !important
+  background: $mix-clip-drag !important
+  border: 1px solid white
   color: white
   position: relative !important
   z-index: 1 !important
@@ -171,10 +172,17 @@ section
     flex: 0 0 300px
 
 rzslider#faders .rz-bar
-  background: #B27DC7
+  background: #B9A2F9
 
 rzslider#faders .rz-pointer
-  background: #B27DC7
+  background: #B9A2F9
 
 rzslider#faders .rz-pointer.rz-active:after
   background: #fff
+
+timeline canvas
+  position: relative
+  color: white
+
+.row.fader
+  padding-bottom: 30px
