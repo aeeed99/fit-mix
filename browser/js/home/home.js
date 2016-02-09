@@ -48,5 +48,16 @@ app.controller('HomeCtrl', function ($scope, $state, HomeFactory, tracks) {
 
 });
 app.controller('wizardController', function($scope){
+    $scope.structure = [
+        {
+            name: "HIIT",
+            description: "A \"High Intensity Interval Training\" structure that alternates between "+
+                "maximum effort and resting sprints"
+        },
+        {
+            name: "Spin Class",
+            description: "A long structure based on "
+        }
+    ]
 
 });
