@@ -1,6 +1,4 @@
-<button type="button" ng-click="openUploadMusic()">Upload Songs to Library</button>
-<button type="button" ng-click="addSelectedTrackToMix(currentTrack)">Add to Mix</button>
-<button type="button" ng-click="addSegmentToLibrary(selectedTrack)">Add to Library</button>
-<button type="button" ng-click="addSfxToMix()" ng-style="hideDangit()">Add to Mix at:</button>
-<input ng-model="sfxTrigger" placeholder="trigger time" ng-style="hideDangit()">
-<button type="button" ng-click="" ng-style="hideDangit()">Preview Sound</button>
+<button type="button" ng-click="openUploadMusic()" ng-show="tab === 'music'">Upload Songs to Library</button>
+<button type="button" ng-click="addSelectedTrackToMix(currentTrack)" ng-show="tab === 'music'">Add to Mix</button>
+<button type="button" ng-click="addEffectToMix(triggerTime)" ng-show="tab === 'sfx'">Add to Mix at:</button>
+<input ng-model="triggerTime" placeholder="trigger time" ng-show="tab === 'sfx'">
