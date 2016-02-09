@@ -9,12 +9,24 @@ app.config(function ($stateProvider) {
                 return HomeFactory.getTracks();
             }
         }
-    });
+    })
+        .state('home.welcome', {
+            url: "",
+            templateUrl: 'js/home/states/welcome.html',
+            controller: function($scope, $state){
+                $scope.wizard = function(){ $state.go('home.wizard'); }
+            }
+        })
+        .state('home.wizard', {
+            url: "",
+            templateUrl: 'js/home/states/wizard.html',
+            controller: 'wizardController'
+        })
 });
 
-app.controller('HomeCtrl', function ($scope, HomeFactory, tracks) {
+app.controller('HomeCtrl', function ($scope, $state, HomeFactory, tracks) {
     // this is a test to see that we can get all tracks
-
+    $state.transitionTo('home.welcome');
     $scope.tracks = tracks;
     var idCounter = 0;
 
@@ -33,5 +45,8 @@ app.controller('HomeCtrl', function ($scope, HomeFactory, tracks) {
     $scope.playTrack = function(track) {
         HomeFactory.play(track);
     };
+
+});
+app.controller('wizardController', function($scope){
 
 });

@@ -1,0 +1,45 @@
+<h2>New Mix</h2>
+
+<uib-accordion close-others="true">
+  <uib-accordion-group heading="Name" is-open="true">
+    Name your template: <br>
+    <input ng-model="mixData.name" type="text" placeholder="e.g. My Awesome HIIT Mix"/>
+  </uib-accordion-group>
+  <uib-accordion-group heading="Structure">
+    <div class="left">
+      <div class="btn-group" role="group">
+        <label class="btn btn-default" ng-model="mixData.structure" uib-btn-radio="'hiit'">HIIT</label><br/>
+        <label class="btn btn-default" ng-model="mixData.structure" uib-btn-radio="'spin'">Spin Class</label><br/>
+        <label class="btn btn-default" ng-model="mixData.structure" uib-btn-radio="'shred'">3-cycle Shred</label><br/>
+        <label class="btn btn-default" ng-model="mixData.structure" uib-btn-radio="'none'">None</label><br/>
+      </div>
+    </div>
+    <div class="right">
+      <div id="structure-preview">
+        Select a popular structure or select "none" to skip.
+      </div>
+      <div id="confirm-section">
+        <button class="btn btn-default">Start with no structure</button>
+        <button class="btn btn-success">Start with {{mixData.structure}}</button>
+      </div>
+    </div>
+  </uib-accordion-group>
+  <uib-accordion-group heading="Length" is-open="true">
+    <p>Estimate the length of your mix</p>
+    <p>(You can always change this later)</p>
+    <div id="timepicker"><uib-timepicker ng-model="mixData.structure"
+                                         hour-step="1" minute-step="1"
+                                         show-meridian="false"></uib-timepicker></div>
+  </uib-accordion-group>
+  <!--<uib-accordion-group heading="Upload Music" is-open="true">-->
+    <!--TODO: Add upload functionality here-->
+  <!--</uib-accordion-group>-->
+  <uib-accordion-group>
+    <p>If everything looks good, confirm below. Otherwise click a heading to edit.</p>
+    <ol>
+      <li class="title">{{mixData.structure}}</li>
+      <li class="duration">{{mixData.duration}}</li>
+      <li class="phases">Sections:</li>
+    </ol>
+  </uib-accordion-group>
+</uib-accordion>
