@@ -29,6 +29,21 @@ app.factory('ModalFactory', function($uibModal, $http){
                 console.log(Array.isArray(files));
                 return $http.post('/api/upload', {files: files});
             });
+        },
+        openAddInstruction: function (pushTo) {
+            var modal = $uibModal.open({
+                animation: true,
+                templateUrl: 'js/mix-board/modals/create-instruction-modal.html',
+                controller: 'phaseModalController',
+                size: 'sm'
+            });
+            modal.result.then(input => {
+                pushTo.push({
+                    text: input.text,
+                    trigger: input.trigger
+                });
+                console.log(pushTo);
+            });
         }
     }
 });

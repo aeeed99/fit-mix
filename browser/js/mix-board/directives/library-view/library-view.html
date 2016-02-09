@@ -13,11 +13,9 @@
       </div>
     </uib-tab>
     <uib-tab>
-      <uib-tab-heading ng-click="voiceTabClick()"><i class="glyphicon glyphicon-bullhorn"></i> Instructions</uib-tab-heading>
-        <textarea class="form-control" rows="5" ng-model="voiceText" placeholder="probably gonna wanna size this down"></textarea>
-        <button ng-click="read(voiceText, chosenVoice)">preview</button>
-        <button ng-click="addVoiceToMix(voiceText, voiceTime)">add to mix at:</button>
-        <input ng-model="voiceTime" placeholder="trigger time">
+      <uib-tab-heading ng-click="sfxTabClick()"><i class="glyphicon glyphicon-bullhorn"></i> Instructions</uib-tab-heading>
+      <div ng-repeat="instruction in instructions | filter: {$: trackFilter} track by $index">
+      <sfx-panel ng-click="selectInstruction(instruction)" panel-identifier="stylizeTrack(sfx)" sfx-info="sfx"></sfx-panel>
     </uib-tab>
     <input id="search-bar" ng-model="trackFilter" placeholder=" search"/>
   </uib-tabset>
