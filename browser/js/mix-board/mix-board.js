@@ -24,7 +24,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
             duration: 10,
             color: "one"
         },
-
+        {
             name: "SPRINT",
             duration: 10,
             color: "three"
@@ -88,16 +88,26 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.sfxTabClick = function(){
         $scope.tab = "sfx";
         $scope.disableSpace = false;
+        if ($scope.isPlaying){
+            $scope.pauseMix();
+            $scope.isPlaying = false;
+        };
         $('.sfx-button').show();
         $('.music-button').hide();
         $('.instruction-button').hide();
     }
     $scope.voiceTabClick = function(){
+        $scope.tab = "instructions";
+        $scope.disableSpace = true;
+        if ($scope.isPlaying){
+            $scope.pauseMix();
+            $scope.isPlaying = false;
+        };
         $('.instruction-button').show();
         $('.music-button').hide();
         $('.sfx-button').hide();
-        $scope.tab = "instructions";
-        $scope.disableSpace = true;
+
+
     }
     $scope.stylizeEffect = function(effect){
         let style = {};
