@@ -13,9 +13,10 @@
       </div>
     </uib-tab>
     <uib-tab>
-      <uib-tab-heading ng-click="sfxTabClick()"><i class="glyphicon glyphicon-bullhorn"></i> Instructions</uib-tab-heading>
-      <div ng-repeat="instruction in instructions | filter: {$: trackFilter} track by $index">
-      <sfx-panel ng-click="selectInstruction(instruction)" panel-identifier="stylizeTrack(sfx)" sfx-info="sfx"></sfx-panel>
+      <uib-tab-heading ng-click="voiceTabClick()"><i class="glyphicon glyphicon-bullhorn"></i> Instructions</uib-tab-heading>
+      <div ng-repeat="instruction in instructions">
+      <instruction-panel ng-click="selectInstruction(instruction)" panel-identifier="stylizeTrack(instruction)" instruction-info="instruction"></instruction-panel>
+      </div>
     </uib-tab>
     <input id="search-bar" ng-model="trackFilter" placeholder=" search"/>
   </uib-tabset>

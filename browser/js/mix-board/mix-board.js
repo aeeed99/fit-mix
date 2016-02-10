@@ -51,7 +51,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 
     $scope.library = tracks;
     $scope.sfxBase = sfx;
-    $scope.instructions = [];
+    $scope.instructions = ["hello", "goodbye"];
 
     $scope.editTitle = false;
     $scope.mixName = "My awesome Playlist";
@@ -125,6 +125,19 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.addEffectToMix = function(effectTrigger){
         let effect = $scope.currentSfx;
         let trigger = +effectTrigger;
+        $scope.mixEffects.push({ effect: effect, trigger: trigger });
+        $scope.mixEffects.sort(function(a, b){
+            console.log(a);
+            console.log(b);
+            if (a.trigger > b.trigger) return 1;
+            if (b. trigger > a.trigger) return -1;
+            return 0;
+        });
+    };
+
+    $scope.addInstructionToMix = function(triggerTime){
+        let effect = $scope.currentInstruction;
+        let trigger = +triggerTime;
         $scope.mixEffects.push({ effect: effect, trigger: trigger });
         $scope.mixEffects.sort(function(a, b){
             console.log(a);

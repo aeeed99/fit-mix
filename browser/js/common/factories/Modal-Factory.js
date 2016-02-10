@@ -38,11 +38,8 @@ app.factory('ModalFactory', function($uibModal, $http){
                 size: 'sm'
             });
             modal.result.then(input => {
-                pushTo.push({
-                    text: input.text,
-                    trigger: input.trigger
-                });
-                console.log(pushTo);
+                //MB: trigger time is set by user later, so all that is necessary is text
+                pushTo.push(input.text);
             });
         }
     }
