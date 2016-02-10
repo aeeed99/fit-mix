@@ -5,7 +5,8 @@
 <div id="sfx-panel">
   <!-- effect is a string if it is a voice, object if it is a sfx -->
   <div ng-repeat="effect in mixEffects track by $index">
-    <span class="glyphicon glyphicon-exclamation-sign sfx-marker" ng-style="stylizeEffect(effect)"></span>
+    <span class="glyphicon glyphicon-bell sfx-marker" ng-style="stylizeEffect(effect)"></span>
+    {{effect}}
   </div>
 </div>
 <div id="upper-panel">
