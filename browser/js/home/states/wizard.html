@@ -1,4 +1,4 @@
-<h2>New Mix</h2>
+<h2>New FitMix</h2>
 
 <uib-accordion close-others="true">
   <uib-accordion-group heading="Name" is-open="true">
@@ -7,23 +7,16 @@
   </uib-accordion-group>
   <uib-accordion-group heading="Structure">
     <div class="left">
-      <div class="btn-group" role="group">
-        <div ng-repeat="structure in structures">
-          <label class="btn btn-default" ng-model="mixData.selectedStructure"
-                 uib-btn-radio="">{{structure.name}}</label><br/>
+      <div>
+        <div class="btn-group" role="group">
+          <label ng-repeat="structure in structures" class="btn btn-default" ng-model="mixData.selectedStructure"
+                 uib-btn-radio="structure">{{structure.name}}</label>
         </div>
-        <!--<label class="btn btn-default" ng-model="mixData.structure" uib-btn-radio="'spin'">Spin Class</label><br/>-->
-        <!--<label class="btn btn-default" ng-model="mixData.structure" uib-btn-radio="'shred'">3-cycle Shred</label><br/>-->
-        <!--<label class="btn btn-default" ng-model="mixData.structure" uib-btn-radio="'none'">None</label><br/>-->
       </div>
     </div>
     <div class="right">
       <div id="structure-preview">
         {{mixData.selectedStructure.description}}
-      </div>
-      <div id="confirm-section">
-        <button class="btn btn-default">Start with no structure</button>
-        <button class="btn btn-success">Start with {{mixData.structure}}</button>
       </div>
     </div>
   </uib-accordion-group>
@@ -31,9 +24,8 @@
     <p>Estimate the length of your mix</p>
     <p>(You can always change this later)</p>
     <div id="timepicker">
-      <uib-timepicker ng-model="mixData.structure"
-                      hour-step="1" minute-step="1"
-                      show-meridian="false"></uib-timepicker>
+      <input ng-model="mixData.duration.hours" type="number">
+      <input ng-model="mixData.duration.minutes" type="number">
     </div>
   </uib-accordion-group>
   <!--<uib-accordion-group heading="Upload Music" is-open="true">-->
@@ -42,10 +34,10 @@
   <uib-accordion-group heading="Review">
     <p>If everything looks good, confirm below. Otherwise click a heading to edit.</p>
     <ol>
-      <li class="title">Title: {{mixData.structure}}</li>
-      <li class="duration">Duration: {{mixData.duration}}</li>
-      <li class="phases">Sections:</li>
+      <li class="title">Title: {{mixData.name}}</li>
+      <li class="duration">Duration: {{mixData.duration.hours}}:{{mixData.duration.minutes}}</li>
+      <li class="phases">Template: {{mixData.selectedStructure.name}}</li>
     </ol>
-    <button class="btn-info" ng-click="startMix()">Looks good, let's Go!</button>
+    <button class="btn-info" ng-click="startMix()">Looks good, let's go!</button>
   </uib-accordion-group>
 </uib-accordion>

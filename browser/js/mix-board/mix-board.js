@@ -4,6 +4,7 @@ app.config(function ($stateProvider) {
         url: '/mix-board',
         templateUrl: 'js/mix-board/mix-board.html',
         controller: 'MixBoardController',
+        params: {'wizardData': null},
         resolve: {
             tracks: function (HomeFactory) {
                 return HomeFactory.getTracks();
@@ -15,28 +16,131 @@ app.config(function ($stateProvider) {
     })
 });
 
-app.controller('MixBoardController', function ($scope, $document, tracks, sfx, MixBoardFactory) {
+app.controller('MixBoardController', function ($scope, $document, $stateParams, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
     //MB: I LIVE ON THE EDGE ^^^^^^
-    $scope.phases = [
-        {
-            name: "STRETCH",
-            duration: 10,
+  $scope.predefinedPhases = [
+        [{
+            name: "EXERCISE",
+            duration: 30,
             color: "one"
         },
         {
-            name: "SPRINT",
-            duration: 10,
+            name: "REST",
+            duration: 30,
             color: "three"
 
         },
         {
-            name: "COOL DOWN",
-            duration: 10,
+            name: "EXERCISE",
+            duration: 30,
             color: "one"
-        }
-    ];
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
 
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        }],
+        [{
+            name: "POSITION ONE",
+            duration: 600,
+            color: "one"
+        },
+        {
+            name: "POSITION TWO",
+            duration: 600,
+            color: "three"
+
+        },
+        {
+            name: "POSITION THREE",
+            duration: 600,
+            color: "two"
+        }],
+        [{
+            name: "CARDIO",
+            duration: 1200,
+            color: "one"
+        },
+        {
+            name: "STRENGTH",
+            duration: 1200,
+            color: "three"
+
+        },
+        {
+            name: "ABS",
+            duration: 1200,
+            color: "two"
+        }]
+    ]
     var sfxPlaying;
     var currentSfx;
     var audio = new Audio();
@@ -49,7 +153,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.mixEffects = MixBoardFactory.getEffects();
     //sample: one sfx and one voice. distinction is mostly important for styling; anything
     //not a string is considered a sfx
-
+    $scope.wizardData = $stateParams.wizardData;
     $scope.library = tracks;
     $scope.sfxBase = sfx;
     $scope.instructions = ["hello", "goodbye"];
@@ -57,7 +161,29 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     console.log("sfxBase", $scope.sfxBase);
 
     $scope.editTitle = false;
-    $scope.mixName = "FitMix";
+    $scope.mixName = function(){
+        if($scope.wizardData && $scope.wizardData.name){
+            return $scope.wizardData.name
+        }
+            return "My FitMix";
+    }();
+    $scope.mixLength = function(){
+        if($scope.wizardData && $scope.wizardData.duration){
+            let minutes = 0;
+            let hours = 0;
+            if ($scope.wizardData.duration.minutes) minutes = $scope.wizardData.duration.minutes * 60;
+            if ($scope.wizardData.duration.hours) hours = $scope.wizardData.duration.hours * 3600;
+            return hours + minutes;
+        }
+        return 1800;
+    }();
+    $scope.phases = function(){
+        console.log("goddamn phases")
+        if($scope.wizardData && $scope.wizardData.selectedStructure.number){
+            return $scope.predefinedPhases[$scope.wizardData.selectedStructure.number];
+        }
+        return {};
+    }();
     $scope.tab = "music";
 
     $scope.isLoaded = false;
@@ -68,6 +194,9 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.disableSpace;
 
     $scope.currentInstruction;
+    (function startup(){
+        console.log("startup fx ran");
+    }());
     // CHES - have not had to use index variable yet but may come in handy..
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
@@ -106,8 +235,6 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
         $('.instruction-button').show();
         $('.music-button').hide();
         $('.sfx-button').hide();
-
-
     };
     $scope.stylizeEffect = function(effect){
         let style = {};
@@ -188,7 +315,6 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 });
 
 app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFactory) {
-    $scope.mixLength = 60;
     $scope.durSum = function () {
         var sum = 0;
         $scope.phases.forEach(function (phase) {
