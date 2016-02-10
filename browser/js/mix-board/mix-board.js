@@ -188,7 +188,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 });
 
 app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFactory) {
-    $scope.mixLength = 600;
+    $scope.mixLength = 60;
     $scope.durSum = function () {
         var sum = 0;
         $scope.phases.forEach(function (phase) {
@@ -491,7 +491,7 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
     };
     //PLAY / PAUSE FUNCTIONALITY
     $(document).on('keyup', function (e) {
-        if (e.which == 32 && $scope.isLoaded && !$scope.disableSpace) {
+        if (e.which == 18 && $scope.isLoaded && !$scope.disableSpace) {
             if ($scope.isPlaying) {
                 wavesurfer.pause();
             } else {
