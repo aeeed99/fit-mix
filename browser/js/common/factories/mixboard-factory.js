@@ -10,31 +10,27 @@ app.factory('MixBoardFactory', function(){
     };
 
     MixBoardFactory.getCleanMix = function(){
-        console.log("cleanMix", MixBoardFactory.cleanMix)
+        console.log("cleanMix", MixBoardFactory.cleanMix);
         var newClean  = jQuery.extend( {}, MixBoardFactory.cleanMix);
         return newClean;
     };
 
     MixBoardFactory.getEffects = function(){
         return MixBoardFactory.soundEffects;
-    }
+    };
 
     MixBoardFactory.addEffectToMix = function(effectTrigger, current, type){
+        console.log("EFFECT", current);
         let effect = current;
         let trigger = +effectTrigger;
         MixBoardFactory.soundEffects.push({ effect: effect, trigger: trigger, type: type });
         MixBoardFactory.soundEffects.sort(function(a, b){
-            console.log(a);
-            console.log(b);
             if (a.trigger > b.trigger) return 1;
             if (b. trigger > a.trigger) return -1;
             return 0;
         });
         console.log("effects", MixBoardFactory.soundEffects)
-    }
-
-
-
+    };
 
     MixBoardFactory.removeTrack = function(index){
         MixBoardFactory.currentMix.splice(index, 1);
@@ -56,7 +52,7 @@ app.factory('MixBoardFactory', function(){
               //mixTrack.wavesurfer.backend.gainNode.gain.setTargetAtTime(1.0, mixTrack.wavesurfer.backend.ac.currentTime, 0.1);
          //   debugger;
              console.log("new track", MixBoardFactory.currentMix[index])
-        })
+        });
 
         console.log("edited mix", MixBoardFactory.currentMix)
     };
@@ -188,4 +184,4 @@ app.factory('MixBoardFactory', function(){
         track.end = track.region.end;
     };
     return MixBoardFactory;
-})
+});
