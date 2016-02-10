@@ -82,11 +82,31 @@ a.social {
 
 
 /*Specific Network Coloring*/
-$network_names: twitter,facebook,google,linkedin,pintrest,tumblr;
-$network_urls:'https://twitter','http://www.facebook','https://plus.google','http://www.linkedin','http://pinterest','http://www.tumblr';
-$network_colors:#00aced,#3b5998,#dd4b39,#007bb6,#cb2027,#32506d;
-$network_icons:'\f099','\f09a','\f0d5','\f0e1','\f0d2','\f173';
 
+$network_names: twitter,
+facebook,
+google,
+linkedin,
+pintrest,
+tumblr;
+$network_urls:'https://twitter',
+'http://www.facebook',
+'https://plus.google',
+'http://www.linkedin',
+'http://pinterest',
+'http://www.tumblr';
+$network_colors:#00aced,
+#3b5998,
+#dd4b39,
+#007bb6,
+#cb2027,
+#32506d;
+$network_icons:'\f099',
+'\f09a',
+'\f0d5',
+'\f0e1',
+'\f0d2',
+'\f173';
 @for $i from 1 through length($network_names) {
     a.social {
         &.social-#{nth($network_names, $i)},
@@ -104,19 +124,19 @@ $network_icons:'\f099','\f09a','\f0d5','\f0e1','\f0d2','\f173';
 
 .music {
     list-style: none;
-    background: #663399;
+    background: #11b4b3;
     padding: 10px;
     font-family: Helvetica;
     font-weight: bold;
-    color: #ee82ee;
+    color: #800080;
     width: 100%;
     font-size: 20px;
     margin-left: -1%;
 }
 
 .music:nth-child(odd) {
-    background: #ee82ee;
-    color: #663399;
+    background: #800080;
+    color: #11b4b3;
 }
 
 
@@ -128,3 +148,86 @@ $network_icons:'\f099','\f09a','\f0d5','\f0e1','\f0d2','\f173';
     padding: 1.5rem 3em;
     text-align: center;
 }*/
+
+
+/*star rating*/
+
+@mixin star-rating( $filled-color: #F9BF3B, $empty-color: #444, $size: 40px, $width: 400px) {
+    $star--filled: ★;
+    $star--empty: ☆;
+    width: $width;
+    > * {
+        float: right;
+    }
+    label {
+        height: 40px;
+        width: 10%;
+        display: block;
+        position: relative;
+        cursor: pointer;
+
+    top: 20px;
+    left: 120px;
+
+        @for $i from 5 through 1 {
+            &:nth-of-type(#{$i}):after {
+                $animation-delay: $i * .05s;
+                animation-delay: $animation-delay;
+            }
+        }
+        &:after {
+            transition: all 0.4s ease-out;
+            -webkit-font-smoothing: antialiased;
+            position: absolute;
+            content: '#{$star--empty}';
+            color: $empty-color;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: $size;
+            animation: 1s pulse ease;
+        }
+        &:hover:after {
+            color: lighten($empty-color, 10%);
+            text-shadow: 0 0 15px lighten($empty-color, 10%);
+        }
+    }
+    input {
+        display: none;
+        &:checked {
+            + label:after,
+            ~ label:after {
+                content: '#{$star--filled}';
+                color: $filled-color;
+                text-shadow: 0 0 20px $filled-color;
+            }
+        }
+    }
+}
+
+.rating {
+    @include star-rating();
+}
+
+button {
+  display: inline-block;
+  font-size: 1em;
+  padding: 0.5em 2em;
+  appearance: none;
+  border-radius: 0.5em;
+  border: none;
+  background: #0000b3;
+  color: #fff;
+  transition: all 0.1s ease-in-out;
+}
+
+button:hover {
+  cursor: pointer;
+  background: #000067;
+}
+
+button:active {
+  background: #0101ff;
+}
