@@ -169,7 +169,11 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     }();
     $scope.mixLength = function(){
         if($scope.wizardData && $scope.wizardData.duration){
-            return ($scope.wizardData.duration.minutes * 60) + ($scope.wizardData.duration.hours * 3600);
+            let minutes = 0;
+            let hours = 0;
+            if ($scope.wizardData.duration.minutes) minutes = $scope.wizardData.duration.minutes * 60;
+            if ($scope.wizardData.duration.hours) hours = $scope.wizardData.duration.hours * 3600;
+            return hours + minutes;
         }
         return 1800;
     }();
