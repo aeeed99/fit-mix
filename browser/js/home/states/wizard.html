@@ -1,4 +1,4 @@
-<h2>New Mix</h2>
+<h2>New FitMix</h2>
 
 <uib-accordion close-others="true">
   <uib-accordion-group heading="Name" is-open="true">
@@ -18,19 +18,14 @@
       <div id="structure-preview">
         {{mixData.selectedStructure.description}}
       </div>
-      <div id="confirm-section">
-        <button class="btn btn-default">Start with no structure</button>
-        <button class="btn btn-success">Start with {{mixData.structure}}</button>
-      </div>
     </div>
   </uib-accordion-group>
   <uib-accordion-group heading="Length" is-open="true">
     <p>Estimate the length of your mix</p>
     <p>(You can always change this later)</p>
     <div id="timepicker">
-      <uib-timepicker ng-model="mixData.duration"
-                      hour-step="1" minute-step="1"
-                      show-meridian="false"></uib-timepicker>
+      <input ng-model="mixData.duration.hours" type="number">
+      <input ng-model="mixData.duration.minutes" type="number">
     </div>
   </uib-accordion-group>
   <!--<uib-accordion-group heading="Upload Music" is-open="true">-->
@@ -41,7 +36,7 @@
     <ol>
       <li class="title">Title: {{mixData.name}}</li>
       <li class="duration">Duration: {{mixData.duration | date : 'HH:mm'}}</li>
-      <li class="phases">Sections:</li>
+      <li class="phases">Template: {{mixData.selectedStructure.name}}</li>
     </ol>
     <button class="btn-info" ng-click="startMix()">Looks good, let's go!</button>
   </uib-accordion-group>

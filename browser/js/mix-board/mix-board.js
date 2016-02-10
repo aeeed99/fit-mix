@@ -4,6 +4,7 @@ app.config(function ($stateProvider) {
         url: '/mix-board',
         templateUrl: 'js/mix-board/mix-board.html',
         controller: 'MixBoardController',
+        params: {'wizardData': null},
         resolve: {
             tracks: function (HomeFactory) {
                 return HomeFactory.getTracks();
@@ -15,7 +16,7 @@ app.config(function ($stateProvider) {
     })
 });
 
-app.controller('MixBoardController', function ($scope, $document, tracks, sfx, MixBoardFactory) {
+app.controller('MixBoardController', function ($scope, $document, $stateParams, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
     //MB: I LIVE ON THE EDGE ^^^^^^
     // $scope.phases = [
@@ -41,6 +42,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     //         color: "one"
     //     }
     // ];
+
     $scope.phases = [];
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
@@ -48,13 +50,24 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.mixEffects = [];
     //sample: one sfx and one voice. distinction is mostly important for styling; anything
     //not a string is considered a sfx
-
+    $scope.wizardData = $stateParams.wizardData;
     $scope.library = tracks;
     $scope.sfxBase = sfx;
     $scope.instructions = ["hello", "goodbye"];
 
     $scope.editTitle = false;
-    $scope.mixName = "My awesome Playlist";
+    $scope.mixName = function(){
+        if($scope.wizardData && $scope.wizardData.name){
+            return $scope.wizardData.name
+            }
+            return "My FitMix";
+    }();
+    $scope.mixLength = function(){
+        if($scope.wizardData && $scope.wizardData.duration){
+            return ($scope.wizardData.duration.minutes * 60) + ($scope.wizardData.duration.hours * 3600);
+        }
+        return 1800;
+    }();
     $scope.tab = "music";
 
     $scope.isLoaded = false;
@@ -63,6 +76,9 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.currentTrack;
     $scope.currentSfx;
     $scope.currentInstruction;
+    (function startup(){
+        console.log("startup fx ran");
+    }());
     // CHES - have not had to use index variable yet but may come in handy..
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
@@ -165,7 +181,6 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 });
 
 app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFactory) {
-    $scope.mixLength = 600;
     $scope.durSum = function () {
         var sum = 0;
         $scope.phases.forEach(function (phase) {
