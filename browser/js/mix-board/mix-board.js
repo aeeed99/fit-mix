@@ -43,7 +43,6 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     var context = new webkitAudioContext();
     var analyser = context.createAnalyser();
     var source;
-    var wavesurfer;
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = MixBoardFactory.getMix(); //NP List of songs on the mix bar.
@@ -372,7 +371,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
 });
 
 app.controller('prevWavController', function ($scope, MixBoardFactory) {
-    //var wavesurfer;
+    var wavesurfer;
     var loadingPrev = false;
     $scope.addFade;
 
