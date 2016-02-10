@@ -17,7 +17,7 @@
            ng-drop="true"
            ng-drop-success="reorderMix($index, $data, $event, mix)">
         <div id="mix-clip" ng-drag="true" ng-drag-data="track">
-          <span>{{ track.name }}</span> {{prettyDuration(track)}}
+          <span id="track-title">{{ track.name }}</span> - <span id="artist">{{track.artist}}</span>
         </div>
       </div>
     </div>
