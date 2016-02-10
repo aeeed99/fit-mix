@@ -51,7 +51,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 
     $scope.library = tracks;
     $scope.sfxBase = sfx;
-    $scope.instructions = [];
+    $scope.instructions = ["hello", "goodbye"];
 
     $scope.editTitle = false;
     $scope.mixName = "My awesome Playlist";
@@ -62,6 +62,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.region;
     $scope.currentTrack;
     $scope.currentSfx;
+    $scope.currentInstruction;
     // CHES - have not had to use index variable yet but may come in handy..
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
@@ -91,9 +92,10 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
         return {width: '100%', height: '100%'};
     };
     $scope.selectSfx = function(sfx){
-        console.log("shot got called");
         $scope.currentSfx = sfx;
-        console.log($scope.currentSfx);
+    }
+    $scope.selectInstruction = function(instruction){
+        $scope.currentInstruction = instruction;
     }
     $scope.addVoiceToMix = function(text, trigger){
         let voice = text;
@@ -108,12 +110,6 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 
     $scope.stylizeTrack = function(track){
         //MB: sfx have no artist, so sfx get t-p-4
-        if(!track.artist){
-            return "track-panel-4";
-        }
-        else if((track.end < track.duration && track.end !== null) || track.start > 0){
-            return "track-panel-3";
-        }
         return "track-panel-1";
     }
     $scope.fillContainer = function () {
@@ -129,6 +125,19 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.addEffectToMix = function(effectTrigger){
         let effect = $scope.currentSfx;
         let trigger = +effectTrigger;
+        $scope.mixEffects.push({ effect: effect, trigger: trigger });
+        $scope.mixEffects.sort(function(a, b){
+            console.log(a);
+            console.log(b);
+            if (a.trigger > b.trigger) return 1;
+            if (b. trigger > a.trigger) return -1;
+            return 0;
+        });
+    };
+
+    $scope.addInstructionToMix = function(triggerTime){
+        let effect = $scope.currentInstruction;
+        let trigger = +triggerTime;
         $scope.mixEffects.push({ effect: effect, trigger: trigger });
         $scope.mixEffects.sort(function(a, b){
             console.log(a);
@@ -177,6 +186,7 @@ app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFact
         return style;
     };
     $scope.openAddPhase = () => ModalFactory.openAddPhase($scope.phases);
+    $scope.openAddInstruction = () => ModalFactory.openAddInstruction($scope.instructions);
 });
 
 app.controller('mixPlaybackController', function($scope, MixBoardFactory) {

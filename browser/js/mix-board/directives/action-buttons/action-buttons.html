@@ -1,5 +1,7 @@
 <button type="button" ng-click="openUploadMusic()">Upload Songs to Library</button>
 <button type="button" ng-click="addSelectedTrackToMix(currentTrack)">Add to Mix</button>
-<button type="button" ng-click="addEffectToMix(triggerTime)">Add to Mix at:</button>
-<button id="no-button" style="display: none"></button>
-<input ng-model="triggerTime" placeholder="trigger time">
+<button type="button" ng-click="addEffectToMix(sfxTriggerTime)">Add sfx to Mix at:</button>
+<input type="text" ng-model="sfxTriggerTime" placeholder="trigger time">
+<button type="button" ng-click="openAddInstruction()">Create Instruction</button>
+<button type="button" ng-click="addInstructionToMix(instructionTriggerTime)">Add instruction to Mix at:</button>
+<input type="text" ng-model="instructionTriggerTime" placeholder="trigger time">
