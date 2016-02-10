@@ -13,7 +13,7 @@
 
 @import '../_compatibility'
 =track-panel
-  height: 72px
+  height: 78px
   width: 168px
   float: left
   +shadow(0 .05em 0)
@@ -22,15 +22,17 @@
   padding: 1px 4px
   font-family: $font-standard
   background-color: #7C5CD8
-  font-size: 13px
+  font-size: 12px
   span
     display: block
     color: white
   .title
+    margin: 3px 0 0 0
     font-weight: bold
-    font-size: 15px
+    font-size: 12px
+    line-height: 130%
   .track-footer
-    margin-top: 0px
+    margin: auto 0 0 0
     font-size: 10px
     .time, .bpm
       display: inline-block
@@ -38,7 +40,8 @@
       font-size: 13px
     .time
       font-weight: bold
-    .bpmtr
+      float: left
+    .bpm
       float: right
 
 .track-selected > #track-panel-1, .track-selected > #track-panel-2, .track-selected > #track-panel-3, .track-selected > #track-panel-4
