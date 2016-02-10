@@ -40,7 +40,7 @@ mix-header > h3
   top: 60px
   left: 0
   width: 32px
-  height: 32px
+  height: 16px
   background-color: $color-inner-line
   text-align: center
   padding-top: 4px
@@ -52,6 +52,8 @@ mix-header > h3
 #mix-edit-buttons //NP: This must stay below `action-buttons, #mix-edit-buttons` for proper styling
   float: right
   margin: 0 80px
+  height: 0px
+  overflow: show
   div, button
     height: 28px
     position: block
@@ -67,7 +69,7 @@ mix-header > h3
       border: none
       border-bottom: 1px solid white
   #_offset //hacky, temp fix
-    top: -2px
+    top: -3px
 
 .mix-frame
   position: relative
