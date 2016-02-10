@@ -18,34 +18,35 @@ app.config(function ($stateProvider) {
 app.controller('MixBoardController', function ($scope, $document, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
     //MB: I LIVE ON THE EDGE ^^^^^^
-    // $scope.phases = [
-    //     {
-    //         name: "STRETCH",
-    //         duration: 120,
-    //         color: "one"
-    //     },
-    //     {
-    //         name: "WARM UP",
-    //         duration: 120,
-    //         color: "two"
-    //     },
-    //     {
-    //         name: "SPRINT",
-    //         duration: 300,
-    //         color: "three"
+    $scope.phases = [
+        {
+            name: "STRETCH",
+            duration: 10,
+            color: "one"
+        },
+        {
+            name: "SPRINT",
+            duration: 10,
+            color: "three"
 
-    //     },
-    //     {
-    //         name: "COOL DOWN",
-    //         duration: 60,
-    //         color: "one"
-    //     }
-    // ];
-    $scope.phases = [];
+        },
+        {
+            name: "COOL DOWN",
+            duration: 10,
+            color: "one"
+        }
+    ];
+
+    var sfxPlaying;
+    var currentSfx;
+    var audio = new Audio();
+    var context = new webkitAudioContext();
+    var analyser = context.createAnalyser();
+    var source;
 
     // $scope.selectedTrack = null; //NP adding to mix will access this var for data manipulation
     $scope.mix = MixBoardFactory.getMix(); //NP List of songs on the mix bar.
-    $scope.mixEffects = [];
+    $scope.mixEffects = MixBoardFactory.getEffects();
     //sample: one sfx and one voice. distinction is mostly important for styling; anything
     //not a string is considered a sfx
 
@@ -53,8 +54,10 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.sfxBase = sfx;
     $scope.instructions = ["hello", "goodbye"];
 
+    console.log("sfxBase", $scope.sfxBase)
+
     $scope.editTitle = false;
-    $scope.mixName = "My awesome Playlist";
+    $scope.mixName = "FitMix";
     $scope.tab = "music";
 
     $scope.isLoaded = false;
@@ -62,6 +65,8 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.region;
     $scope.currentTrack;
     $scope.currentSfx;
+    $scope.disableSpace;
+
     $scope.currentInstruction;
     // CHES - have not had to use index variable yet but may come in handy..
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
@@ -72,23 +77,37 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.read = function(text){
         responsiveVoice.speak(text, "US English Female");
     }
+
     $scope.musicTabClick = function(){
         $scope.tab = "music";
+        $scope.disableSpace = false;
         $('.music-button').show();
         $('.sfx-button').hide();
         $('.instruction-button').hide();
     }
     $scope.sfxTabClick = function(){
         $scope.tab = "sfx";
+        $scope.disableSpace = false;
+        if ($scope.isPlaying){
+            $scope.pauseMix();
+            $scope.isPlaying = false;
+        };
         $('.sfx-button').show();
         $('.music-button').hide();
         $('.instruction-button').hide();
     }
     $scope.voiceTabClick = function(){
+        $scope.tab = "instructions";
+        $scope.disableSpace = true;
+        if ($scope.isPlaying){
+            $scope.pauseMix();
+            $scope.isPlaying = false;
+        };
         $('.instruction-button').show();
         $('.music-button').hide();
         $('.sfx-button').hide();
-        $scope.tab = "instructions";
+
+
     }
     $scope.stylizeEffect = function(effect){
         let style = {};
@@ -97,24 +116,46 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
         else style.color = "rgba(220,20,60,.75)";
         return style;
     }
+
     $scope.fillContainer = function(){
         return {width: '100%', height: '100%'};
     };
+
     $scope.selectSfx = function(sfx){
         $scope.currentSfx = sfx;
+        console.log($scope.currentSfx);
+        if (sfxPlaying) {
+            console.log("pausing")
+            audio.pause()
+            // sfxPlaying=false;
+        }
+        if (currentSfx == sfx){
+            console.log("stopped current")
+            sfxPlaying = false;
+            currentSfx = null;
+        } else{
+            console.log("playing new sound")
+            //audio = new Audio();
+            //context = new webkitAudioContext();
+            //analyser = context.createAnalyser();
+            audio.src = sfx.src;
+            audio.controls = true;
+            audio.autoplay = true;
+            sfxPlaying = true;
+            currentSfx = sfx
+            source = context.createMediaElementSource(audio);
+            source.connect(analyser);
+            analyser.connect(context.destination);
+            currentSfx = sfx
+            sfxPlaying=true;
+        }
+
     }
     $scope.selectInstruction = function(instruction){
         $scope.currentInstruction = instruction;
     }
     $scope.addVoiceToMix = function(text, trigger){
-        let voice = text;
-        trigger = +trigger;
-        $scope.mixEffects.push({ effect: voice, trigger: trigger});
-        $scope.mixEffects.sort(function(a, b){
-            if (a.trigger > b.trigger) return 1;
-            if (b. trigger > a.trigger) return -1;
-            return 0;
-        });
+        MixBoardFactory.addEffectToMix( trigger, text , "voice")
     };
 
     $scope.stylizeTrack = function(track){
@@ -132,16 +173,8 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     };
 
     $scope.addEffectToMix = function(effectTrigger){
-        let effect = $scope.currentSfx;
-        let trigger = +effectTrigger;
-        $scope.mixEffects.push({ effect: effect, trigger: trigger });
-        $scope.mixEffects.sort(function(a, b){
-            console.log(a);
-            console.log(b);
-            if (a.trigger > b.trigger) return 1;
-            if (b. trigger > a.trigger) return -1;
-            return 0;
-        });
+        MixBoardFactory.addEffectToMix(effectTrigger, $scope.currentSfx, "sfx")
+        console.log("mixEffects", MixBoardFactory.getEffects())
     };
 
     $scope.addInstructionToMix = function(triggerTime){
@@ -202,12 +235,22 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
 
     var trackIndex;
     $scope.mix =  MixBoardFactory.getMix();
+    var timeLogged = 0;
+    var trackProgress = 0;
+
+    $scope.totalTimePassed = timeLogged + trackProgress
+    $scope.formattedTimePassed = MixBoardFactory.getTimeObject($scope.totalTimePassed)
+    $scope.soundEffects = MixBoardFactory.getEffects();
+    $scope.effectIndex = 0;
 
     $scope.pauseMix=function(){
         $scope.currentMixTrack.wavesurfer.pause()
     };
 
+
     $scope.playClip = function (restart) {
+            console.log("MY EFFECTS", $scope.soundEffects)
+
         // EC - checks whether we are restartign or continuing from prev
          var waveArray = MixBoardFactory.createWaveArray();
         if (restart){
@@ -217,9 +260,12 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
                 console.log("pausing current");
                 $scope.currentMixTrack.wavesurfer.pause();
             }
-
+            timeLogged=0;
+            trackProgress=0;
+            $scope.effectIndex = 0;
             trackIndex = 0;
             $scope.currentMixTrack = null;
+            $scope.soundEffects = MixBoardFactory.getEffects()
            // $scope.mix = MixBoardFactory.getCleanMix();
            MixBoardFactory.resetMix();
 
@@ -233,6 +279,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
         } else {
             startTime = $scope.mix[trackIndex].start;
         }
+        console.log("startTime", startTime)
 
         $scope.currentMixTrack = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
 
@@ -241,7 +288,55 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
         $scope.currentMixTrack.wavesurfer.play(startTime, $scope.currentMixTrack.end);
 
         $scope.currentMixTrack.wavesurfer.on('audioprocess', function(process){
-            console.log("process", process)
+          //  console.log("process", process)
+            trackProgress = process - $scope.currentMixTrack.start;
+            $scope.totalTimePassed = timeLogged + trackProgress
+            $scope.formattedTimePassed = MixBoardFactory.getTimeObject($scope.totalTimePassed)
+            $scope.$digest();
+            if ($scope.soundEffects[$scope.effectIndex] && $scope.soundEffects[$scope.effectIndex].trigger - $scope.totalTimePassed <= .2  ){
+                    console.log("PLAY EFFECT NOW!!!!")
+              if ($scope.soundEffects[$scope.effectIndex].type == "voice") {
+                console.log("PAUSING BECAUSE VOICE")
+
+               // $scope.read($scope.soundEffects[$scope.effectIndex].effect)
+                function voiceEndCallback() {
+                    console.log("Voice ended");
+                    $scope.playClip();
+
+                }
+                function voiceStartCalback() {
+                    console.log("Voice Started");
+                    $scope.currentMixTrack.wavesurfer.pause();
+                }
+
+                var parameters = {
+                    onend: voiceEndCallback,
+                    onstart: voiceStartCalback
+                }
+
+                responsiveVoice.speak($scope.soundEffects[$scope.effectIndex].effect,"UK English Female", parameters);
+              }
+              else {
+               // $scope.currentMixTrack.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(MixBoardFactory.createQuickWaveArray(), $scope.currentMixTrack.wavesurfer.backend.ac.currentTime, 2);
+                var sfxAudio = new Audio();
+                var context = new webkitAudioContext();
+                var analyser = context.createAnalyser();
+                sfxAudio.src = $scope.soundEffects[$scope.effectIndex].effect.src;
+                sfxAudio.controls = true;
+                sfxAudio.autoplay = true;
+                var source = context.createMediaElementSource(sfxAudio);
+                source.connect(analyser);
+                analyser.connect(context.destination);
+
+             }
+
+            $scope.effectIndex+=1
+            console.log("new effect", $scope.effectIndex)
+            console.log("new effect name", $scope.soundEffects[$scope.effectIndex])
+            }
+           // console.log("the process", trackProgress)
+            //console.log("trackProgress", $scope.totalTimePassed )
+
             if ($scope.currentMixTrack){
                 $scope.currentMixTrack.currentProgress = process;
                 if ($scope.currentMixTrack.fade >$scope.currentMixTrack.startTime && !$scope.currentMixTrack.fadeRegistered && $scope.currentMixTrack.fade >= ($scope.currentMixTrack.end-$scope.currentMixTrack.wavesurfer.getCurrentTime() ) ){
@@ -255,10 +350,15 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
                         if ($scope.currentMixTrack) {$scope.playClip() };
                 }
                 else if ($scope.currentMixTrack.end - $scope.currentMixTrack.currentProgress < .2 && $scope.currentMixTrack.currentProgress < $scope.currentMixTrack.end ) {
-                    //debugger;
                     $scope.currentMixTrack.wavesurfer.pause();
                     if (trackIndex+1 < $scope.mix.length){
+                        console.log("time logged pre", timeLogged)
+                        console.log("duration pre", $scope.currentMixTrack.duration)
+                        timeLogged += $scope.currentMixTrack.duration;
                         console.log("next")
+                        console.log("timeLogged", timeLogged)
+                        trackProgress = 0
+                        console.log("trackProgress", trackProgress)
                         trackIndex+=1
                         $scope.currentMixTrack = $scope.mix[trackIndex];
                         $scope.currentMixTrack.currentProgress = 0;
@@ -266,6 +366,8 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
                         $scope.playClip()
                     } else {
                         console.log("no more left!!");
+                        timeLogged = 0;
+                        trackProgress = 0;
                         $scope.currentMixTrack = null;
                         trackIndex=0;
                       }
@@ -278,10 +380,14 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
 app.controller('prevWavController', function ($scope, MixBoardFactory) {
     var wavesurfer;
     var loadingPrev = false;
+    $scope.addFade;
 
+    $scope.showFader = function(){
+        $scope.addFade = !$scope.addFade;
+    }
 
     $scope.prevWave = function (track) {
-
+        console.log("track", track)
         // CHES - "isLoaded" is for loading pre-saved data
         $scope.isLoaded = false;
         // CHES - remove previous wavesurfer if exists
@@ -392,7 +498,7 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
     };
     //PLAY / PAUSE FUNCTIONALITY
     $(document).on('keyup', function (e) {
-        if (e.which == 32 && $scope.isLoaded) {
+        if (e.which == 32 && $scope.isLoaded && !$scope.disableSpace) {
             if ($scope.isPlaying) {
                 wavesurfer.pause();
             } else {
