@@ -18,30 +18,24 @@ app.config(function ($stateProvider) {
 app.controller('MixBoardController', function ($scope, $document, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
     //MB: I LIVE ON THE EDGE ^^^^^^
-    // $scope.phases = [
-    //     {
-    //         name: "STRETCH",
-    //         duration: 120,
-    //         color: "one"
-    //     },
-    //     {
-    //         name: "WARM UP",
-    //         duration: 120,
-    //         color: "two"
-    //     },
-    //     {
-    //         name: "SPRINT",
-    //         duration: 300,
-    //         color: "three"
+    $scope.phases = [
+        {
+            name: "STRETCH",
+            duration: 10,
+            color: "one"
+        },
 
-    //     },
-    //     {
-    //         name: "COOL DOWN",
-    //         duration: 60,
-    //         color: "one"
-    //     }
-    // ];
-    $scope.phases = [];
+            name: "SPRINT",
+            duration: 10,
+            color: "three"
+
+        },
+        {
+            name: "COOL DOWN",
+            duration: 10,
+            color: "one"
+        }
+    ];
 
     var sfxPlaying;
     var currentSfx;
@@ -58,7 +52,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 
     $scope.library = tracks;
     $scope.sfxBase = sfx;
-    $scope.instructions = [];
+    $scope.instructions = ["hello", "goodbye"];
 
     console.log("sfxBase", $scope.sfxBase)
 
@@ -73,6 +67,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.currentSfx;
     $scope.disableSpace;
 
+    $scope.currentInstruction;
     // CHES - have not had to use index variable yet but may come in handy..
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
@@ -82,16 +77,25 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.read = function(text){
         responsiveVoice.speak(text, "US English Female");
     }
-    $scope.sfxTabClick = function(){
-        $scope.tab = "sfx";
-        $scope.disableSpace = false;
-    }
+
     $scope.musicTabClick = function(){
         $scope.tab = "music";
         $scope.disableSpace = false;
-
+        $('.music-button').show();
+        $('.sfx-button').hide();
+        $('.instruction-button').hide();
+    }
+    $scope.sfxTabClick = function(){
+        $scope.tab = "sfx";
+        $scope.disableSpace = false;
+        $('.sfx-button').show();
+        $('.music-button').hide();
+        $('.instruction-button').hide();
     }
     $scope.voiceTabClick = function(){
+        $('.instruction-button').show();
+        $('.music-button').hide();
+        $('.sfx-button').hide();
         $scope.tab = "instructions";
         $scope.disableSpace = true;
     }
@@ -102,11 +106,12 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
         else style.color = "rgba(220,20,60,.75)";
         return style;
     }
+
     $scope.fillContainer = function(){
         return {width: '100%', height: '100%'};
     };
+
     $scope.selectSfx = function(sfx){
-        console.log("shot got called");
         $scope.currentSfx = sfx;
         console.log($scope.currentSfx);
         if (sfxPlaying) {
@@ -136,18 +141,15 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
         }
 
     }
+    $scope.selectInstruction = function(instruction){
+        $scope.currentInstruction = instruction;
+    }
     $scope.addVoiceToMix = function(text, trigger){
         MixBoardFactory.addEffectToMix( trigger, text , "voice")
     };
 
     $scope.stylizeTrack = function(track){
         //MB: sfx have no artist, so sfx get t-p-4
-        if(!track.artist){
-            return "track-panel-4";
-        }
-        else if((track.end < track.duration && track.end !== null) || track.start > 0){
-            return "track-panel-3";
-        }
         return "track-panel-1";
     }
     $scope.fillContainer = function () {
@@ -157,12 +159,25 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function (track) {
         MixBoardFactory.addTrackToMix(track);
-        console.log("scope mix", $scope.mix)
+        $('button').blur();
     };
 
     $scope.addEffectToMix = function(effectTrigger){
         MixBoardFactory.addEffectToMix(effectTrigger, $scope.currentSfx, "sfx")
         console.log("mixEffects", MixBoardFactory.getEffects())
+    };
+
+    $scope.addInstructionToMix = function(triggerTime){
+        let effect = $scope.currentInstruction;
+        let trigger = +triggerTime;
+        $scope.mixEffects.push({ effect: effect, trigger: trigger });
+        $scope.mixEffects.sort(function(a, b){
+            console.log(a);
+            console.log(b);
+            if (a.trigger > b.trigger) return 1;
+            if (b. trigger > a.trigger) return -1;
+            return 0;
+        });
     };
 
     $scope.currentMixTrack;
@@ -203,6 +218,7 @@ app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFact
         return style;
     };
     $scope.openAddPhase = () => ModalFactory.openAddPhase($scope.phases);
+    $scope.openAddInstruction = () => ModalFactory.openAddInstruction($scope.instructions);
 });
 
 app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
