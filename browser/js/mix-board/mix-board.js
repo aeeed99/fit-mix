@@ -72,13 +72,22 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.read = function(text){
         responsiveVoice.speak(text, "US English Female");
     }
-    $scope.sfxTabClick = function(){
-        $scope.tab = "sfx";
-    }
     $scope.musicTabClick = function(){
         $scope.tab = "music";
+        $('.music-button').show();
+        $('.sfx-button').hide();
+        $('.instruction-button').hide();
+    }
+    $scope.sfxTabClick = function(){
+        $scope.tab = "sfx";
+        $('.sfx-button').show();
+        $('.music-button').hide();
+        $('.instruction-button').hide();
     }
     $scope.voiceTabClick = function(){
+        $('.instruction-button').show();
+        $('.music-button').hide();
+        $('.sfx-button').hide();
         $scope.tab = "instructions";
     }
     $scope.stylizeEffect = function(effect){
