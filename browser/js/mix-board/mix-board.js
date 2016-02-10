@@ -71,6 +71,8 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.region;
     $scope.currentTrack;
     $scope.currentSfx;
+    $scope.disableSpace;
+
     // CHES - have not had to use index variable yet but may come in handy..
     $scope.currentTrackIndex = $scope.library.indexOf($scope.currentTrack);
     //var wavesurfer;
@@ -82,12 +84,16 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     }
     $scope.sfxTabClick = function(){
         $scope.tab = "sfx";
+        $scope.disableSpace = false;
     }
     $scope.musicTabClick = function(){
         $scope.tab = "music";
+        $scope.disableSpace = false;
+
     }
     $scope.voiceTabClick = function(){
         $scope.tab = "instructions";
+        $scope.disableSpace = true;
     }
     $scope.stylizeEffect = function(effect){
         let style = {};
@@ -466,7 +472,7 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
     };
     //PLAY / PAUSE FUNCTIONALITY
     $(document).on('keyup', function (e) {
-        if (e.which == 32 && $scope.isLoaded) {
+        if (e.which == 32 && $scope.isLoaded && !$scope.disableSpace) {
             if ($scope.isPlaying) {
                 wavesurfer.pause();
             } else {
