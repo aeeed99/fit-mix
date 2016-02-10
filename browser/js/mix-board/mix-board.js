@@ -19,25 +19,128 @@ app.config(function ($stateProvider) {
 app.controller('MixBoardController', function ($scope, $document, $stateParams, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
     //MB: I LIVE ON THE EDGE ^^^^^^
-    $scope.phases = [
-        {
-            name: "STRETCH",
-            duration: 10,
+  $scope.predefinedPhases = [
+        [{
+            name: "EXERCISE",
+            duration: 30,
             color: "one"
         },
         {
-            name: "SPRINT",
-            duration: 10,
+            name: "REST",
+            duration: 30,
             color: "three"
 
         },
         {
-            name: "COOL DOWN",
-            duration: 10,
+            name: "EXERCISE",
+            duration: 30,
             color: "one"
-        }
-    ];
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
 
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        },
+        {
+            name: "EXERCISE",
+            duration: 30,
+            color: "one"
+        },
+        {
+            name: "REST",
+            duration: 30,
+            color: "three"
+
+        }],
+        [{
+            name: "POSITION ONE",
+            duration: 600,
+            color: "one"
+        },
+        {
+            name: "POSITION TWO",
+            duration: 600,
+            color: "three"
+
+        },
+        {
+            name: "POSITION THREE",
+            duration: 600,
+            color: "two"
+        }],
+        [{
+            name: "CARDIO",
+            duration: 1200,
+            color: "one"
+        },
+        {
+            name: "STRENGTH",
+            duration: 1200,
+            color: "three"
+
+        },
+        {
+            name: "ABS",
+            duration: 1200,
+            color: "two"
+        }]
+    ]
     var sfxPlaying;
     var currentSfx;
     var audio = new Audio();
@@ -61,7 +164,7 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     $scope.mixName = function(){
         if($scope.wizardData && $scope.wizardData.name){
             return $scope.wizardData.name
-            }
+        }
             return "My FitMix";
     }();
     $scope.mixLength = function(){
@@ -69,6 +172,13 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
             return ($scope.wizardData.duration.minutes * 60) + ($scope.wizardData.duration.hours * 3600);
         }
         return 1800;
+    }();
+    $scope.phases = function(){
+        console.log("goddamn phases")
+        if($scope.wizardData && $scope.wizardData.selectedStructure.number){
+            return $scope.predefinedPhases[$scope.wizardData.selectedStructure.number];
+        }
+        return {};
     }();
     $scope.tab = "music";
 
