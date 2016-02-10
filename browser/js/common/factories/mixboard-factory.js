@@ -1,8 +1,9 @@
 app.factory('MixBoardFactory', function(){
     var MixBoardFactory = {};
-
+    var tempID = 0;
     MixBoardFactory.currentMix = [];
     MixBoardFactory.cleanMix = [];
+    MixBoardFactory.soundEffects = [];
 
     MixBoardFactory.getMix = function(){
         return MixBoardFactory.currentMix;
@@ -13,6 +14,27 @@ app.factory('MixBoardFactory', function(){
         var newClean  = jQuery.extend( {}, MixBoardFactory.cleanMix);
         return newClean;
     };
+
+    MixBoardFactory.getEffects = function(){
+        return MixBoardFactory.soundEffects;
+    }
+
+    MixBoardFactory.addEffectToMix = function(effectTrigger, current, type){
+        let effect = current;
+        let trigger = +effectTrigger;
+        MixBoardFactory.soundEffects.push({ effect: effect, trigger: trigger, type: type });
+        MixBoardFactory.soundEffects.sort(function(a, b){
+            console.log(a);
+            console.log(b);
+            if (a.trigger > b.trigger) return 1;
+            if (b. trigger > a.trigger) return -1;
+            return 0;
+        });
+        console.log("effects", MixBoardFactory.soundEffects)
+    }
+
+
+
 
     MixBoardFactory.removeTrack = function(index){
         MixBoardFactory.currentMix.splice(index, 1);
@@ -54,9 +76,26 @@ app.factory('MixBoardFactory', function(){
         return waveArray;
     };
 
+    MixBoardFactory.createQuickWaveArray = function (){
+        var waveArray = new Float32Array(9);
+        waveArray[0] = 0.9;
+        waveArray[1] = 0.9;
+        waveArray[2] = 0.8;
+        waveArray[3] = 0.8;
+        waveArray[4] = 0.7;
+        waveArray[5] = 0.5;
+        waveArray[6] = 0.3;
+        waveArray[7] = 0.1;
+        waveArray[8] = 1.0;
+
+        return waveArray;
+    };
+
     MixBoardFactory.getTimeObject = function(regionTime){
         return { m: ('0' + Math.floor( regionTime/60)).slice(-2),
-               s: ('0' + Math.ceil( regionTime%60)).slice(-2)};
+               s: ('0' + Math.ceil( regionTime%60)).slice(-2),
+               ms: ('0' +  (regionTime%600)).slice(-2)
+           };
     };
 
     MixBoardFactory.getCurrentSong = function(library, track){
@@ -88,7 +127,7 @@ app.factory('MixBoardFactory', function(){
 
     MixBoardFactory.enableDragSelection = function(wavesurfer){
             wavesurfer.enableDragSelection({
-                 color: 'rgba(0, 255, 0, 0.1)'
+                 color: 'rgba(190,255,246,0.5)'
              });
     };
 
@@ -115,6 +154,8 @@ app.factory('MixBoardFactory', function(){
                 track.duration = track.wavesurfer.getDuration();
             }
             // EC - makes a copy so this isn't pass by reference
+             track.tempID = tempID;
+             tempID+=1;
              var copy1 = jQuery.extend( {}, track)
              var copy2 = jQuery.extend( {}, track)
              MixBoardFactory.currentMix.push(copy1);
