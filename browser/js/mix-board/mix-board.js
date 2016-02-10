@@ -54,7 +54,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.sfxBase = sfx;
     $scope.instructions = ["hello", "goodbye"];
 
-    console.log("sfxBase", $scope.sfxBase)
+    console.log("sfxBase", $scope.sfxBase);
 
     $scope.editTitle = false;
     $scope.mixName = "FitMix";
@@ -76,7 +76,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     //MB: you all can hear them too, right?
     $scope.read = function(text){
         responsiveVoice.speak(text, "US English Female");
-    }
+    };
 
     $scope.musicTabClick = function(){
         $scope.tab = "music";
@@ -84,38 +84,38 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
         $('.music-button').show();
         $('.sfx-button').hide();
         $('.instruction-button').hide();
-    }
+    };
     $scope.sfxTabClick = function(){
         $scope.tab = "sfx";
         $scope.disableSpace = false;
         if ($scope.isPlaying){
             wavesurfer.pause();
             $scope.isPlaying = false;
-        };
+        }
         $('.sfx-button').show();
         $('.music-button').hide();
         $('.instruction-button').hide();
-    }
+    };
     $scope.voiceTabClick = function(){
         $scope.tab = "instructions";
         $scope.disableSpace = true;
         if ($scope.isPlaying){
             wavesurfer.pause();
             $scope.isPlaying = false;
-        };
+        }
         $('.instruction-button').show();
         $('.music-button').hide();
         $('.sfx-button').hide();
 
 
-    }
+    };
     $scope.stylizeEffect = function(effect){
         let style = {};
         //they're inverted!
         if (typeof(effect.effect) === 'string') style.color = "rgba(35,235,195,.75)";
         else style.color = "rgba(220,20,60,.75)";
         return style;
-    }
+    };
 
     $scope.fillContainer = function(){
         return {width: '100%', height: '100%'};
@@ -125,16 +125,16 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
         $scope.currentSfx = sfx;
         console.log($scope.currentSfx);
         if (sfxPlaying) {
-            console.log("pausing")
-            audio.pause()
+            console.log("pausing");
+            audio.pause();
             // sfxPlaying=false;
         }
         if (currentSfx == sfx){
-            console.log("stopped current")
+            console.log("stopped current");
             sfxPlaying = false;
             currentSfx = null;
         } else{
-            console.log("playing new sound")
+            console.log("playing new sound");
             //audio = new Audio();
             //context = new webkitAudioContext();
             //analyser = context.createAnalyser();
@@ -142,18 +142,18 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
             audio.controls = true;
             audio.autoplay = true;
             sfxPlaying = true;
-            currentSfx = sfx
+            currentSfx = sfx;
             source = context.createMediaElementSource(audio);
             source.connect(analyser);
             analyser.connect(context.destination);
-            currentSfx = sfx
+            currentSfx = sfx;
             sfxPlaying=true;
         }
 
-    }
+    };
     $scope.selectInstruction = function(instruction){
         $scope.currentInstruction = instruction;
-    }
+    };
     $scope.addVoiceToMix = function(text, trigger){
         MixBoardFactory.addEffectToMix( trigger, text , "voice")
     };
@@ -161,7 +161,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.stylizeTrack = function(track){
         //MB: sfx have no artist, so sfx get t-p-4
         return "track-panel-1";
-    }
+    };
     $scope.fillContainer = function () {
         return {width: '100%', height: '100%'};
     };
@@ -173,7 +173,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     };
 
     $scope.addEffectToMix = function(effectTrigger){
-        MixBoardFactory.addEffectToMix(effectTrigger, $scope.currentSfx, "sfx")
+        MixBoardFactory.addEffectToMix(effectTrigger, $scope.currentSfx, "sfx");
         console.log("mixEffects", MixBoardFactory.getEffects())
     };
 
@@ -188,7 +188,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
 });
 
 app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFactory) {
-    $scope.mixLength = 600;
+    $scope.mixLength = 60;
     $scope.durSum = function () {
         var sum = 0;
         $scope.phases.forEach(function (phase) {
@@ -231,8 +231,8 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
     var timeLogged = 0;
     var trackProgress = 0;
 
-    $scope.totalTimePassed = timeLogged + trackProgress
-    $scope.formattedTimePassed = MixBoardFactory.getTimeObject($scope.totalTimePassed)
+    $scope.totalTimePassed = timeLogged + trackProgress;
+    $scope.formattedTimePassed = MixBoardFactory.getTimeObject($scope.totalTimePassed);
     $scope.soundEffects = MixBoardFactory.getEffects();
     $scope.effectIndex = 0;
 
@@ -242,7 +242,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
 
 
     $scope.playClip = function (restart) {
-            console.log("MY EFFECTS", $scope.soundEffects)
+            console.log("MY EFFECTS", $scope.soundEffects);
 
         // EC - checks whether we are restartign or continuing from prev
          var waveArray = MixBoardFactory.createWaveArray();
@@ -258,7 +258,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
             $scope.effectIndex = 0;
             trackIndex = 0;
             $scope.currentMixTrack = null;
-            $scope.soundEffects = MixBoardFactory.getEffects()
+            $scope.soundEffects = MixBoardFactory.getEffects();
            // $scope.mix = MixBoardFactory.getCleanMix();
            MixBoardFactory.resetMix();
 
@@ -272,24 +272,24 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
         } else {
             startTime = $scope.mix[trackIndex].start;
         }
-        console.log("startTime", startTime)
+        console.log("startTime", startTime);
 
         $scope.currentMixTrack = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
 
-        console.log("now up", $scope.currentMixTrack)
+        console.log("now up", $scope.currentMixTrack);
       //  debugger;
         $scope.currentMixTrack.wavesurfer.play(startTime, $scope.currentMixTrack.end);
 
         $scope.currentMixTrack.wavesurfer.on('audioprocess', function(process){
           //  console.log("process", process)
             trackProgress = process - $scope.currentMixTrack.start;
-            $scope.totalTimePassed = timeLogged + trackProgress
-            $scope.formattedTimePassed = MixBoardFactory.getTimeObject($scope.totalTimePassed)
+            $scope.totalTimePassed = timeLogged + trackProgress;
+            $scope.formattedTimePassed = MixBoardFactory.getTimeObject($scope.totalTimePassed);
             $scope.$digest();
             if ($scope.soundEffects[$scope.effectIndex] && $scope.soundEffects[$scope.effectIndex].trigger - $scope.totalTimePassed <= .2  ){
-                    console.log("PLAY EFFECT NOW!!!!")
+                    console.log("PLAY EFFECT NOW!!!!");
               if ($scope.soundEffects[$scope.effectIndex].type == "voice") {
-                console.log("PAUSING BECAUSE VOICE")
+                console.log("PAUSING BECAUSE VOICE");
 
                // $scope.read($scope.soundEffects[$scope.effectIndex].effect)
                 function voiceEndCallback() {
@@ -305,7 +305,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
                 var parameters = {
                     onend: voiceEndCallback,
                     onstart: voiceStartCalback
-                }
+                };
 
                 responsiveVoice.speak($scope.soundEffects[$scope.effectIndex].effect,"UK English Female", parameters);
               }
@@ -323,8 +323,8 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
 
              }
 
-            $scope.effectIndex+=1
-            console.log("new effect", $scope.effectIndex)
+            $scope.effectIndex+=1;
+            console.log("new effect", $scope.effectIndex);
             console.log("new effect name", $scope.soundEffects[$scope.effectIndex])
             }
            // console.log("the process", trackProgress)
@@ -333,29 +333,29 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
             if ($scope.currentMixTrack){
                 $scope.currentMixTrack.currentProgress = process;
                 if ($scope.currentMixTrack.fade >$scope.currentMixTrack.startTime && !$scope.currentMixTrack.fadeRegistered && $scope.currentMixTrack.fade >= ($scope.currentMixTrack.end-$scope.currentMixTrack.wavesurfer.getCurrentTime() ) ){
-                        console.log("FADING", $scope.currentMixTrack)
+                        console.log("FADING", $scope.currentMixTrack);
                         $scope.currentMixTrack.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(waveArray, $scope.currentMixTrack.wavesurfer.backend.ac.currentTime, $scope.currentMixTrack.fade);
                         $scope.currentMixTrack.fadeRegistered = true;
-                        trackIndex+=1
+                        trackIndex+=1;
                         $scope.currentMixTrack = $scope.mix[trackIndex];
                         $scope.currentMixTrack.currentProgress = 0;
                         console.log("next up after fade", $scope.currentMixTrack);
-                        if ($scope.currentMixTrack) {$scope.playClip() };
+                        if ($scope.currentMixTrack) {$scope.playClip() }
                 }
                 else if ($scope.currentMixTrack.end - $scope.currentMixTrack.currentProgress < .2 && $scope.currentMixTrack.currentProgress < $scope.currentMixTrack.end ) {
                     $scope.currentMixTrack.wavesurfer.pause();
                     if (trackIndex+1 < $scope.mix.length){
-                        console.log("time logged pre", timeLogged)
-                        console.log("duration pre", $scope.currentMixTrack.duration)
+                        console.log("time logged pre", timeLogged);
+                        console.log("duration pre", $scope.currentMixTrack.duration);
                         timeLogged += $scope.currentMixTrack.duration;
-                        console.log("next")
-                        console.log("timeLogged", timeLogged)
-                        trackProgress = 0
-                        console.log("trackProgress", trackProgress)
-                        trackIndex+=1
+                        console.log("next");
+                        console.log("timeLogged", timeLogged);
+                        trackProgress = 0;
+                        console.log("trackProgress", trackProgress);
+                        trackIndex+=1;
                         $scope.currentMixTrack = $scope.mix[trackIndex];
                         $scope.currentMixTrack.currentProgress = 0;
-                        console.log("track", $scope.currentMixTrack)
+                        console.log("track", $scope.currentMixTrack);
                         $scope.playClip()
                     } else {
                         console.log("no more left!!");
@@ -377,10 +377,10 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
 
     $scope.showFader = function(){
         $scope.addFade = !$scope.addFade;
-    }
+    };
 
     $scope.prevWave = function (track) {
-        console.log("track", track)
+        console.log("track", track);
         // CHES - "isLoaded" is for loading pre-saved data
         $scope.isLoaded = false;
         // CHES - remove previous wavesurfer if exists
@@ -491,7 +491,7 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
     };
     //PLAY / PAUSE FUNCTIONALITY
     $(document).on('keyup', function (e) {
-        if (e.which == 32 && $scope.isLoaded && !$scope.disableSpace) {
+        if (e.which == 18 && $scope.isLoaded && !$scope.disableSpace) {
             if ($scope.isPlaying) {
                 wavesurfer.pause();
             } else {
@@ -531,7 +531,4 @@ app.controller('uploadModalController', function ($scope, $uibModalInstance) {
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
-});
-app.controller('modalInstanceController', function(){
-
 });

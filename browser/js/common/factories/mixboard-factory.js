@@ -89,7 +89,9 @@ app.factory('MixBoardFactory', function(){
 
     MixBoardFactory.getTimeObject = function(regionTime){
         return { m: ('0' + Math.floor( regionTime/60)).slice(-2),
-               s: ('0' + Math.ceil( regionTime%60)).slice(-2)};
+               s: ('0' + Math.ceil( regionTime%60)).slice(-2),
+               ms: ('0' +  (regionTime%600)).slice(-2)
+           };
     };
 
     MixBoardFactory.getCurrentSong = function(library, track){
@@ -121,7 +123,7 @@ app.factory('MixBoardFactory', function(){
 
     MixBoardFactory.enableDragSelection = function(wavesurfer){
             wavesurfer.enableDragSelection({
-                 color: 'rgba(0, 255, 0, 0.1)'
+                 color: 'rgba(190,255,246,0.5)'
              });
     };
 
