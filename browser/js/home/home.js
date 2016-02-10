@@ -48,6 +48,7 @@ app.controller('HomeCtrl', function ($scope, $state, HomeFactory, tracks) {
 
 });
 app.controller('wizardController', function($scope, $state){
+    $scope.mixData = {};
     $scope.structures = [
         {
             name: "HIIT",
@@ -63,10 +64,6 @@ app.controller('wizardController', function($scope, $state){
             name: "3-cycle Shred",
             description: "Inspired by Jillian Michaels' routines. Provdes a series of 3/2/1-minute "+
                 "sections, with cardio/strength/abs recommended for each section respectively"
-        },
-        {
-            name: "none",
-            description: "Start with no structure and build your own."
         }
     ];
 
