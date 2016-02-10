@@ -89,7 +89,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
         $scope.tab = "sfx";
         $scope.disableSpace = false;
         if ($scope.isPlaying){
-            $scope.pauseMix();
+            $scope.wavesurfer.pause();
             $scope.isPlaying = false;
         };
         $('.sfx-button').show();
@@ -100,7 +100,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
         $scope.tab = "instructions";
         $scope.disableSpace = true;
         if ($scope.isPlaying){
-            $scope.pauseMix();
+            $scope.wavesurfer.pause();
             $scope.isPlaying = false;
         };
         $('.instruction-button').show();
@@ -180,14 +180,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     $scope.addInstructionToMix = function(triggerTime){
         let effect = $scope.currentInstruction;
         let trigger = +triggerTime;
-        $scope.mixEffects.push({ effect: effect, trigger: trigger });
-        $scope.mixEffects.sort(function(a, b){
-            console.log(a);
-            console.log(b);
-            if (a.trigger > b.trigger) return 1;
-            if (b. trigger > a.trigger) return -1;
-            return 0;
-        });
+        MixBoardFactory.addEffectToMix( trigger, effect, "voice")
     };
 
     $scope.currentMixTrack;
