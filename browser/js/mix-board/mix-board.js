@@ -182,7 +182,7 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
         if($scope.wizardData && $scope.wizardData.selectedStructure.number){
             return $scope.predefinedPhases[$scope.wizardData.selectedStructure.number];
         }
-        return {};
+        return [];
     }();
     $scope.tab = "music";
 
