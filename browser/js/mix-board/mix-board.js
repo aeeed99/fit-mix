@@ -119,7 +119,7 @@ app.controller('MixBoardController', function ($scope, $document, tracks, sfx, M
     // NP: Add-to-mix functionality (non-DnD version)
     $scope.addSelectedTrackToMix = function (track) {
         MixBoardFactory.addTrackToMix(track);
-        console.log("scope mix", $scope.mix)
+        $('button').blur();
     };
 
     $scope.addEffectToMix = function(effectTrigger){
