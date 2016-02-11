@@ -156,24 +156,15 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     $scope.wizardData = $stateParams.wizardData;
     $scope.library = tracks;
     $scope.sfxBase = sfx;
-    $scope.instructions = ["hello", "goodbye"].map(function(instruction){
+    $scope.instructions = ["CRUNCH TIME!!!", "Plank For 30 Seconds", "Take A Break!", "Great Job!", ].map(function(instruction){
         var msg = new SpeechSynthesisUtterance();
         var voices = window.speechSynthesis.getVoices();
-        //console.log(voices)
         msg.voice = voices[26];
         msg.voiceURI = voices[26].voiceURI
         msg.text = instruction
         console.log("msg text", msg)
-
         return msg
     });
-
-    console.log("instructions", $scope.instructions)
-
-
-              //  window.speechSynthesis.speak(msg);
-
-    console.log("sfxBase", $scope.sfxBase);
 
     $scope.editTitle = false;
     $scope.mixName = function(){
