@@ -156,9 +156,15 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     $scope.wizardData = $stateParams.wizardData;
     $scope.library = tracks;
     $scope.sfxBase = sfx;
-    $scope.instructions = ["hello", "goodbye"];
-
-    console.log("sfxBase", $scope.sfxBase);
+    $scope.instructions = ["CRUNCH TIME!!!", "Plank For 30 Seconds", "Take A Break!", "Great Job!", ].map(function(instruction){
+        var msg = new SpeechSynthesisUtterance();
+        var voices = window.speechSynthesis.getVoices();
+        msg.voice = voices[26];
+        msg.voiceURI = voices[26].voiceURI
+        msg.text = instruction
+        console.log("msg text", msg)
+        return msg
+    });
 
     $scope.editTitle = false;
     $scope.mixName = function(){
@@ -279,7 +285,18 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
 
     };
     $scope.selectInstruction = function(instruction){
-        $scope.currentInstruction = instruction;
+                var msg = new SpeechSynthesisUtterance();
+                var voices = window.speechSynthesis.getVoices();
+                console.log("the instruction", instruction)
+                msg.voice = voices[26];
+                msg.voiceURI = voices[26].voiceURI
+                msg.text = instruction.text
+                console.log("msg text", msg)
+
+                 window.speechSynthesis.speak(msg);
+                $scope.currentInstruction = msg;
+
+
     };
     $scope.addVoiceToMix = function(text, trigger){
         MixBoardFactory.addEffectToMix( trigger, text , "voice")
@@ -361,6 +378,7 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
     $scope.formattedTimePassed = MixBoardFactory.getTimeObject($scope.totalTimePassed);
     $scope.soundEffects = MixBoardFactory.getEffects();
     $scope.effectIndex = 0;
+    $scope.voice;
 
     $scope.pauseMix=function(){
         $scope.currentMixTrack.wavesurfer.pause()
@@ -415,25 +433,21 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
             if ($scope.soundEffects[$scope.effectIndex] && $scope.soundEffects[$scope.effectIndex].trigger - $scope.totalTimePassed <= .2  ){
                     console.log("PLAY EFFECT NOW!!!!");
               if ($scope.soundEffects[$scope.effectIndex].type == "voice") {
-                console.log("PAUSING BECAUSE VOICE");
+                     console.log("PAUSING BECAUSE VOICE");
+                     console.log("voice",$scope.soundEffects[$scope.effectIndex] )
+                     $scope.soundEffects[$scope.effectIndex].effect.onend = function(e) {
+                         console.log('Finished in ' + event.elapsedTime + ' seconds.');
+                         $scope.voice = false;
+                         $scope.$digest();
+                         $scope.playClip();
+                     }
+                     $scope.soundEffects[$scope.effectIndex].effect.onstart = function(e) {
+                         $scope.voice = true;
+                         $scope.$digest();
+                         $scope.currentMixTrack.wavesurfer.pause();
+                     }
 
-               // $scope.read($scope.soundEffects[$scope.effectIndex].effect)
-                function voiceEndCallback() {
-                    console.log("Voice ended");
-                    $scope.playClip();
-
-                }
-                function voiceStartCalback() {
-                    console.log("Voice Started");
-                    $scope.currentMixTrack.wavesurfer.pause();
-                }
-
-                var parameters = {
-                    onend: voiceEndCallback,
-                    onstart: voiceStartCalback
-                };
-
-                responsiveVoice.speak($scope.soundEffects[$scope.effectIndex].effect,"UK English Female", parameters);
+                     window.speechSynthesis.speak($scope.soundEffects[$scope.effectIndex].effect);
               }
               else {
                // $scope.currentMixTrack.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(MixBoardFactory.createQuickWaveArray(), $scope.currentMixTrack.wavesurfer.backend.ac.currentTime, 2);
@@ -617,7 +631,7 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
     };
     //PLAY / PAUSE FUNCTIONALITY
     $(document).on('keyup', function (e) {
-        if (e.which == 18 && $scope.isLoaded && !$scope.disableSpace) {
+        if (e.which == 18) {
             if ($scope.isPlaying) {
                 wavesurfer.pause();
             } else {
