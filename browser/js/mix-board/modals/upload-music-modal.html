@@ -1,4 +1,9 @@
 <h2>Upload Music</h2>
-<input id="upload-field" type="file" multiple oninput="ok()">
-<button class="btn-primary" ng-click="ok()">upload</button>
-<button class="btn-warning" ng-click="ok()">cancel</button>
+<!-- <input id="upload-field" type="file" multiple oninput="ok()"> -->
+<form action="/api/upload" method="POST" enctype="multipart/form-data">
+  Select files to upload:
+  <input type="file" name="track" multiple>
+  <input type="submit" value="Upload Tracks">
+</form>
+<!-- <button class="btn-primary" ng-click="ok()">upload</button>
+<button class="btn-warning" ng-click="ok()">cancel</button> -->
