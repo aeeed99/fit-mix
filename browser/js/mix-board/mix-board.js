@@ -192,12 +192,6 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     }();
     $scope.tab = "music";
 
-    $scope.pad = function(number){
-        // if (number.toString().length === 1) return "0" + number.toString();
-        // return number;
-        return ("00");
-    }
-
     $scope.isLoaded = false;
     $scope.isPlaying = false;
     $scope.region;
