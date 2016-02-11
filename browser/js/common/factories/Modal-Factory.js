@@ -39,7 +39,13 @@ app.factory('ModalFactory', function($uibModal, $http){
             });
             modal.result.then(input => {
                 //MB: trigger time is set by user later, so all that is necessary is text
-                pushTo.push(input.text);
+                var msg = new SpeechSynthesisUtterance();
+                var voices = window.speechSynthesis.getVoices();
+                msg.voice = voices[26];
+                msg.voiceURI = voices[26].voiceURI
+                msg.text = input.text
+                window.speechSynthesis.speak(msg);
+                pushTo.push(msg);
             });
         }
     }

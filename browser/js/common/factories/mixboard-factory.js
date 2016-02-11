@@ -20,6 +20,30 @@ app.factory('MixBoardFactory', function(){
     };
 
     MixBoardFactory.addEffectToMix = function(effectTrigger, current, type){
+        //var msg = new SpeechSynthesisUtterance('Hello World');
+    //     var msg = new SpeechSynthesisUtterance();
+    //     var voices = window.speechSynthesis.getVoices();
+    //     console.log(voices)
+    //     var counter = 0;
+
+
+    // // function playsounds(counter) {
+    // //        if (counter<100){
+    // //             console.log(voices[counter])
+    // //             msg.voice = voices[counter];
+    // //             msg.voiceURI = voices[counter].voiceURI
+    // //             msg.text = voices[counter].name
+    // //             window.speechSynthesis.speak(msg);
+    // //             msg.onend = function(e) {
+    // //                  console.log('Finished in ' + event.elapsedTime + ' seconds.');
+    // //                   counter++
+    // //                   playsounds(counter)
+    // //             }
+    // //         }
+    // // }
+
+    // playsounds(counter)
+
         console.log("EFFECT", current);
         let effect = current;
         let trigger = +effectTrigger;
