@@ -24,8 +24,8 @@
     <p>Estimate the length of your mix</p>
     <p>(You can always change this later)</p>
     <div id="timepicker">
-      <input ng-model="mixData.duration.hours" type="number">
-      <input ng-model="mixData.duration.minutes" type="number">
+      <input class="number-input" ng-model="mixData.duration.hours" type="number" min="0" max="6">
+      <input class="number-input" ng-model="mixData.duration.minutes" type="number" min="0" max="59">
     </div>
   </uib-accordion-group>
   <!--<uib-accordion-group heading="Upload Music" is-open="true">-->
@@ -35,7 +35,7 @@
     <p>If everything looks good, confirm below. Otherwise click a heading to edit.</p>
     <ol>
       <li class="title">Title: {{mixData.name}}</li>
-      <li class="duration">Duration: {{mixData.duration.hours}}:{{mixData.duration.minutes}}</li>
+      <li class="duration">Duration: {{mixData.duration.hours}}:{{pad(mixData.duration.minutes)}}</li>
       <li class="phases">Template: {{mixData.selectedStructure.name}}</li>
     </ol>
     <button class="btn-info" ng-click="startMix()">Looks good, let's go!</button>

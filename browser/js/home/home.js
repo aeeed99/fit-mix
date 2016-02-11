@@ -72,7 +72,8 @@ app.controller('wizardController', function($scope, $state){
         },
         {
             name: "Custom",
-            description: "If you select custom, you can create and add stages to your mix during creation."
+            description: "If you select custom, you can create and add stages to your mix during creation.",
+            number: 3
         }
     ];
 

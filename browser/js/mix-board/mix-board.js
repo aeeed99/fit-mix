@@ -139,7 +139,8 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
             name: "ABS",
             duration: 1200,
             color: "two"
-        }]
+        }],
+        []
     ]
     var sfxPlaying;
     var currentSfx;
@@ -184,13 +185,18 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
         return 1800;
     }();
     $scope.phases = function(){
-        console.log("goddamn phases")
-        if($scope.wizardData && $scope.wizardData.selectedStructure.number){
+        if($scope.wizardData && $scope.wizardData.selectedStructure){
             return $scope.predefinedPhases[$scope.wizardData.selectedStructure.number];
         }
         return [];
     }();
     $scope.tab = "music";
+
+    $scope.pad = function(number){
+        // if (number.toString().length === 1) return "0" + number.toString();
+        // return number;
+        return ("00");
+    }
 
     $scope.isLoaded = false;
     $scope.isPlaying = false;
