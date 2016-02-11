@@ -15,7 +15,7 @@
     <uib-tab>
       <uib-tab-heading ng-click="voiceTabClick()"><i class="glyphicon glyphicon-bullhorn"></i> Instructions</uib-tab-heading>
       <div ng-repeat="instruction in instructions">
-      <instruction-panel ng-click="selectInstruction(instruction)" panel-identifier="stylizeTrack(instruction.text)" instruction-info="instruction.text"></instruction-panel>
+      <instruction-panel ng-click="selectInstruction(instruction)" panel-identifier="stylizeTrack(instruction)" instruction-info="instruction"></instruction-panel>
       </div>
     </uib-tab>
     <input id="search-bar" ng-model="trackFilter" placeholder=" search"/>
