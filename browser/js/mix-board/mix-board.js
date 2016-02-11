@@ -139,7 +139,8 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
             name: "ABS",
             duration: 1200,
             color: "two"
-        }]
+        }],
+        []
     ]
     var sfxPlaying;
     var currentSfx;
@@ -184,8 +185,7 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
         return 1800;
     }();
     $scope.phases = function(){
-        console.log("goddamn phases")
-        if($scope.wizardData && $scope.wizardData.selectedStructure.number){
+        if($scope.wizardData && $scope.wizardData.selectedStructure){
             return $scope.predefinedPhases[$scope.wizardData.selectedStructure.number];
         }
         return [];
