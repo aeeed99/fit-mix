@@ -8,7 +8,7 @@ var fs = require('fs-extra');
 
 const mongoose = require('mongoose');
 //const connectToDb = require('../server/db');
-
+const Track = require('mongoose').model('Track');
 const chalk = require('chalk');
 const Promise = require('bluebird');
 const helper = require('../../../../bin/helper');
@@ -20,12 +20,13 @@ module.exports = router;
 // then set the static path to directory with updated files
 // (so it can be used as src)
 
-router.post('/', function(req, res){
-    let files = req.body.files;
-});
+// router.post('/', function(req, res){
+//     let files = req.body.files;
+// });
 
 
-router.post('/upload', function (req, res) {
+router.post('/', function (req, res) {
+    console.log("uploading", req.body)
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
         res.writeHead(200, {
@@ -37,7 +38,7 @@ router.post('/upload', function (req, res) {
             files: files
         }));
 
-        new track({
+        new Track({
             name: fields.title
         }).save(function (e, result) {
             console.log('new track saved', result);
