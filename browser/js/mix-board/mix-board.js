@@ -156,6 +156,7 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     $scope.wizardData = $stateParams.wizardData;
     $scope.library = tracks;
     $scope.sfxBase = sfx;
+
     $scope.instructions = ["CRUNCH TIME!!!", "Plank For 30 Seconds", "Take A Break!", "Great Job!", ].map(function(instruction){
         var voices = window.speechSynthesis.getVoices();
         if (voices){
@@ -314,6 +315,7 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
             $scope.currentInstruction = voiceObj;
         }
 
+
     };
     $scope.addVoiceToMix = function(text, trigger){
         MixBoardFactory.addEffectToMix( trigger, text , "voice")
@@ -395,7 +397,6 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
     $scope.formattedTimePassed = MixBoardFactory.getTimeObject($scope.totalTimePassed);
     $scope.soundEffects = MixBoardFactory.getEffects();
     $scope.effectIndex = 0;
-    $scope.voice;
 
     $scope.pauseMix=function(){
         $scope.currentMixTrack.wavesurfer.pause()
@@ -669,7 +670,7 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
     };
     //PLAY / PAUSE FUNCTIONALITY
     $(document).on('keyup', function (e) {
-        if (e.which == 18) {
+        if (e.which == 18 && $scope.isLoaded && !$scope.disableSpace) {
             if ($scope.isPlaying) {
                 wavesurfer.pause();
             } else {
