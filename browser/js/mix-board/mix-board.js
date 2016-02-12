@@ -157,13 +157,23 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     $scope.library = tracks;
     $scope.sfxBase = sfx;
     $scope.instructions = ["CRUNCH TIME!!!", "Plank For 30 Seconds", "Take A Break!", "Great Job!", ].map(function(instruction){
-        var msg = new SpeechSynthesisUtterance();
         var voices = window.speechSynthesis.getVoices();
-        msg.voice = voices[26];
-        msg.voiceURI = voices[26].voiceURI
-        msg.text = instruction
-        console.log("msg text", msg)
-        return msg
+        if (voices){
+            var msg = new SpeechSynthesisUtterance();
+            msg.voice = voices[26];
+            msg.voiceURI = voices[26].voiceURI
+            msg.text = instruction
+            msg.linux = false;
+            console.log("msg text", msg)
+            return msg
+        } else{
+            // code for poor Nick's computer
+            var voiceObj = {};
+            voiceObj.text = instruction;
+            voiceObj.linux = true;
+            return voiceObj;
+        }
+
     });
 
     $scope.editTitle = false;
@@ -285,17 +295,24 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
 
     };
     $scope.selectInstruction = function(instruction){
-                var msg = new SpeechSynthesisUtterance();
-                var voices = window.speechSynthesis.getVoices();
-                console.log("the instruction", instruction)
-                msg.voice = voices[26];
-                msg.voiceURI = voices[26].voiceURI
-                msg.text = instruction.text
-                console.log("msg text", msg)
-
-                 window.speechSynthesis.speak(msg);
-                $scope.currentInstruction = msg;
-
+        var voices = window.speechSynthesis.getVoices();
+        if (voices){
+            var msg = new SpeechSynthesisUtterance();
+            console.log("the instruction", instruction)
+            msg.voice = voices[26];
+            msg.voiceURI = voices[26].voiceURI;
+            msg.text = instruction.text;
+            msg.linux = false;
+            console.log("msg text", msg);
+            window.speechSynthesis.speak(msg);
+            $scope.currentInstruction = msg;
+        } else {
+            var voiceObj = {};
+            voiceObj.text = instruction.text;
+            voiceObj.linux = true;
+            responsiveVoice.speak( instruction.text, "US English Female");
+            $scope.currentInstruction = voiceObj;
+        }
 
     };
     $scope.addVoiceToMix = function(text, trigger){
@@ -435,19 +452,40 @@ app.controller('mixPlaybackController', function($scope, MixBoardFactory) {
               if ($scope.soundEffects[$scope.effectIndex].type == "voice") {
                      console.log("PAUSING BECAUSE VOICE");
                      console.log("voice",$scope.soundEffects[$scope.effectIndex] )
-                     $scope.soundEffects[$scope.effectIndex].effect.onend = function(e) {
+
+                     if ($scope.soundEffects[$scope.effectIndex].effect.linux){
+                        $scope.soundEffects[$scope.effectIndex].effect.onend = function(e) {
                          console.log('Finished in ' + event.elapsedTime + ' seconds.');
                          $scope.voice = false;
                          $scope.$digest();
                          $scope.playClip();
-                     }
-                     $scope.soundEffects[$scope.effectIndex].effect.onstart = function(e) {
-                         $scope.voice = true;
-                         $scope.$digest();
-                         $scope.currentMixTrack.wavesurfer.pause();
-                     }
+                         }
+                         $scope.soundEffects[$scope.effectIndex].effect.onstart = function(e) {
+                             $scope.voice = true;
+                             $scope.$digest();
+                             $scope.currentMixTrack.wavesurfer.pause();
+                         }
 
-                     window.speechSynthesis.speak($scope.soundEffects[$scope.effectIndex].effect);
+                        window.speechSynthesis.speak($scope.soundEffects[$scope.effectIndex].effect);
+                    } else {
+                        function voiceEndCallback() {
+                          console.log("Voice ended");
+                           $scope.playClip();
+                        }
+                        function voiceStartCalback() {
+                            console.log("Voice Started");
+                            $scope.currentMixTrack.wavesurfer.pause();
+                        }
+
+                        var parameters = {
+                            onend: voiceEndCallback,
+                            onstart: voiceStartCalback
+                        };
+
+                        responsiveVoice.speak($scope.soundEffects[$scope.effectIndex].effect.text,"UK English Female", parameters);
+
+                    }
+
               }
               else {
                // $scope.currentMixTrack.wavesurfer.backend.gainNode.gain.setValueCurveAtTime(MixBoardFactory.createQuickWaveArray(), $scope.currentMixTrack.wavesurfer.backend.ac.currentTime, 2);
