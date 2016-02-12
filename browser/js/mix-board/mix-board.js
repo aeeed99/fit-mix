@@ -320,7 +320,7 @@ app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFact
         $scope.phases.forEach(function (phase) {
             sum += phase.duration;
         });
-        return sum
+        return sum;
     };
     $scope.reorderMix = function (index, item, event, array) {
         //phases don't have artists, so this ensures no dragging between phases and mix
@@ -348,6 +348,17 @@ app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFact
     };
     $scope.openAddPhase = () => ModalFactory.openAddPhase($scope.phases);
     $scope.openAddInstruction = () => ModalFactory.openAddInstruction($scope.instructions);
+    $(document).ready(function() {
+        var phaseAdder = $('#phase-adder');
+        $('#lower-panel').mouseenter(function () {
+            phaseAdder.addClass('phase-adder-shown');
+            phaseAdder.removeClass('phase-adder-hidden');
+        });
+        $('#lower-panel').mouseleave(function(){
+            phaseAdder.removeClass('phase-adder-shown');
+            phaseAdder.addClass('phase-adder-hidden');
+        })
+    });
 });
 
 app.controller('mixPlaybackController', function($scope, MixBoardFactory) {

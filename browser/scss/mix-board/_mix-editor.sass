@@ -1,5 +1,5 @@
 @import "../_compatibility"
-
+@import '../design-variables'
 
 
 #upper-panel
@@ -48,3 +48,26 @@
   background: transparent
 .sfx-marker
   color: rgba(255, 26, 44, 0.93) !important
+
+.mix-frame #phase-adder
+  background-color: $nav-tab
+
+.mix-frame #phase-adder.phase-adder-hidden
+  background-color: transparent
+  span
+    color: transparent
+  border-color: transparent
+  text-color: transparent
+  color: transparent
+  &:hover
+    span
+      color: $color3-bright-accent
+    background: rgba(0, 94, 94, 0.49)
+    color: rgba(0, 139, 139, 0.62)
+    border: 2px dashed $color3-dark
+
+
+.mix-frame #phase-adder.phase-adder-shown
+  span
+    color: $color3-bright-accent
+  border: 2px dashed #cc0036
