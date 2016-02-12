@@ -155,7 +155,6 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     //not a string is considered a sfx
     $scope.wizardData = $stateParams.wizardData;
     $scope.library = tracks;
-    console.log("$scope.library", $scope.library)
     $scope.sfxBase = sfx;
     $scope.instructions = ["hello", "goodbye"];
 
@@ -660,7 +659,6 @@ app.controller('uploadModalController', function ($scope, $rootScope, $uibModalI
 
     $(document).on('keyup', function (e) {
         if (e.keyCode == 27) {
-            console.log("closing");
             $uibModalInstance.dismiss('cancel');
         }
     });
@@ -691,8 +689,6 @@ app.service('fileUpload',  function ($http, $state, $window) {
         files.forEach(function(file){
             fd.append('audio[]', file, file.name);
         })
-
-        console.log("files", files)
 
         $http.post(uploadUrl, fd, {
             transformRequest: angular.identity,
