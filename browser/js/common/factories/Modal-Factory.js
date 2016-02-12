@@ -35,7 +35,23 @@ app.factory('ModalFactory', function($uibModal, $http){
             });
             modal.result.then(input => {
                 //MB: trigger time is set by user later, so all that is necessary is text
-                pushTo.push(input.text);
+                var voices = window.speechSynthesis.getVoices();
+                if (voices){
+                    var msg = new SpeechSynthesisUtterance();
+                    msg.voice = voices[26];
+                    msg.voiceURI = voices[26].voiceURI
+                    msg.text = input.text
+                    msg.linux = false;
+                    window.speechSynthesis.speak(msg);
+                    pushTo.push(msg);
+                } else{
+                    var voiceObj = {};
+                    voiceObj.text = input.text;
+                    voiceObj.linux = true;
+                    responsiveVoice.speak( input.text, "US English Female");
+                    pushTo.push(voiceObj);
+                }
+
             });
         }
     }
