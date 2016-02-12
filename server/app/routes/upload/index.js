@@ -10,6 +10,7 @@ var uploading = multer({
   dest: __dirname + '../../../../uploads/',
 })
 
+const filesDir = path.join(process.cwd(), 'server/audio');
 const mongoose = require('mongoose');
 //const connectToDb = require('../server/db');
 const Track = require('mongoose').model('Track');
@@ -25,6 +26,9 @@ const extractMetaData = function (path) {
     return helper.dirWalk(path)
         .then(function (filesNames) {
             console.log("filesNames", filesNames);
+            filesNames = filesNames.filter(function(file){
+                return file.indexOf('DS_Store') < 0
+            })
             return filesNames
         })
         .map(function (name) {
@@ -42,7 +46,7 @@ const clearDb = function () {
 };
 
 
-router.post('/', uploading.array('track', 2), function (req, res, next) {
+router.post('/', uploading.array('file', 12), function (req, res, next) {
 console.log("tracks", req.files)
 connectToDb.bind({docsToSave: {}})
     .then(function () {
@@ -60,6 +64,7 @@ connectToDb.bind({docsToSave: {}})
         var promises = [];
         songs.forEach(function (song) {
           console.log("song", song)
+       //   console.log("song id", song.path.split('/').pop())
             var newSong = new Track({
                 name: song.name,
                 artist: song.artist,
@@ -76,9 +81,28 @@ connectToDb.bind({docsToSave: {}})
         });
         return Promise.all(promises)
     })
+    // move the files to a directory on the server
+    .then(function (songs) {
+        console.log("move files");
+        this.songs = songs;
+        console.log("the songs", this.songs)
+        //console.log("files", this.files)
+        return Promise.map(this.songs, function (file) {
+            return new Promise(function (resolve, reject) {
+                console.log("path", file.path);
+                let readStream = fs.createReadStream(file.path);
+                let writeStream = fs.createWriteStream(path.join(filesDir, file._id.toString()));
+                readStream.on('error', reject);
+                writeStream.on('error', reject);
+                writeStream.on('finish', resolve);
+                readStream.pipe(writeStream)
+            })
+        })
+    })
     .then(function (results) {
         console.log('complete!', results);
         //process.exit(0)
+       // res.send(results).status(200)
         res.send(results).status(200)
     })
     .catch(function (e) {

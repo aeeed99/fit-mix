@@ -155,6 +155,7 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     //not a string is considered a sfx
     $scope.wizardData = $stateParams.wizardData;
     $scope.library = tracks;
+    console.log("$scope.library", $scope.library)
     $scope.sfxBase = sfx;
     $scope.instructions = ["CRUNCH TIME!!!", "Plank For 30 Seconds", "Take A Break!", "Great Job!", ].map(function(instruction){
         var msg = new SpeechSynthesisUtterance();
@@ -662,13 +663,61 @@ app.controller('phaseModalController', function ($scope, $uibModalInstance) {
     };
 });
 
-app.controller('uploadModalController', function ($scope, $uibModalInstance) {
-    $scope.ok = function () {
+app.controller('uploadModalController', function ($scope, $rootScope, $uibModalInstance, $state, fileUpload) {
+    // $scope.ok = function () {
+    //     $uibModalInstance.close("upload-field");
+    // };
+    // $uibModalInstance.dismiss('cancel');
+    // //NP VVV Not working :( VVV
+    // $scope.cancel = function () {
+    //     $uibModalInstance.dismiss('cancel');
+    // };
+
+    $scope.uploadFile = function(){
+        var file = $scope.myFile;
+        console.log('file is ' );
+        console.dir(file);
+        var uploadUrl = "/api/upload";
+        fileUpload.uploadFileToUrl(file, uploadUrl);
         $uibModalInstance.close("upload-field");
+        console.log("made it here");
     };
-    $uibModalInstance.dismiss('cancel');
-    //NP VVV Not working :( VVV
-    $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
+});
+
+app.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
     };
+}]);
+
+app.service('fileUpload',  function ($http, $state, $window) {
+    this.uploadFileToUrl = function(file, uploadUrl){
+        var fd = new FormData();
+        fd.append('file', file);
+        $http.post(uploadUrl, fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+        .success(function(){
+            console.log("success!!!!")
+              //$state.go('mix-board');
+            // return
+            //$route.reload();
+        $window.location.reload();
+        })
+        .error(function(){
+            console.log("fail!!!!")
+
+        });
+    }
 });
