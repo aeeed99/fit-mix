@@ -346,18 +346,22 @@ app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFact
         style.width = (track.duration / $scope.mixLength) * 100 + '%';
         return style;
     };
-    $scope.openAddPhase = () => ModalFactory.openAddPhase($scope.phases);
+    $scope.openAddPhase = () => {
+        ModalFactory.openAddPhase($scope.phases);
+        $('#phase-adder').blur()
+    };
     $scope.openAddInstruction = () => ModalFactory.openAddInstruction($scope.instructions);
     $(document).ready(function() {
-        var phaseAdder = $('#phase-adder');
-        $('#lower-panel').mouseenter(function () {
+        var phaseAdder = $('#phase-adder'),
+            lowerPanel = $('#lower-panel');
+        lowerPanel.mouseenter(function () {
             phaseAdder.addClass('phase-adder-shown');
             phaseAdder.removeClass('phase-adder-hidden');
         });
-        $('#lower-panel').mouseleave(function(){
+        lowerPanel.mouseleave(function(){
             phaseAdder.removeClass('phase-adder-shown');
             phaseAdder.addClass('phase-adder-hidden');
-        })
+        });
     });
 });
 
