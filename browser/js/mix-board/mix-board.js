@@ -674,11 +674,12 @@ app.controller('uploadModalController', function ($scope, $rootScope, $uibModalI
     // };
 
     $scope.uploadFile = function(){
-        var file = $scope.myFile;
+        var files = $scope.myFiles;
+        // debugger;
         console.log('file is ' );
-        console.dir(file);
+        console.dir(files);
         var uploadUrl = "/api/upload";
-        fileUpload.uploadFileToUrl(file, uploadUrl);
+        fileUpload.uploadFileToUrl(files, uploadUrl);
         $uibModalInstance.close("upload-field");
         console.log("made it here");
     };
@@ -693,7 +694,8 @@ app.directive('fileModel', ['$parse', function ($parse) {
 
             element.bind('change', function(){
                 scope.$apply(function(){
-                    modelSetter(scope, element[0].files[0]);
+                    //var files = [];
+                    modelSetter(scope, element[0].files);
                 });
             });
         }
@@ -701,9 +703,16 @@ app.directive('fileModel', ['$parse', function ($parse) {
 }]);
 
 app.service('fileUpload',  function ($http, $state, $window) {
-    this.uploadFileToUrl = function(file, uploadUrl){
+    this.uploadFileToUrl = function(files, uploadUrl){
         var fd = new FormData();
-        fd.append('file', file);
+
+        files = [].slice.call(files)
+        files.forEach(function(file){
+            fd.append('audio[]', file, file.name);
+        })
+
+        console.log("files", files)
+
         $http.post(uploadUrl, fd, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
@@ -713,7 +722,7 @@ app.service('fileUpload',  function ($http, $state, $window) {
               //$state.go('mix-board');
             // return
             //$route.reload();
-        $window.location.reload();
+         $window.location.reload();
         })
         .error(function(){
             console.log("fail!!!!")

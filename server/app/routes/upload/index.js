@@ -46,14 +46,11 @@ const clearDb = function () {
 };
 
 
-router.post('/', uploading.array('file', 12), function (req, res, next) {
+router.post('/', uploading.array('audio[]', 20), function (req, res, next) {
 console.log("tracks", req.files)
+//console.log("body", req.body)
+
 connectToDb.bind({docsToSave: {}})
-    .then(function () {
-        //clear database
-        console.log("clearing")
-        return clearDb()
-    })
     .then(function () {
         // get song metadata
         console.log("metadata")
