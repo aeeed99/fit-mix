@@ -1,4 +1,5 @@
 # FitMix
+##### (formally SpinMix)
 ######An online mixing tool that allows fitness professionals and enthusiasts to tailor their music to their workout routines.
 Typically, playlists for workouts and fitness classes are static--at most, they’re themed and ordered for a certain effect. FitMix arms athletes and instructors with extensive control for creating dynamic exercise mixes that follow the structure and intensity of their workouts; users can enhance their mixes with sound effects and text-to-speech instructions, even as they clip the best parts of their favorite songs to create invigorating motivational mashups.
 
