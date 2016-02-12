@@ -648,13 +648,59 @@ app.controller('phaseModalController', function ($scope, $uibModalInstance) {
     };
 });
 
-app.controller('uploadModalController', function ($scope, $uibModalInstance) {
-    $scope.ok = function () {
+app.controller('uploadModalController', function ($scope, $rootScope, $uibModalInstance, $state, fileUpload) {
+
+    $scope.uploadFile = function(){
+        var files = $scope.myFiles;
+        var uploadUrl = "/api/upload";
+        fileUpload.uploadFileToUrl(files, uploadUrl);
         $uibModalInstance.close("upload-field");
     };
-    $uibModalInstance.dismiss('cancel');
-    //NP VVV Not working :( VVV
-    $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
+
+    $(document).on('keyup', function (e) {
+        if (e.keyCode == 27) {
+            $uibModalInstance.dismiss('cancel');
+        }
+    });
+
+});
+
+app.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files);
+                });
+            });
+        }
     };
+}]);
+
+app.service('fileUpload',  function ($http, $state, $window) {
+    this.uploadFileToUrl = function(files, uploadUrl){
+        var fd = new FormData();
+
+        files = [].slice.call(files)
+        files.forEach(function(file){
+            fd.append('audio[]', file, file.name);
+        })
+
+        $http.post(uploadUrl, fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+        .success(function(){
+            console.log("success!!!!")
+            $state.reload();
+        })
+        .error(function(){
+            console.log("fail!!!!")
+
+        });
+    }
 });

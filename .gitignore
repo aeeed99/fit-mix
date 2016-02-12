@@ -6,3 +6,4 @@ public
 coverage
 server/audio/**
 server/sfx/**
+server/uploads/**
