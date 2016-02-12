@@ -47,8 +47,6 @@ const clearDb = function () {
 
 
 router.post('/', uploading.array('audio[]', 20), function (req, res, next) {
-console.log("tracks", req.files)
-//console.log("body", req.body)
 
 connectToDb.bind({docsToSave: {}})
     .then(function () {
@@ -98,14 +96,11 @@ connectToDb.bind({docsToSave: {}})
     })
     .then(function (results) {
         console.log('complete!', results);
-        //process.exit(0)
-       // res.send(results).status(200)
         res.send(results).status(200)
     })
     .catch(function (e) {
         console.error(e);
         console.error(e.stack);
-      //  process.exit()
     });
 
 });

@@ -664,25 +664,21 @@ app.controller('phaseModalController', function ($scope, $uibModalInstance) {
 });
 
 app.controller('uploadModalController', function ($scope, $rootScope, $uibModalInstance, $state, fileUpload) {
-    // $scope.ok = function () {
-    //     $uibModalInstance.close("upload-field");
-    // };
-    // $uibModalInstance.dismiss('cancel');
-    // //NP VVV Not working :( VVV
-    // $scope.cancel = function () {
-    //     $uibModalInstance.dismiss('cancel');
-    // };
 
     $scope.uploadFile = function(){
         var files = $scope.myFiles;
-        // debugger;
-        console.log('file is ' );
-        console.dir(files);
         var uploadUrl = "/api/upload";
         fileUpload.uploadFileToUrl(files, uploadUrl);
         $uibModalInstance.close("upload-field");
-        console.log("made it here");
     };
+
+    $(document).on('keyup', function (e) {
+        if (e.keyCode == 27) {
+            console.log("closing");
+            $uibModalInstance.dismiss('cancel');
+        }
+    });
+
 });
 
 app.directive('fileModel', ['$parse', function ($parse) {
@@ -694,7 +690,6 @@ app.directive('fileModel', ['$parse', function ($parse) {
 
             element.bind('change', function(){
                 scope.$apply(function(){
-                    //var files = [];
                     modelSetter(scope, element[0].files);
                 });
             });
@@ -719,10 +714,7 @@ app.service('fileUpload',  function ($http, $state, $window) {
         })
         .success(function(){
             console.log("success!!!!")
-              //$state.go('mix-board');
-            // return
-            //$route.reload();
-         $window.location.reload();
+            $state.reload();
         })
         .error(function(){
             console.log("fail!!!!")
