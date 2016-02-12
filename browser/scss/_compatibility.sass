@@ -1,3 +1,5 @@
+@import '_design-variables'
+
 =shadow($value)
   -moz-box-shadow: $value
   -webkit-box-shadow: $value
@@ -27,3 +29,17 @@
   +shadow(0 2px 5px rgba(203, 4, 188, 0.67))
   margin: 0 0 8px 0
   padding: 6px 0
+
+=placeholder($value)
+  ::-webkit-input-placeholder
+    color: $value
+  :-moz-placeholder
+    color: $value
+    opacity: 1
+  ::-moz-placeholder
+    color: $value
+    opacity: 1
+  :-ms-input-placeholder
+    color: $value
+  :placeholder-shown
+    color: $value

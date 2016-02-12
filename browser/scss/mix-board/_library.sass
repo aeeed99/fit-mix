@@ -4,7 +4,7 @@
 
 #library
   +inner-frame()
-  +shadow(inset 0 0 10px $color-inner-shadow)
+  //+shadow(inset 0 0 10px $color-inner-shadow)
   padding: 0 8px
   margin: 24px auto
   height: 55vh
@@ -21,8 +21,9 @@
   margin: 8px 10px
   padding: 1px 4px
   font-family: $font-standard
-  background-color: #7C5CD8
   font-size: 12px
+  &:hover
+    background: $track-panel-selected
   span
     display: block
     color: white
@@ -45,27 +46,32 @@
       float: right
 
 .track-selected > #track-panel-1, .track-selected > #track-panel-2, .track-selected > #track-panel-3, .track-selected > #track-panel-4
-  background-color: #C5A9FB !important
-  border: 3px solid #FFFFFF
+  background: $track-panel-selected !important
+  border: 1px solid $track-panel-selected-border
+  +shadow(0 0 10px white)
 
 #track-panel-1
-  background-color: $track-panel-color-1
+  background: $track-panel-color-1
   +track-panel
 
 #track-panel-3
-  background-color: $track-panel-color-3
+  background: $track-panel-color-3
   +track-panel
 
 #track-panel-4
-  background-color: $track-panel-color-4
+  background: $track-panel-color-4
   +track-panel
 
 #search-bar
   float: right
   margin: 10px
   border-radius: 12px
+  border-color: transparent
   padding: 0 8px
   width: 16%
+  color: $search-bar-color
+  +placeholder($search-bar-color)
+  background: $search-bar
 
 .upload-btn
   position: absolute
