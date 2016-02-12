@@ -4,7 +4,7 @@ Typically, playlists for workouts and fitness classes are static--at most, theyâ
 
 Though it gives athletes powerful tools for editing their music, FitMix maintains a straightforward, intuitive interface. Features such as drag-and-drop reordering, dynamic resizing, and one-click track cropping lets anyone create great mixes with no experience needed.
 
-#Contributors
+#Developers
 
 Emily Chesler: [Github](https://github.com/emches)
 
