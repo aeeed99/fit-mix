@@ -19,7 +19,14 @@ app.config(function ($stateProvider) {
 app.controller('MixBoardController', function ($scope, $document, $stateParams, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
     //MB: I LIVE ON THE EDGE ^^^^^^
-    $scope.predefinedPhases = [
+        $document.ready(function(){
+            $('.sfx-button').hide();
+            $('.music-button').hide();
+            $('.instruction-button').hide();
+        });
+
+        $scope.predefinedPhases = [
+
         [{
             name: "EXERCISE",
             duration: 30,
@@ -213,6 +220,8 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
         $('.music-button').show();
         $('.sfx-button').hide();
         $('.instruction-button').hide();
+        $('.sfx-button').hide();
+        $('.instruction-button').hide();
     };
     $scope.sfxTabClick = function () {
         $scope.tab = "sfx";
@@ -224,6 +233,7 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
         $('.sfx-button').show();
         $('.music-button').hide();
         $('.instruction-button').hide();
+
     };
     $scope.voiceTabClick = function () {
         $scope.tab = "instructions";
@@ -235,6 +245,7 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
         $('.instruction-button').show();
         $('.music-button').hide();
         $('.sfx-button').hide();
+
     };
     $scope.stylizeEffect = function (effect) {
         let style = {};
@@ -527,6 +538,7 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
         console.log("track", track);
         // CHES - "isLoaded" is for loading pre-saved data
         $scope.isLoaded = false;
+        $('.music-button').show();
         // CHES - remove previous wavesurfer if exists
         if (wavesurfer) {
             wavesurfer.pause();
