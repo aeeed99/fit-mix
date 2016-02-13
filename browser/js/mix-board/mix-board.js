@@ -19,7 +19,14 @@ app.config(function ($stateProvider) {
 app.controller('MixBoardController', function ($scope, $document, $stateParams, tracks, sfx, MixBoardFactory) {
     // HARD CODED RIGHT NOW
     //MB: I LIVE ON THE EDGE ^^^^^^
-    $scope.predefinedPhases = [
+        $document.ready(function(){
+            $('.sfx-button').hide();
+            $('.music-button').hide();
+            $('.instruction-button').hide();
+        });
+
+        $scope.predefinedPhases = [
+
         [{
             name: "EXERCISE",
             duration: 30,
@@ -223,6 +230,7 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
         $('.sfx-button').show();
         $('.music-button').hide();
         $('.instruction-button').hide();
+
     };
     $scope.voiceTabClick = function () {
         $scope.tab = "instructions";
@@ -234,6 +242,7 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
         $('.instruction-button').show();
         $('.music-button').hide();
         $('.sfx-button').hide();
+
     };
     $scope.stylizeEffect = function (effect) {
         let style = {};
@@ -529,10 +538,12 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
         console.log("track", track);
         // CHES - "isLoaded" is for loading pre-saved data
         $scope.isLoaded = false;
+        $('.music-button').show();
         // CHES - remove previous wavesurfer if exists
         if (wavesurfer) {
             wavesurfer.pause();
             $("#track-preview").empty();
+            $("#track-timeline").empty();
         }
         $scope.lengthModels = {};
         $scope.currentTrack = MixBoardFactory.getCurrentSong($scope.library, track);
@@ -565,8 +576,7 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
             $scope.currentTrack.fade = $scope.currentTrack.fade ? $scope.currentTrack.fade : undefined;
             hideProgress();
             $scope.$digest();
-            // CHES - creates track timeline
-            var timeline = MixBoardFactory.createTimeline(wavesurfer);
+
             MixBoardFactory.enableDragSelection(wavesurfer);
 
             // CHES - if it finds a pre-existing region, it will preload it
@@ -576,6 +586,8 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
                 MixBoardFactory.addRegion(wavesurfer, $scope.currentTrack.region);
             }
 
+            // CHES - creates track timeline
+            var timeline = MixBoardFactory.createTimeline(wavesurfer);
             // CHES - play track once ready
             wavesurfer.play();
             $scope.isPlaying = true;
