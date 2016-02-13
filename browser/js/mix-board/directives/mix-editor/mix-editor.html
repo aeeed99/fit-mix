@@ -31,10 +31,10 @@
              dur-sum="durSum()"
              mix-length="mixLength" workout-len="phase.duration" ng-drop="true"
              ng-drop-success="reorderPhase($index, $data, $event, phases)">
-      <div id="phase-edit-button" class="shown">
+      <div id="phase-edit-button">
         <button class="btn btn-default" ng-click="removePhase($index)"><span class="glyphicon glyphicon-ban-circle"></span></button>
       </div>
-      <div ng-drag="true" ng-drag-data="phase" id="{{phase.color}}" class="a-phase phase-shown">
+      <div ng-drag="true" ng-drag-data="phase" id="{{phase.color}}" class="a-phase">
         <p>{{phase.name}}</p>
         <p>{{phase.duration}} SEC</p>
       </div>
