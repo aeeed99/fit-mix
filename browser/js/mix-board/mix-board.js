@@ -220,8 +220,6 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
         $('.music-button').show();
         $('.sfx-button').hide();
         $('.instruction-button').hide();
-        $('.sfx-button').hide();
-        $('.instruction-button').hide();
     };
     $scope.sfxTabClick = function () {
         $scope.tab = "sfx";
