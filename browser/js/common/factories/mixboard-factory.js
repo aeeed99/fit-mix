@@ -1,9 +1,25 @@
-app.factory('MixBoardFactory', function(){
+app.factory('MixBoardFactory', function($http){
     var MixBoardFactory = {};
     var tempID = 0;
     MixBoardFactory.currentMix = [];
     MixBoardFactory.cleanMix = [];
     MixBoardFactory.soundEffects = [];
+
+    MixBoardFactory.saveMix = function(name, length){
+        console.log("saveMix called with")
+        console.log(name, length);
+        console.log(this.currentMix);
+        console.log(this.soundEffects);
+        let mixTracks = this.currentMix;
+        let mixEffects = this.soundEffects;
+        $http.post('/api/mix/', {
+            name: name,
+            tracks: mixTracks,
+            effects: mixEffects,
+            length: length,
+            published: true
+        })
+    };
 
     MixBoardFactory.getMix = function(){
         return MixBoardFactory.currentMix;

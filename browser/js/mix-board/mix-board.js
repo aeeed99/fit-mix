@@ -157,12 +157,14 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     $scope.library = tracks;
     $scope.sfxBase = sfx;
     $scope.instructions = ["hello", "goodbye"];
-
+    $scope.staticLength = 1800;
+    $scope.staticName = "My FitMix";
     console.log("sfxBase", $scope.sfxBase);
 
     $scope.editTitle = false;
     $scope.mixName = function(){
         if($scope.wizardData && $scope.wizardData.name){
+            $scope.staticName = $scope.wizardData.name;
             return $scope.wizardData.name
         }
             return "My FitMix";
@@ -173,6 +175,7 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
             let hours = 0;
             if ($scope.wizardData.duration.minutes) minutes = $scope.wizardData.duration.minutes * 60;
             if ($scope.wizardData.duration.hours) hours = $scope.wizardData.duration.hours * 3600;
+            $scope.staticLength = hours + minutes;
             return hours + minutes;
         }
         return 1800;
@@ -206,7 +209,10 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     $scope.read = function(text){
         responsiveVoice.speak(text, "US English Female");
     };
-
+    $scope.publishMix = function(){
+        console.log("pubMix called")
+        MixBoardFactory.saveMix($scope.staticName, $scope.staticLength);
+    }
     $scope.musicTabClick = function(){
         $scope.tab = "music";
         $scope.disableSpace = false;

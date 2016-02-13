@@ -10,12 +10,14 @@ module.exports = router;
 
 router.route('/')
     .get(function (req, res, next) {
+        console.log("hitting api mix");
         Mix.find({}).exec()
-            .then(mixes => send(mixes))
+            .then(mixes => res.send(mixes))
             .then(null, next);
     })
     .post(function (req, res, next) {
-        Mix.create(req.body).exec()
+        console.log('post request received')
+        Mix.create(req.body)
             .then(mixes => res.status(201).send(mixes))
             .then(null, next)
     });
