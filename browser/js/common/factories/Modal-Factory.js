@@ -13,6 +13,11 @@ app.factory('ModalFactory', function($uibModal, $http){
                     duration: input.duration,
                     color: "two"
                 });
+                window.setTimeout(function(){
+                    $('.a-phase').click(function(){
+                        alert("did it work?")
+                    });
+                }, 10);
             });
         },
         openUploadMusic: function() {
