@@ -27,15 +27,19 @@
 </div>
 <div id="lower-panel">
   <div class="row resizable mix-frame" id="phases-view">
-    <section ng-repeat="phase in phases" resizable r-directions="['right']" r-flex="true" dur-sum="durSum()"
+    <section class="phase-area" ng-repeat="phase in phases" resizable r-directions="['right']" r-flex="true"
+             dur-sum="durSum()"
              mix-length="mixLength" workout-len="phase.duration" ng-drop="true"
              ng-drop-success="reorderPhase($index, $data, $event, phases)">
-      <div id="phase-edit-button" class="shown"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></button></div>
+      <div id="phase-edit-button" class="shown">
+        <button class="btn btn-default" ng-click="removePhase($index)"><span class="glyphicon glyphicon-ban-circle"></span></button>
+      </div>
       <div ng-drag="true" ng-drag-data="phase" id="{{phase.color}}" class="a-phase phase-shown">
         <p>{{phase.name}}</p>
         <p>{{phase.duration}} SEC</p>
       </div>
     </section>
-    <button id="phase-adder" class="phase-adder-hidden" ng-click="openAddPhase()"><span class="glyphicon glyphicon-plus-sign"</button>
+    <button id="phase-adder" class="phase-adder-hidden" ng-click="openAddPhase()"><span
+      class="glyphicon glyphicon-plus-sign"</button>
   </div>
 </div>

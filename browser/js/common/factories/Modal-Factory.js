@@ -14,8 +14,13 @@ app.factory('ModalFactory', function($uibModal, $http){
                     color: "two"
                 });
                 window.setTimeout(function(){
-                    $('.a-phase').click(function(){
-                        alert("did it work?")
+                    let $aPhase = $('.phase-area');
+                    $aPhase.mouseenter(function(){
+                        let $this = $(this);
+                        $this.children('#phase-edit-button').addClass('shown');
+                    });
+                    $aPhase.mouseleave(function(){
+                        $(this).children('#phase-edit-button').removeClass('shown');
                     });
                 }, 10);
             });

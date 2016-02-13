@@ -334,6 +334,9 @@ app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFact
             MixBoardFactory.reorderInPlace(index, item, event, array);
         }
     };
+    $scope.removePhase = function(idx){
+        $scope.phases.splice(idx, 1);
+    };
     $scope.prettyDuration = function (track) {
         return (track.duration - track.duration % 60) / 60 + ":" + track.duration % 60;
     };

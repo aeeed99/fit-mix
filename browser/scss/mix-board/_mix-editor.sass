@@ -72,6 +72,7 @@
     background: $button-background-hover
 
 #phase-edit-button
+  display: none //NP when .shown is absent, button is hidden
   float: right
   width: 0px
   position: relative
@@ -81,4 +82,7 @@
     background: rgba(90, 90, 90, 0.55)
     border: none
     border-radius: 2px
+
+#phase-edit-button.shown
+  display: block
 
