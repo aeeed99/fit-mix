@@ -4,9 +4,7 @@
   <div ng-controller="prevWavController">
     <library-view></library-view>
     <action-buttons></action-buttons>
-    <div ng-show="isLoaded" class="row">
-      <button class="fader-btn" ng-click="showFader()"><span class="glyphicon glyphicon-plus-sign"></span> FADE</button>
-    </div>
+
     <div ng-show="addFade" class="row fader" ng-show="isLoaded">
       <rzslider id="faders"
                 rz-slider-model="slider.value"
@@ -20,9 +18,12 @@
         <div class="progress-bar progress-bar-info">
         </div>
       </div>
-      <div class="row" id="track-timeline">
+      <div id="track-timeline">
       </div>
-      <div id="track-preview">
+      <div id="prev-container">
+        <div id="track-preview">
+        </div>
+          <button ng-show="isLoaded" button class="fader-btn" ng-click="showFader()"><span class="glyphicon glyphicon-plus-sign"></span> FADE</button>
       </div>
     </div>
   </div>
