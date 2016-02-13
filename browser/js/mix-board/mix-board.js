@@ -541,6 +541,7 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
         if (wavesurfer) {
             wavesurfer.pause();
             $("#track-preview").empty();
+            $("#track-timeline").empty();
         }
         $scope.lengthModels = {};
         $scope.currentTrack = MixBoardFactory.getCurrentSong($scope.library, track);
@@ -573,8 +574,7 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
             $scope.currentTrack.fade = $scope.currentTrack.fade ? $scope.currentTrack.fade : undefined;
             hideProgress();
             $scope.$digest();
-            // CHES - creates track timeline
-            var timeline = MixBoardFactory.createTimeline(wavesurfer);
+
             MixBoardFactory.enableDragSelection(wavesurfer);
 
             // CHES - if it finds a pre-existing region, it will preload it
@@ -584,6 +584,8 @@ app.controller('prevWavController', function ($scope, MixBoardFactory) {
                 MixBoardFactory.addRegion(wavesurfer, $scope.currentTrack.region);
             }
 
+            // CHES - creates track timeline
+            var timeline = MixBoardFactory.createTimeline(wavesurfer);
             // CHES - play track once ready
             wavesurfer.play();
             $scope.isPlaying = true;
