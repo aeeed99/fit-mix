@@ -1,5 +1,5 @@
 @import "../_compatibility"
-
+@import '../design-variables'
 
 
 #upper-panel
@@ -48,3 +48,25 @@
   background: transparent
 .sfx-marker
   color: rgba(255, 26, 44, 0.93) !important
+
+.mix-frame #phase-adder
+  background-color: $button-background
+  border-radius: 0
+
+.mix-frame #phase-adder.phase-adder-hidden
+  background-color: transparent
+  span
+    color: transparent
+  border-color: transparent
+  text-color: transparent
+  color: transparent
+
+.mix-frame #phase-adder.phase-adder-shown
+  span
+    color: $button-color
+  border: 2px dashed #184952
+  &:hover
+    border-color: $button-background
+    span
+      color: $button-color-hover
+    background: $button-background-hover

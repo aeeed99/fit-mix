@@ -11,18 +11,20 @@
 
 action-buttons, #mix-edit-buttons, #mix-edit-buttons
   button, div
-    width: 120px
-    height: 20px
+    width: auto
+    font-size: 15px
+    height: auto
     font-family: $font-standard
     border-radius: 0
-    border: 1px solid transparent
-    background: #4c9ab8
-    padding: 0
-    color: #04445d
-    border-color: #4c9ab8
+    border: 1px solid $button-border-color
+    background: $button-border-color
+    padding: 0px 10px
+    color: $button-color
+    vertical-align: top
+
   button:hover
-    background: #034761
-    color: #2a84a6
+    background: $button-background-hover
+    color: $button-color-hover
 
 mix-header
   display: block
@@ -117,3 +119,4 @@ body.ng-scope.modal-open div.modal.fade.ng-isolate-scope.inner
 @import '_phase-sliders'
 @import '_modals'
 @import '_mix-editor'
+@import '_mix-header'

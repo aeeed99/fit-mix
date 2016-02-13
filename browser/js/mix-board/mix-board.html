@@ -1,20 +1,18 @@
-<div id="user-menu">
-  <span class="glyphicon glyphicon-menu-hamburger"></span>
-</div>
 <mix-header></mix-header>
 <div class="container clearfix">
-  <mix-playback></mix-playback>
   <mix-editor></mix-editor>
   <div ng-controller="prevWavController">
     <library-view></library-view>
     <action-buttons></action-buttons>
-    <div ng-show="isLoaded" class="row"><button class="fader-btn" ng-click="showFader()"><span class="glyphicon glyphicon-plus-sign"></span> FADE</button></div>
+    <div ng-show="isLoaded" class="row">
+      <button class="fader-btn" ng-click="showFader()"><span class="glyphicon glyphicon-plus-sign"></span> FADE</button>
+    </div>
     <div ng-show="addFade" class="row fader" ng-show="isLoaded">
       <rzslider id="faders"
-           rz-slider-model="slider.value"
-           rz-slider-options="slider.options">
+                rz-slider-model="slider.value"
+                rz-slider-options="slider.options">
       </rzslider>
-  </div>
+    </div>
     <div id="prev-wav">
       <!--NP: This cannot be a directive because of a query selector. But edit with caution.
       collapsing recommended if not in use -->
