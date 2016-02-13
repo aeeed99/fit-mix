@@ -11,7 +11,6 @@ const connectToDb = require('../server/db');
 const Track = mongoose.model('Track');
 
 const filesDir = pathLib.join(process.cwd(), 'server/audio');
-
 const extractMetaData = function (path) {
     return helper.dirWalk(path)
         .then(function (filesNames) {

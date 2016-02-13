@@ -24,10 +24,6 @@ app.factory('ModalFactory', function($uibModal, $http){
             });
             modal.result.then((id) => {
                 console.log("Called with id " + id);
-                //make an array of all the files to pass to backend
-                var files = toArray(document.getElementById(id).files);
-                console.log(Array.isArray(files));
-                return $http.post('/api/upload', {files: files});
             });
         },
         openAddInstruction: function (pushTo) {

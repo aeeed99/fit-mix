@@ -15,7 +15,6 @@ Omri & Zeke:
 module.exports = function(name) {
   return new Promise(function(resolve, reject) {
     var passedData={};
-
     var parser = mm(fs.createReadStream(name), { duration: true }, function (err, metadata) {
         console.log("starting on: " + name + " hopefully this indicates the bad file");
         if(err) return reject(err);
