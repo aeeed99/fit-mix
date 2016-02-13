@@ -185,7 +185,6 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
         return 1800;
     }();
     $scope.phases = function () {
-        console.log("goddamn phases")
         if ($scope.wizardData && $scope.wizardData.selectedStructure.number) {
             return $scope.predefinedPhases[$scope.wizardData.selectedStructure.number];
         }
@@ -343,6 +342,9 @@ app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFact
         if (!item.artist) {
             MixBoardFactory.reorderInPlace(index, item, event, array);
         }
+    };
+    $scope.removePhase = function(idx){
+        $scope.phases.splice(idx, 1);
     };
     $scope.prettyDuration = function (track) {
         return (track.duration - track.duration % 60) / 60 + ":" + track.duration % 60;
