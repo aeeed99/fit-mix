@@ -1,10 +1,33 @@
-app.factory('MixBoardFactory', function(){
+app.factory('MixBoardFactory', function($http){
     var MixBoardFactory = {};
     var tempID = 0;
     MixBoardFactory.currentMix = [];
     MixBoardFactory.cleanMix = [];
     MixBoardFactory.soundEffects = [];
 
+    MixBoardFactory.exportMix = function(){
+        console.log("made it here")
+         var jsonArray = MixBoardFactory.currentMix.map(function(track){
+            var trackObj = {
+                file: track._id,
+                cut: {
+                    start: track.start,
+                    end: track.end
+                }
+            }
+            return trackObj;
+        });
+        var jsonTracks = {
+            title: "MY MIX",
+            segments: jsonArray
+        }
+        jsonTracks = JSON.stringify(jsonTracks)
+        console.log("THE MIX!!!!", jsonTracks);
+        return $http.post('/api/mix/download', jsonTracks)
+        .then(function (response) {
+            console.log("response", response.data)
+        });
+    }
     MixBoardFactory.getMix = function(){
         return MixBoardFactory.currentMix;
     };

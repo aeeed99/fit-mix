@@ -5,8 +5,32 @@ var path = require('path');
 var router = require('express').Router();
 var _ = require('lodash');
 var request = require('request');
-var Mix = require("mongoose").model('Mix'); //need to make a mix db schema
+var fs = require('fs');
+var jsonfile = require('jsonfile')
+var config = require('../../../../mix.json');
+var exec = require('child_process').exec;
+//var Mix = require("mongoose").model('Mix'); //need to make a mix db schema
 module.exports = router;
+
+router.route('/download')
+    .post(function (req, res, next) {
+        console.log("KLJNLNJNJ")
+        console.log("mix", req.body)
+        var mix = req.body;
+        // mix.segments.forEach(function(segment, index){
+        //     mix.segments[index].file = '../server/audio/'+ mix.segments[index].file;
+        // })
+        console.log("new mix", mix)
+        jsonfile.writeFileSync('mix.json', mix, {spaces: 2} );
+        config = require('../../../../mix.json');
+        console.log("config", config)
+
+            exec(`python stitch.py '${JSON.stringify(config)}'`, function (err, stdout) {
+                if (err) return console.error(err);
+                console.log(stdout);
+            });
+
+    });
 
 router.route('/')
     .get(function (req, res, next) {
@@ -49,3 +73,5 @@ router.route('/:mixId')
             .then(track => res.status(204).end())
             .then(null, next)
     });
+
+
