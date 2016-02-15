@@ -46,7 +46,7 @@ const clearDb = function () {
 };
 
 
-router.post('/', uploading.array('audio[]', 20), function (req, res, next) {
+router.post('/', uploading.array('audio[]', 40), function (req, res, next) {
 
 connectToDb.bind({docsToSave: {}})
     .then(function () {
