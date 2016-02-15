@@ -288,6 +288,8 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     };
     $scope.selectInstruction = function (instruction) {
         $scope.currentInstruction = instruction;
+         responsiveVoice.speak(instruction, "UK English Female");
+
     };
     $scope.addVoiceToMix = function (text, trigger) {
         MixBoardFactory.addEffectToMix(trigger, text, "voice")
