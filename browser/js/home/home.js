@@ -29,6 +29,15 @@ app.controller('HomeCtrl', function ($scope, $state, HomeFactory, tracks) {
     $state.transitionTo('home.welcome');
     $scope.tracks = tracks;
     var idCounter = 0;
+    $scope.myInterval = 3000;
+    $scope.slides = [
+        {
+            text: "hello",
+            id: 1,
+            image: "http://www.fillmurray.com/1600/900",
+            active: true
+        }
+    ]
 
     $scope.tracks.forEach(function (track) {
         track.waveID = 'wave' + idCounter;
