@@ -7,30 +7,34 @@ var _ = require('lodash');
 var request = require('request');
 var fs = require('fs');
 var jsonfile = require('jsonfile')
-var config = require('../../../../mix.json');
 var exec = require('child_process').exec;
-//var Mix = require("mongoose").model('Mix'); //need to make a mix db schema
 module.exports = router;
 
 router.route('/download')
     .post(function (req, res, next) {
-        console.log("KLJNLNJNJ")
-        console.log("mix", req.body)
         var mix = req.body;
-        // mix.segments.forEach(function(segment, index){
-        //     mix.segments[index].file = '../server/audio/'+ mix.segments[index].file;
-        // })
         console.log("new mix", mix)
-        jsonfile.writeFileSync('mix.json', mix, {spaces: 2} );
-        config = require('../../../../mix.json');
-        console.log("config", config)
+        jsonfile.writeFile('mix.json', mix, {spaces: 2}, function(err){
 
-            exec(`python stitch.py '${JSON.stringify(config)}'`, function (err, stdout) {
+            exec(`python stitch.py '${JSON.stringify(mix)}'`, function (err, stdout) {
                 if (err) return console.error(err);
                 console.log(stdout);
-            });
+
+                var filePath = path.join(__dirname, '../../../../myMIX.mp3');
+                res.send('myMIX.mp3').status(201)
+            })
+
+        });
 
     });
+
+router.route('/download/:mix')
+    .get(function (req, res, next) {
+        console.log("mix?", req.params.mix)
+        var file = __dirname + '../../../../../' + req.params.mix;
+        res.download(file);
+    });
+
 
 router.route('/')
     .get(function (req, res, next) {

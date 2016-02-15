@@ -18,7 +18,7 @@ app.factory('MixBoardFactory', function($http){
             return trackObj;
         });
         var jsonTracks = {
-            title: "MY MIX",
+            title: "myMIX",
             segments: jsonArray
         }
         jsonTracks = JSON.stringify(jsonTracks)
@@ -26,6 +26,7 @@ app.factory('MixBoardFactory', function($http){
         return $http.post('/api/mix/download', jsonTracks)
         .then(function (response) {
             console.log("response", response.data)
+            window.location.href = '/api/mix/download/' + response.data
         });
     }
     MixBoardFactory.getMix = function(){

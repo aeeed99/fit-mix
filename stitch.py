@@ -13,15 +13,15 @@ def cache_files(segment_list):
     for segment in segment_list:
         if segment['file'] not in files:
             print 'here is a file!: ' + segment['file']
-            files[segment['file']] = AudioSegment.from_file('./server/audio/' + segment['file']+'.mp3', format='mp3')
+            files[segment['file']] = AudioSegment.from_file('./server/audio/' + segment['file'], format='mp3')
     return files
 
 files = cache_files(segments)
 
 for segment in segments:
 
-    start = segment['cut']['start']
-    end = segment['cut']['end']
+    start = segment['cut']['start'] * 1000
+    end = segment['cut']['end'] * 1000
 
     cut_audio = files[segment['file']][start:end]
 
