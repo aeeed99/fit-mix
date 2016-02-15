@@ -6,7 +6,6 @@ app.factory('MixBoardFactory', function($http){
     MixBoardFactory.soundEffects = [];
 
     MixBoardFactory.exportMix = function(){
-        console.log("made it here")
          var jsonArray = MixBoardFactory.currentMix.map(function(track){
             var trackObj = {
                 file: track._id,
@@ -18,11 +17,10 @@ app.factory('MixBoardFactory', function($http){
             return trackObj;
         });
         var jsonTracks = {
-            title: "myMIX",
+            title: "TabataMix",
             segments: jsonArray
         }
         jsonTracks = JSON.stringify(jsonTracks)
-        console.log("THE MIX!!!!", jsonTracks);
         return $http.post('/api/mix/download', jsonTracks)
         .then(function (response) {
             console.log("response", response.data)

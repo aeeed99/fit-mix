@@ -20,8 +20,8 @@ router.route('/download')
                 if (err) return console.error(err);
                 console.log(stdout);
 
-                var filePath = path.join(__dirname, '../../../../myMIX.mp3');
-                res.send('myMIX.mp3').status(201)
+                var filePath = path.join(__dirname, '../../../../TabataMix.mp3');
+                res.send('TabataMix.mp3').status(201)
             })
 
         });
