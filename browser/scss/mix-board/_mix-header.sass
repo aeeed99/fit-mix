@@ -1,0 +1,35 @@
+@import '../design-variables'
+
+.split-side
+  float: left
+  width: 30%
+  height: 100%
+  text-align: left
+  padding: 20px
+.split-right
+  text-align: right
+
+#split-center
+  float: left
+  margin: 0 69px 0 -69px
+  width: 40%
+  height: 100%
+  .playback-btns
+    float: left
+    margin: 10px 0 0 0
+    display: inline-block
+    position: relative
+    left: 100px
+    top: 2px
+  #main-clock
+    margin: 0 auto
+    display: block
+    #clock-area
+      background: linear-gradient(#5e2a2e, #231011)
+      display: inline-block
+      min-width: 300px
+      border-radius: 3px
+      margin: 6px 0
+      height: 48px
+      h3
+        font-family: $main-clock-font

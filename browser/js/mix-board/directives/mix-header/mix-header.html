@@ -1,3 +1,13 @@
-<h3><span class="dev-placeholder" ng-click="toggleEdit()" ng-hide="editTitle">{{mixName}}</span><input
-  class="dev-placeholder" ng-style="{'background-color': '#434343', 'text-align': 'center'}" ng-model="mixName"
-  ng-show="editTitle" ng-click="toggleEdit()"></h3>
+<div class="split-side">
+  <div class="btn-group" role="group">
+    <button class="btn btn-danger"><span class="glyphicon glyphicon-file"></span></button>
+    <button class="btn btn-danger"><span class="glyphicon glyphicon-download"></span></button>
+  </div>
+  <button class="btn btn-danger"><span class="glyphicon glyphicon-question-sign"></span></button>
+</div>
+<mix-playback id="split-center"></mix-playback>
+<div id="split-side split-right">
+  <h3><span ng-click="toggleEdit()" ng-hide="editTitle">{{mixName}}</span><input
+    class="dev-placeholder" ng-style="{'background-color': '#434343', 'text-align': 'center'}" ng-model="mixName"
+    ng-show="editTitle" ng-click="toggleEdit()"></h3>
+</div>
