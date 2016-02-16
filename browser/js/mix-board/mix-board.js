@@ -288,6 +288,8 @@ app.controller('MixBoardController', function ($scope, $document, $stateParams, 
     };
     $scope.selectInstruction = function (instruction) {
         $scope.currentInstruction = instruction;
+         responsiveVoice.speak(instruction, "UK English Female");
+
     };
     $scope.addVoiceToMix = function (text, trigger) {
         MixBoardFactory.addEffectToMix(trigger, text, "voice")
@@ -330,6 +332,10 @@ app.controller('mixEditController', function ($scope, MixBoardFactory, ModalFact
         });
         return sum;
     };
+
+    $scope.exportMix = function(){
+        MixBoardFactory.exportMix();
+    }
     $scope.reorderMix = function (index, item, event, array) {
         //phases don't have artists, so this ensures no dragging between phases and mix
         if (item.artist) {
@@ -425,6 +431,7 @@ app.controller('mixPlaybackController', function ($scope, MixBoardFactory) {
             startTime = $scope.mix[trackIndex].start;
         }
         console.log("startTime", startTime);
+        console.log("full mix", $scope.mix)
 
         $scope.currentMixTrack = $scope.currentMixTrack ? $scope.currentMixTrack : $scope.mix[trackIndex];
 

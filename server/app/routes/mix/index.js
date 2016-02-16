@@ -5,8 +5,36 @@ var path = require('path');
 var router = require('express').Router();
 var _ = require('lodash');
 var request = require('request');
-var Mix = require("mongoose").model('Mix'); //need to make a mix db schema
+var fs = require('fs');
+var jsonfile = require('jsonfile')
+var exec = require('child_process').exec;
 module.exports = router;
+
+router.route('/download')
+    .post(function (req, res, next) {
+        var mix = req.body;
+        console.log("new mix", mix)
+        jsonfile.writeFile('mix.json', mix, {spaces: 2}, function(err){
+
+            exec(`python stitch.py '${JSON.stringify(mix)}'`, function (err, stdout) {
+                if (err) return console.error(err);
+                console.log(stdout);
+
+                var filePath = path.join(__dirname, '../../../../TabataMix.mp3');
+                res.send('TabataMix.mp3').status(201)
+            })
+
+        });
+
+    });
+
+router.route('/download/:mix')
+    .get(function (req, res, next) {
+        console.log("mix?", req.params.mix)
+        var file = __dirname + '../../../../../' + req.params.mix;
+        res.download(file);
+    });
+
 
 router.route('/')
     .get(function (req, res, next) {
@@ -49,3 +77,5 @@ router.route('/:mixId')
             .then(track => res.status(204).end())
             .then(null, next)
     });
+
+
