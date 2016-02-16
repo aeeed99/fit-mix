@@ -4,6 +4,5 @@ npm-debug.log
 public
 .DS_Store
 coverage
-server/audio/**
 server/sfx/**
 server/uploads/**
