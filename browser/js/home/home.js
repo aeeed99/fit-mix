@@ -29,6 +29,30 @@ app.controller('HomeCtrl', function ($scope, $state, HomeFactory, tracks) {
     $state.transitionTo('home.welcome');
     $scope.tracks = tracks;
     var idCounter = 0;
+    $scope.myInterval = 3000;
+    $scope.slides = [
+        {
+            text: "Select the parts of each song that pump you up most",
+            id: 0,
+            image: "https://raw.githubusercontent.com/nickpalenchar/fit-mix/master/fitmix.png",
+            active: true,
+            name: "Clip"
+        },
+        {
+            text: "Match your tracks to specific times during your workout",
+            id: 1,
+            image: "https://raw.githubusercontent.com/nickpalenchar/fit-mix/master/fitmix9.png",
+            active: false,
+            name: "Mix"
+        },
+        {
+            text: "Specify instructions for your mix to give you",
+            id: 2,
+            image: "https://raw.githubusercontent.com/nickpalenchar/fit-mix/master/fitmix0.png",
+            active: false,
+            name: "Teach"
+        }
+    ]
 
     $scope.tracks.forEach(function (track) {
         track.waveID = 'wave' + idCounter;

@@ -1,4 +1,15 @@
-<h2>Create a mix and get moving!</h2>
+<h3>An online mixing tool that allows fitness professionals and enthusiasts to tailor their music to their workout routines.</h2>
+<div class="container">
+<uib-carousel interval="myInterval" no-wrap="noWrapSlides">
+      <uib-slide ng-repeat="slide in slides" active="slide.active" index="slide.id">
+        <img ng-src="{{slide.image}}" style="margin:auto;">
+        <div class="carousel-caption">
+          <h4>{{slide.name}}</h4>
+          <p>{{slide.text}}</p>
+        </div>
+      </uib-slide>
+</uib-carousel>
+</div>
 <div id="welcome-buttons">
   <!--<div class="dropdown">--> <!--NP TODO: get this dropdown to work -->
     <!--<button class="btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"-->
@@ -12,5 +23,5 @@
       <!--<li><a href="#">Just create an account.</a></li>-->
     <!--</ul>-->
   </div>
-  <button class="btn-success" ng-click="wizard()">I'm new</button><button class="btn-info">I'm Returning</button>
+  <button class="btn-success crimson-bg" ng-click="wizard()">Get Mixing!</button>
 </div>
