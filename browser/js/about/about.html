@@ -5,10 +5,11 @@
                 <div class='row-fluid'>
                     <div class='span2'>
                         <img class='img-polaroid' src='https://media.licdn.com/media/AAEAAQAAAAAAAAOVAAAAJDA4MGJhOTJjLWI5Y2EtNDE2OC1hNTcwLWVkMTA2ZDcyODk4Nw.jpg'>
-                        <button>Like</button>
+                        <a class='glyphicon glyphicon-thumbs-up'></a>
+                        <button ng-click="addToList(like)">Like</button>
                     </div>
                     <div class='span4'>
-                        <h2 class ="firstname">Joe</h2>
+                        <h2 class="firstname">Joe</h2>
                         <span>Pro Fit Mixer</span>
                         <ul class='unstyled'>
                             <li>
@@ -28,10 +29,10 @@
                                 <span>3</span> Mixes
                             </li>
                             <li>
-                                <span>72</span> Friends
+                                <span><wish-list></wish-list></span> Likes
                             </li>
                             <li>
-                                <span>42</span> Followers
+                                <span>4.5</span> Avg Rating
                             </li>
                         </ul>
                         <div>
@@ -86,7 +87,7 @@
                         <br>
                         <br>
                     </li>
-                    <li class="music">WORKOUT LIKE A ROCKSTAR MIX</br>
+                    <li class="music">ROCKSTAR WORKOUT MIX</br>
                         <br>
                         <audio controls>
                             <source src="song.mp3" type="audio/mpeg">
