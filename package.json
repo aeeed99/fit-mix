@@ -57,7 +57,7 @@
     "mime": "^1.3.4",
     "mocha-mongoose": "^1.0.3",
     "mongodb": "^1.4.33",
-    "mongoose": "^4.0.7",
+    "mongoose": "^5.9.20",
     "multer": "^1.1.0",
     "musicmetadata": "^2.0.1",
     "ng-draggable": "^1.0.0",
