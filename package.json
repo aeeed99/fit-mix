@@ -56,7 +56,7 @@
     "lodash": "^3.9.3",
     "mime": "^1.3.4",
     "mocha-mongoose": "^1.0.3",
-    "mongodb": "^1.4.33",
+    "mongodb": "^3.6.1",
     "mongoose": "^4.0.7",
     "multer": "^1.1.0",
     "musicmetadata": "^2.0.1",
